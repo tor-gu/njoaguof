@@ -1,5 +1,6 @@
 requireNamespace("usethis", quietly = TRUE)
 
+source("data-raw/prevalidation.R")
 source("data-raw/build_data.R")
 
 usethis::use_data(incident, overwrite = TRUE)
