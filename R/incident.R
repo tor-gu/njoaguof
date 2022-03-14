@@ -1,0 +1,79 @@
+#' Incidents in the NJ OAG Use of Force database
+#'
+#' Use of force incidents from the NJ OAG Use of Force database.
+#'
+#' @format A dataframe with 23 columns
+#' \describe{
+#'  \item{form_id}{A unique identifier for the row, present in the source data}
+#'
+#'  \item{report_number}{An identifier for a use of force report (potentially
+#'  containing multiple incidents)}
+#'
+#'  \item{incident_case_number}{A unique internal agency case number assigned
+#'  to the incident.}
+#'
+#'  \item{incident_date_1}{The date of the incident. In the source data, this
+#'  is column \code{IncidentDate1}, and is the date the OAG dashboard uses as the
+#'  incident date.}
+#'
+#'  \item{incident_date_2}{A second "incident date" field in the source data.
+#'  It is always equal to \code{incident_date_1} or \code{incident_date_1 + 1}.
+#'  The dashboard does not use this date.}
+#'
+#'  \item{agency_county}{The county of the \emph{agency}, or "NJSP" or "Other".
+#'  Note that this is not the incident location. This is column
+#'  \code{County2}.}
+#'
+#'  \item{agency_name}{The name of the agency, e.g. "Essex Co Sheriffs
+#'  Office".}
+#'
+#'  \item{incident_municipality}{The municipality where the incident occurred.}
+#'
+#'  \item{incident_municipality_county}{The county where the incident
+#'  occurred.}
+#'
+#'  \item{officer_name_id}{An ID identifying the officer. In the source data,
+#'  this is column \code{officer_name}. }
+#'
+#'  \item{officer_name}{The most common name associated to the
+#'  \code{officer_name_id}. In this table, each
+#'  \code{officer_name_id} is associated to a single name, while in the
+#'  source data, names will sometimes vary in spelling and capitalization. For
+#'  name variants, refer to table \code{officer_name_variants}. To associate
+#'  a name variant to a specific incident, refer to the raw data
+#'  \code{use_of_force_raw}, column \code{Officer_Name2}.}
+#'
+#'  \item{on_behalf_of_last_name}{This is the last name of the officer involved if
+#'  the incident report was filled out by a different officer.}
+#'
+#'  \item{on_behalf_of_first_name}{This is the first name of the officer involved if
+#'  the incident report was filled out by a different officer.}
+#'
+#'  \item{officer_age}{The officer's age.}
+#'
+#'  \item{officer_race}{The officer's race}
+#'
+#'  \item{officer_rank}{The officer's rank}
+#'
+#'  \item{officer_gender}{The officer's gender}
+#'
+#'  \item{officer_injured}{\code{TRUE} if the officer was injured in the
+#'  incident. \emph{C.f.} tables \code{incident_officer_injury_type} and
+#'  \code{incident_officer_medical_treatment}.}
+#'
+#'  \item{video_footage}{\code{TRUE} if there is video footage of the
+#'  incident. \emph{C.f} table \code{incident_video_type}.}
+#'
+#'  \item{indoors}{\code{TRUE} if the incident was indoors. Not exclusive of
+#'  \code{outdoors}.}
+#'
+#'  \item{outdoors}{\code{TRUE} if the incident was indoors. Not exclusive of
+#'  \code{indoors}.}
+#'
+#'  \item{subject_count}{Number of subjects involved. \emph{C.f.} table
+#'  \code{subject}.}
+#'
+#'  \item{subject_injured_count}{Number of injured subjects.}
+#' }
+#' @source \url{https://www.njoag.gov/force/}
+"incident"
