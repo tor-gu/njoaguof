@@ -8,6 +8,14 @@
 \description{
 This is cleaned-up version of the NJ OAG Use of Force database available from https://www.njoag.gov/force/.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/tor-gu/njoaguof}
+  \item Report bugs at \url{https://github.com/tor-gu/njoaguof/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Tor Gunston \email{tor.gunston@protonmail.com}
 
