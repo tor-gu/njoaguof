@@ -250,7 +250,7 @@ make_messy_relationship_table <- function(table, levels, separating_regex) {
 
 
 ## -----------------------------------------------------------------------------------
-incident_perceived_condition <- uof_raw %>%
+incident_subject_perceived_condition <- uof_raw %>%
   select(form_id, list_col=PerceivedCondition) %>%
   make_messy_relationship_table(njoaguof:::perceived_condition_levels,
                                 sep_comma_no_space) %>%
@@ -291,10 +291,10 @@ incident_subject_injury <- uof_raw %>%
 
 
 ## -----------------------------------------------------------------------------------
-incident_force_type <- uof_raw %>% 
+incident_subject_force_type <- uof_raw %>% 
   select(form_id, list_col=TypeofForce) %>%
   make_messy_relationship_table(njoaguof:::force_type_levels,
-                                sep_comma_no_space) %>%
+                                sep_comma_space_no_paren) %>%
   rename(force_type=value)
 
 

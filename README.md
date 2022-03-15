@@ -32,11 +32,11 @@ from <https://www.njoag.gov/force/>.
     multi-value fields that should be associated to individual incident
     subjects. Unfortunately, these tables reflect some irreducible
     messiness of the source data. See the notes below.
-    -   `incident_force_type`
-    -   `incident_perceived_condition`
     -   `incident_subject_action`
+    -   `incident_subject_force_type`
     -   `incident_subject_injury`
     -   `incident_subject_medical_treatment`
+    -   `incident_subject_perceived_condition`
     -   `incident_subject_resistance`
 -   `officer_name_variants` Includes every variation in spelling and
     capitalization of the officer names found in the source data.
@@ -163,19 +163,75 @@ subject %>% filter(form_id == 16301)
 #> 2   16301     2 FALSE    Person    23 FALSE    Black    Female
 ```
 
-#### Multi-value incident ields
+#### Multi-value incident fields
 
-Some fields contain multiple values for #### Multi-value
-Incident-Subject Fields
+Some fields contain multiple values which apply to the entire incident.
+For each such column, we create a separate table establishing a
+many-to-one relationship. For example, this row in the source data has
+three values for `incident_type`, and this results in three rows in the
+`incident_type` table.
 
-The cleaned data is available in the following tables:
+``` r
+library(tidyverse)
+use_of_force_raw %>% filter(form_id == 16301) %>%
+  select(incident_type)
+#> # A tibble: 1 × 1
+#>   incident_type                                                                 
+#>   <chr>                                                                         
+#> 1 Potential Mental Health Incident, Suspicious person, Disturbance (drinking, f…
+incident_type %>% filter(form_id == 16301)
+#> # A tibble: 3 × 2
+#>   form_id type                                        
+#>     <dbl> <fct>                                       
+#> 1   16301 Potential Mental Health Incident            
+#> 2   16301 Suspicious person                           
+#> 3   16301 Disturbance (drinking, fighting, disorderly)
+```
 
--   `incident` There is one row in this table for each incident.
--   `subject` There is one row in this table for each subject.
+#### Multi-value Incident-Subject Fields
+
+Some fields contain multiple values which apply to individual subjects,
+but there is no reliable way to assign the values to subjects. For
+example, in this row of the raw data, there are two subjects and three
+values in the `SubResist` field. In this case, we create three rows in
+the `incident_subject_resistance` table, indicating the position of each
+item in the list with the `index` value.
+
+``` r
+use_of_force_raw %>% 
+  filter(form_id == 19542) %>% 
+  select(subject_type,SubResist)
+#> # A tibble: 1 × 2
+#>   subject_type  SubResist                                                      
+#>   <chr>         <chr>                                                          
+#> 1 Person,Person Verbal,Aggressive resistance(attempt to attack or harm),Verbal,
+incident_subject_resistance %>% filter(form_id == 19542)
+#> # A tibble: 3 × 3
+#>   form_id index subject_resistance                              
+#>     <dbl> <chr> <fct>                                           
+#> 1   19542 1     Verbal                                          
+#> 2   19542 2     Aggressive resistance(attempt to attack or harm)
+#> 3   19542 3     Verbal
+```
+
+All of the `incident_subject_xxx` data tables are of this form, with an
+`index` column included so the order information is not lost.
+
+#### Officer name variants
+
+In the raw data, there are two fields which identify the officer:
+`officer_name` (an ID field) and `Officer_Name2` (a name field). A
+single `officer_name` ID can be associated different spellings in the
+`Officer_Name2` field. When building the `incident` table, we ensure
+that every `officer_name_id` is associated with a single spelling of the
+officer name by choosing the most common form.
+
+But all variants of the officer name appearing in the source data are
+preserved in the `officer_name_variants` table.
 
 ## Installation
 
-You can install the development version of njoaguof from
+You can install the latest version of njoaguof from
 [GitHub](https://github.com/) with:
 
 ``` r
