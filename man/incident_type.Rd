@@ -3,7 +3,7 @@
 \docType{data}
 \name{incident_type}
 \alias{incident_type}
-\title{Reason for Initial Dispatch or Encounter}
+\title{Reason for initial dispatch or encounter}
 \format{
 A dataframe with 2 columns
 \describe{

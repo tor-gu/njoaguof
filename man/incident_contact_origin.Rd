@@ -3,7 +3,7 @@
 \docType{data}
 \name{incident_contact_origin}
 \alias{incident_contact_origin}
-\title{Origin(s) of Initial Police-Citizen Contact}
+\title{Origin(s) of initial police-citizen contact}
 \format{
 A dataframe with 2 columns
 \describe{
@@ -18,7 +18,7 @@ A dataframe with 2 columns
 incident_contact_origin
 }
 \description{
-Origin of Initial Police-Citizen Contact
+Origin of initial police-citizen contact
 }
 \details{
 This data is extracted from the \code{contact_origin} field in

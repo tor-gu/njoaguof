@@ -19,7 +19,7 @@ A dataframe with 3 columns
 incident_subject_action
 }
 \description{
-Subject’s actions that elicited a use of force response.
+Subject’s action that elicited a use of force response.
 }
 \details{
 This data is extracted from the \code{SubActions} field in

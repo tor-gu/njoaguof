@@ -4,6 +4,8 @@
 # njoaguof
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/tor-gu/njoaguof/workflows/R-CMD-check/badge.svg)](https://github.com/tor-gu/njoaguof/actions)
 <!-- badges: end -->
 
 This is cleaned-up version of the NJ OAG Use of Force database available
