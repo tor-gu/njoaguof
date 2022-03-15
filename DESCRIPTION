@@ -1,6 +1,6 @@
 Package: njoaguof
 Title: NJ OAG Use of Force data package
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: 
     person("Tor", "Gunston", , "tor.gunston@protonmail.com", role = c("aut", "cre"))
 Description: This is cleaned-up version of the NJ OAG Use of Force database
