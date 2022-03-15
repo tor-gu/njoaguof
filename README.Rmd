@@ -46,7 +46,7 @@ This is cleaned-up version of the NJ OAG Use of Force database
 * ```use_of_force_raw``` The source data.
 
 ## Examples
-Every incident has a unique ```form_id```, and this field is used to link the ```subject``` and ```incident_xxx``` tables to specific incidents:
+Every incident has a unique ```form_id```, and this field is used to link the ```subject``` ```incident_xxx``` and ```incident_subject_xxx``` tables to specific incidents:
 ```{r}
 library(njoaguof)
 library(dplyr)
@@ -93,7 +93,7 @@ subject %>% filter(form_id == 16301)
 ```
 
 #### Multi-value incident fields
-Some fields contain multiple values which apply to the entire incident. For each such column, we create a separate table establishing a many-to-one relationship. For example, this row in the source data has three values for ```incident_type```, and this results in three rows in the ```incident_type``` table.
+Some fields contain multiple values which apply to the entire incident. For each such column, we create a separate table expressing this many-to-one relationship. For example, this row in the source data has three values for ```incident_type```, and this results in three rows in the ```incident_type``` table.
 ```{r}
 library(tidyverse)
 use_of_force_raw %>% filter(form_id == 16301) %>%
@@ -110,12 +110,14 @@ use_of_force_raw %>%
   select(subject_type,SubResist)
 incident_subject_resistance %>% filter(form_id == 19542)
 ```
+Note that it is not clear in the source data if "Aggressive resistance" should be associated to the first subject or to the second subject.
+
 All of the ```incident_subject_xxx``` data tables are of this form, with an ```index``` column included so the order information is not lost.
 
 #### Officer name variants
 In the raw data, there are two fields which identify the officer:  ```officer_name``` (an ID field) and ```Officer_Name2``` (a name field). A single ```officer_name``` ID can be associated different spellings in the ```Officer_Name2``` field. When building the ```incident``` table, we ensure that every ```officer_name_id``` is associated with a single spelling of the officer name by choosing the most common form.
 
-But all variants of the officer name appearing in the source data are preserved in the ```officer_name_variants``` table.
+But all variants of the officer names appearing in the source data are preserved in the ```officer_name_variants``` table.
 
 ## Installation
 

@@ -38,8 +38,9 @@
 #'  \item{officer_name}{The most common name associated to the
 #'  \code{officer_name_id}. In this table, each
 #'  \code{officer_name_id} is associated to a single name, while in the
-#'  source data, names will sometimes vary in spelling and capitalization. For
-#'  name variants, refer to table \code{officer_name_variants}. To associate
+#'  source data, names will sometimes vary in spelling and capitalization.
+#'
+#'  For name variants, refer to table \code{officer_name_variants}. To associate
 #'  a name variant to a specific incident, refer to the raw data
 #'  \code{use_of_force_raw}, column \code{Officer_Name2}.}
 #'
@@ -51,11 +52,11 @@
 #'
 #'  \item{officer_age}{The officer's age.}
 #'
-#'  \item{officer_race}{The officer's race}
+#'  \item{officer_race}{The officer's race.}
 #'
-#'  \item{officer_rank}{The officer's rank}
+#'  \item{officer_rank}{The officer's rank.}
 #'
-#'  \item{officer_gender}{The officer's gender}
+#'  \item{officer_gender}{The officer's gender.}
 #'
 #'  \item{officer_injured}{\code{TRUE} if the officer was injured in the
 #'  incident. \emph{C.f.} tables \code{incident_officer_injury_type} and

@@ -1,4 +1,4 @@
-#' Reason for Initial Dispatch or Encounter
+#' Reason for initial dispatch or encounter
 #'
 #' The type of incident during which the use of force occurred.
 #'

@@ -1,6 +1,6 @@
-#' Origin(s) of Initial Police-Citizen Contact
+#' Origin(s) of initial police-citizen contact
 #'
-#' Origin of Initial Police-Citizen Contact
+#' Origin of initial police-citizen contact
 #'
 #' This data is extracted from the \code{contact_origin} field in
 #' \code{use_of_force_raw}.

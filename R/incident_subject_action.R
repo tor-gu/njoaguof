@@ -1,6 +1,6 @@
 #' Subject action
 #'
-#' Subject’s actions that elicited a use of force response.
+#' Subject’s action that elicited a use of force response.
 #'
 #' This data is extracted from the \code{SubActions} field in
 #' \code{use_of_force_raw}.

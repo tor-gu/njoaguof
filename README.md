@@ -45,7 +45,8 @@ from <https://www.njoag.gov/force/>.
 ## Examples
 
 Every incident has a unique `form_id`, and this field is used to link
-the `subject` and `incident_xxx` tables to specific incidents:
+the `subject` `incident_xxx` and `incident_subject_xxx` tables to
+specific incidents:
 
 ``` r
 library(njoaguof)
@@ -166,7 +167,7 @@ subject %>% filter(form_id == 16301)
 #### Multi-value incident fields
 
 Some fields contain multiple values which apply to the entire incident.
-For each such column, we create a separate table establishing a
+For each such column, we create a separate table expressing this
 many-to-one relationship. For example, this row in the source data has
 three values for `incident_type`, and this results in three rows in the
 `incident_type` table.
@@ -214,6 +215,9 @@ incident_subject_resistance %>% filter(form_id == 19542)
 #> 3   19542 3     Verbal
 ```
 
+Note that it is not clear in the source data if “Aggressive resistance”
+should be associated to the first subject or to the second subject.
+
 All of the `incident_subject_xxx` data tables are of this form, with an
 `index` column included so the order information is not lost.
 
@@ -226,7 +230,7 @@ single `officer_name` ID can be associated different spellings in the
 that every `officer_name_id` is associated with a single spelling of the
 officer name by choosing the most common form.
 
-But all variants of the officer name appearing in the source data are
+But all variants of the officer names appearing in the source data are
 preserved in the `officer_name_variants` table.
 
 ## Installation
