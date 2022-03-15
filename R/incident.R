@@ -70,10 +70,17 @@
 #'  \item{outdoors}{\code{TRUE} if the incident was indoors. Not exclusive of
 #'  \code{indoors}.}
 #'
-#'  \item{subject_count}{Number of subjects involved. \emph{C.f.} table
-#'  \code{subject}.}
+#'  \item{subject_count}{Number of subjects involved. This will reliably match
+#'  the number of subject in the \code{subject} table with same \code{form_id}.}
 #'
-#'  \item{subject_injured_count}{Number of injured subjects.}
+#'  \item{subject_injured_count}{Number of injured subjects. This field
+#'  corresponds to column \code{TotalSubInjuredIncident} in the raw data.
+#'
+#'  \emph{\strong{Warning} This field is not reliable. There over 700
+#'  incidents with \code{subject_injured_count > subject_count} and over
+#'  3500 rows with \code{subject_injured_count == 0} that have matching rows
+#'  in \code{incident_subject_injury} indicating specific injury types.}}
+#'
 #' }
 #' @source \url{https://www.njoag.gov/force/}
 "incident"
