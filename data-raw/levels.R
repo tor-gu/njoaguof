@@ -201,6 +201,7 @@ force_type_levels <- c(
   "Canine bit (apprehension)",
   "Canine bit (spontaneous)",
   "Carotid artery restraint",
+  "CED Spark Display",
   "Chokehold",
   "Compliance hold with impact weapon- not a strike",
   "Discharged Chemical at",
@@ -247,6 +248,14 @@ county_levels <- c(
   "Other"
 )
 
+reason_not_arrested_levels <- c(
+  "Already in Custody",
+  "Deceased",
+  "Medical/Mental Health Incident",
+  "Subject Fled",
+  "Other"
+)
+
 usethis::use_data(
   incident_type_levels,
   subject_type_levels,
@@ -267,5 +276,6 @@ usethis::use_data(
   subject_injury_levels,
   force_type_levels,
   county_levels,
+  reason_not_arrested_levels,
   internal = TRUE,
   overwrite = TRUE)

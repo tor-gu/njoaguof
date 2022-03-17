@@ -72,7 +72,7 @@ incident %>%
 
 The raw data from the NJ OAG is available in table ```use_of_force_raw```, which has one row for each use of force incident.  Fields with multiple values are recorded as comma separated lists. For example:
 ```{r}
-use_of_force_raw %>% count(SubectsGender) %>% head(5)
+use_of_force_raw %>% count(SubjectsGender) %>% head(5)
 ```
 These fields are broken out into new data tables in the following categories.
 
@@ -84,10 +84,10 @@ use_of_force_raw %>% filter(form_id == 16301) %>%
     form_id,
     SubjectsArrested,
     subject_type,
-    SubectsAge,
+    SubjectsAge,
     SubjectRace,
-    SubectsGender,
-    SubectsGender
+    SubjectsGender,
+    SubjectsGender
   )
 
 subject %>% filter(form_id == 16301)

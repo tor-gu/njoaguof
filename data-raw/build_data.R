@@ -32,9 +32,9 @@ subject <- uof_raw %>%
   select(form_id,
          SubjectsArrested,
          subject_type,
-         SubectsAge,
+         SubjectsAge,
          SubjectRace,
-         SubectsGender) %>%
+         SubjectsGender) %>%
   mutate(across(
     where(is.character),
     ~ str_replace(., trailing_comma_regex, "")
@@ -56,7 +56,7 @@ subject <- subject %>%
            paste0("type__", 1:max_subjects), 
            ",",
            fill="right") %>%
-  separate(SubectsAge, 
+  separate(SubjectsAge, 
            paste0("age__", 1:max_subjects), 
            ",",
            fill="right") %>%
@@ -64,7 +64,7 @@ subject <- subject %>%
            paste0("race__", 1:max_subjects), 
            ",",
            fill="right") %>%
-  separate(SubectsGender, 
+  separate(SubjectsGender, 
            paste0("gender__", 1:max_subjects), 
            ",",
            fill="right") %>%
@@ -299,6 +299,14 @@ incident_subject_force_type <- uof_raw %>%
 
 
 ## ---------------------------------------------------------------------------------------
+incident_subject_reason_not_arrested <- uof_raw %>%
+  select(form_id, list_col="ReasonNotArrest") %>%
+  make_messy_relationship_table(njoaguof:::reason_not_arrested_levels,
+                                sep_comma_no_space) %>%
+  rename(reason_not_arrested=value)
+
+
+## ---------------------------------------------------------------------------------------
 incident <- uof_raw %>%
   select(
     form_id,
@@ -309,7 +317,6 @@ incident <- uof_raw %>%
     report_number,
     incident_case_number,
     incident_date_1 = IncidentDate1,
-    incident_date_2 = incident_date,
     incident_municipality,
     indoor_or_outdoor,
     video_footage,
@@ -318,9 +325,7 @@ incident <- uof_raw %>%
     officer_rank,
     officer_gender = officer_gender_fill,
     officer_injured = officer_injuries_injured,
-    subject_injured_count = TotalSubInjuredIncident,
-    on_behalf_of_last_name = on_behalf_other_officer_last_nam,
-    on_behalf_of_first_name = on_behalf_other_officer_first_na
+    subject_injured_count = TotalSubInjuredIncident
   )
 
 
@@ -357,20 +362,27 @@ stopifnot(
 
 ## ---------------------------------------------------------------------------------------
 stopifnot(0 == 
-              uof_raw %>% filter(IncidentDate1 != IncidentDate1_old) %>% nrow()
-            )
+            uof_raw %>% filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
+          0 ==
+            uof_raw %>% filter(Incident_date1 != IncidentDate1_old) %>% nrow()
+)
 
 
 ## ---------------------------------------------------------------------------------------
-stopifnot(0 == uof_raw %>% filter(!is.na(other_officer_involved)) %>% nrow(),
+stopifnot(0 == uof_raw %>% filter(!is.na(incident_date)) %>% nrow(),
+          0 == uof_raw %>% filter(!is.na(other_officer_involved)) %>% nrow(),
           0 == uof_raw %>% filter(!is.na(officer_in_uniform)) %>% nrow())
+
+
+## ---------------------------------------------------------------------------------------
+stopifnot(0 == uof_raw %>% filter(incident_lighting2 != 1) %>% nrow())
 
 
 ## ---------------------------------------------------------------------------------------
 stopifnot(
   0 == uof_raw %>%
     select(OffInjuryType, officer_injuries_injured) %>%
-    mutate(NoInjury = str_detect(OffInjuryType, "NoInjury")) %>%
+    mutate(NoInjury = str_detect(OffInjuryType, "No Injury")) %>%
     filter(NoInjury == (officer_injuries_injured == "1")) %>%
     nrow()
 )
@@ -389,7 +401,6 @@ stopifnot(
 
 ## ---------------------------------------------------------------------------------------
 stopifnot(
-  all(uof_raw$ReasonNotArrest == ""),
   all(uof_raw$KEEPDROP == "KEEP"),
   all(
     uof_raw$IncidentYear == lubridate::year(uof_raw$IncidentDate1)
@@ -503,12 +514,6 @@ incident <- incident %>%
 
 ## ---------------------------------------------------------------------------------------
 incident <- incident %>%
-  mutate(on_behalf_of_first_name=na_if(on_behalf_of_first_name, "")) %>%
-  mutate(on_behalf_of_last_name=na_if(on_behalf_of_last_name, ""))
-
-
-## ---------------------------------------------------------------------------------------
-incident <- incident %>%
   left_join(count(subject, form_id, name = "subject_count"),
             by = "form_id")
 
@@ -520,15 +525,12 @@ incident <- incident %>%
     report_number,
     incident_case_number,
     incident_date_1,
-    incident_date_2,
     agency_county,
     agency_name,
     incident_municipality,
     incident_municipality_county,
     officer_name_id,
     officer_name,
-    on_behalf_of_last_name,
-    on_behalf_of_first_name,
     officer_age,
     officer_race,
     officer_rank,

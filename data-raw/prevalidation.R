@@ -43,11 +43,11 @@ raw_names <- c(
   "SubActions"                       ,"SubResist",
   "SubMedicalTreat"                  ,"SubjectInjuries",
   "SubjectsArrested"                 ,"ReasonNotArrest",
-  "subject_type"                     ,"SubectsAge",
-  "SubjectRace"                      ,"SubectsGender",
-  "TypeofForce"                      ,"on_behalf_other_officer_last_nam",
-  "on_behalf_other_officer_first_na" ,"KEEPDROP",
-  "IncidentYear"
+  "subject_type"                     ,"SubjectsAge",
+  "SubjectRace"                      ,"SubjectsGender",
+  "TypeofForce"                      ,"Incident_date1",
+  "incident_lighting2"               ,"IncidentYear",
+  "KEEPDROP"
 )
 
 message("Checking column names")
@@ -69,7 +69,7 @@ check_list_levels(
 
 check_list_levels(
   uof_raw,
-  SubectsGender,
+  SubjectsGender,
   sep_comma_no_space,
   njoaguof:::gender_levels,
   ""
@@ -143,7 +143,7 @@ check_list_levels(
   OffInjuryType,
   sep_comma_space_no_paren,
   njoaguof:::officer_injury_type_levels,
-  c("NoInjury", "Not Provided")
+  c("No Injury", "Not Provided")
 )
 
 check_list_levels(
@@ -202,6 +202,13 @@ check_list_levels(
   ""
 )
 
+check_list_levels(
+  uof_raw,
+  ReasonNotArrest,
+  sep_comma_no_space,
+  njoaguof:::reason_not_arrested_levels,
+  c("Not Provided", "")
+)
 message("Checking county levels")
 stopifnot(0 ==
             setdiff(uof_raw %>% dplyr::pull(County2), njoaguof:::county_levels))

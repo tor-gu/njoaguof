@@ -66,20 +66,20 @@ incident %>%
   select(form_id, agency_county) %>%
   right_join(incident_video_type, by = "form_id") %>%
   count(agency_county, video_type)
-#> # A tibble: 178 × 3
+#> # A tibble: 180 × 3
 #>    agency_county video_type              n
 #>    <fct>         <fct>               <int>
-#>  1 Atlantic      Body Worn             461
+#>  1 Atlantic      Body Worn             479
 #>  2 Atlantic      CED Camera              5
 #>  3 Atlantic      Cell Phone              3
 #>  4 Atlantic      Commercial Building    24
-#>  5 Atlantic      Motor Vehicle         127
+#>  5 Atlantic      Motor Vehicle         132
 #>  6 Atlantic      Residential/Home        2
-#>  7 Atlantic      Station House          26
+#>  7 Atlantic      Station House          28
 #>  8 Atlantic      Other                  31
-#>  9 Bergen        Body Worn             461
-#> 10 Bergen        CED Camera             35
-#> # … with 168 more rows
+#>  9 Bergen        Body Worn             480
+#> 10 Bergen        CED Camera             36
+#> # … with 170 more rows
 ```
 
 ``` r
@@ -93,23 +93,23 @@ incident %>%
 #> # A tibble: 20 × 3
 #>    officer_gender          subject_gender              n
 #>    <fct>                   <fct>                   <int>
-#>  1 Male                    Male                    14010
-#>  2 Male                    Female                   3585
+#>  1 Male                    Male                    14610
+#>  2 Male                    Female                   3737
 #>  3 Male                    Gender Non-Conforming/X    15
 #>  4 Male                    Not Provided              175
-#>  5 Female                  Male                      686
-#>  6 Female                  Female                    399
+#>  5 Female                  Male                      715
+#>  6 Female                  Female                    412
 #>  7 Female                  Gender Non-Conforming/X     2
 #>  8 Female                  Not Provided                6
 #>  9 Gender Non-Conforming/X Male                        9
 #> 10 Gender Non-Conforming/X Female                      1
 #> 11 Gender Non-Conforming/X Gender Non-Conforming/X     1
-#> 12 Other                   Male                     1779
-#> 13 Other                   Female                    450
-#> 14 Other                   Gender Non-Conforming/X     3
+#> 12 Other                   Male                     1845
+#> 13 Other                   Female                    461
+#> 14 Other                   Gender Non-Conforming/X     2
 #> 15 Other                   Not Provided               34
-#> 16 Not Provided            Male                      184
-#> 17 Not Provided            Female                     49
+#> 16 Not Provided            Male                      205
+#> 17 Not Provided            Female                     56
 #> 18 Not Provided            Not Provided               40
 #> 19 <NA>                    Male                       16
 #> 20 <NA>                    Female                      7
@@ -122,13 +122,13 @@ which has one row for each use of force incident. Fields with multiple
 values are recorded as comma separated lists. For example:
 
 ``` r
-use_of_force_raw %>% count(SubectsGender) %>% head(5)
+use_of_force_raw %>% count(SubjectsGender) %>% head(5)
 #> # A tibble: 5 × 2
-#>   SubectsGender                     n
+#>   SubjectsGender                    n
 #>   <chr>                         <int>
 #> 1 ""                                1
-#> 2 "Female,"                      4222
-#> 3 "Female,Female"                  53
+#> 2 "Female,"                      4402
+#> 3 "Female,Female"                  54
 #> 4 "Female,Female,Female,"           3
 #> 5 "Female,Female,Female,Female"     3
 ```
@@ -148,15 +148,15 @@ use_of_force_raw %>% filter(form_id == 16301) %>%
     form_id,
     SubjectsArrested,
     subject_type,
-    SubectsAge,
+    SubjectsAge,
     SubjectRace,
-    SubectsGender,
-    SubectsGender
+    SubjectsGender,
+    SubjectsGender
   )
 #> # A tibble: 1 × 6
-#>   form_id SubjectsArrested subject_type  SubectsAge SubjectRace    SubectsGender
-#>     <dbl> <chr>            <chr>         <chr>      <chr>          <chr>        
-#> 1   16301 True,False       Person,Person 26,23      Hispanic,Black Male,Female
+#>   form_id SubjectsArrested subject_type  SubjectsAge SubjectRace  SubjectsGender
+#>     <dbl> <chr>            <chr>         <chr>       <chr>        <chr>         
+#> 1   16301 True,False       Person,Person 26,23       Hispanic,Bl… Male,Female
 
 subject %>% filter(form_id == 16301)
 #> # A tibble: 2 × 8
