@@ -19,10 +19,6 @@ to the incident.}
 is column \code{IncidentDate1}, and is the date the OAG dashboard uses as the
 incident date.}
 
-\item{incident_date_2}{A second "incident date" field in the source data.
-It is always equal to \code{incident_date_1} or \code{incident_date_1 + 1}.
-The dashboard does not use this date.}
-
 \item{agency_county}{The county of the \emph{agency}, or "NJSP" or "Other".
 Note that this is not the incident location. This is column
 \code{County2}.}
@@ -46,12 +42,6 @@ source data, names will sometimes vary in spelling and capitalization.
 For name variants, refer to table \code{officer_name_variants}. To associate
 a name variant to a specific incident, refer to the raw data
 \code{use_of_force_raw}, column \code{Officer_Name2}.}
-
-\item{on_behalf_of_last_name}{This is the last name of the officer involved if
-the incident report was filled out by a different officer.}
-
-\item{on_behalf_of_first_name}{This is the first name of the officer involved if
-the incident report was filled out by a different officer.}
 
 \item{officer_age}{The officer's age.}
 
