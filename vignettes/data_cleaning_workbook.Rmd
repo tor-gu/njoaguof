@@ -291,6 +291,7 @@ make_messy_relationship_table <- function(table, levels, separating_regex) {
                  values_to="value",
                  values_drop_na=TRUE) %>%
     separate(column, c("column", "index"), "__") %>%
+    mutate(index=as.integer(index)) %>%
     pivot_wider(names_from="column", values_from="value") %>%
     mutate(value=factor(str_trim(value), levels=levels)) %>%
     filter(!is.na(value))
