@@ -90,29 +90,27 @@ incident %>%
   select(form_id, officer_gender) %>% 
   right_join(subject, by="form_id") %>%
   count(officer_gender, subject_gender=gender)
-#> # A tibble: 20 × 3
+#> # A tibble: 18 × 3
 #>    officer_gender          subject_gender              n
 #>    <fct>                   <fct>                   <int>
 #>  1 Male                    Male                    14610
 #>  2 Male                    Female                   3737
 #>  3 Male                    Gender Non-Conforming/X    15
-#>  4 Male                    Not Provided              175
+#>  4 Male                    <NA>                      175
 #>  5 Female                  Male                      715
 #>  6 Female                  Female                    412
 #>  7 Female                  Gender Non-Conforming/X     2
-#>  8 Female                  Not Provided                6
+#>  8 Female                  <NA>                        6
 #>  9 Gender Non-Conforming/X Male                        9
 #> 10 Gender Non-Conforming/X Female                      1
 #> 11 Gender Non-Conforming/X Gender Non-Conforming/X     1
 #> 12 Other                   Male                     1845
 #> 13 Other                   Female                    461
 #> 14 Other                   Gender Non-Conforming/X     2
-#> 15 Other                   Not Provided               34
-#> 16 Not Provided            Male                      205
-#> 17 Not Provided            Female                     56
-#> 18 Not Provided            Not Provided               40
-#> 19 <NA>                    Male                       16
-#> 20 <NA>                    Female                      7
+#> 15 Other                   <NA>                       34
+#> 16 <NA>                    Male                      221
+#> 17 <NA>                    Female                     63
+#> 18 <NA>                    <NA>                       40
 ```
 
 ## Notes
