@@ -5,8 +5,7 @@ gender_levels <-
   c("Male",
     "Female",
     "Gender Non-Conforming/X",
-    "Other",
-    "Not Provided")
+    "Other")
 
 incident_type_levels <- c(
   "Aggressive/Injured Animal",
@@ -46,8 +45,7 @@ race_levels <- c(
   "Pacific Islander",
   "Two or more races",
   "White",
-  "Other",
-  "Not Provided"
+  "Other"
 )
 
 weather_levels <- c("Clear", "Cloudy", "Fog", "Rain", "Snow/Sleet/Ice")

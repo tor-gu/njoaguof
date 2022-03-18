@@ -72,7 +72,7 @@ check_list_levels(
   SubjectsGender,
   sep_comma_no_space,
   njoaguof:::gender_levels,
-  ""
+  c("", "Not Provided")
 )
 
 check_list_levels(
@@ -80,7 +80,7 @@ check_list_levels(
   SubjectRace,
   sep_comma_no_space,
   njoaguof:::race_levels,
-  c("Am. Indian", "Black or African American", "")
+  c("Am. Indian", "Black or African American", "", "Not Provided")
 )
 
 check_list_levels(
