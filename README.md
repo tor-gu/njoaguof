@@ -39,6 +39,7 @@ from <https://www.njoag.gov/force/>.
     -   `incident_subject_injury`
     -   `incident_subject_medical_treatment`
     -   `incident_subject_perceived_condition`
+    -   `incident_subject_reason_not_arrested`
     -   `incident_subject_resistance`
 -   `officer_name_variants` Includes every variation in spelling and
     capitalization of the officer names found in the source data.
@@ -53,14 +54,6 @@ specific incidents:
 ``` r
 library(njoaguof)
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 # Summarize video_type by agency_county
 incident %>%
   select(form_id, agency_county) %>%
@@ -209,10 +202,10 @@ use_of_force_raw %>%
 incident_subject_resistance %>% filter(form_id == 19542)
 #> # A tibble: 3 × 3
 #>   form_id index subject_resistance                              
-#>     <dbl> <chr> <fct>                                           
-#> 1   19542 1     Verbal                                          
-#> 2   19542 2     Aggressive resistance(attempt to attack or harm)
-#> 3   19542 3     Verbal
+#>     <dbl> <int> <fct>                                           
+#> 1   19542     1 Verbal                                          
+#> 2   19542     2 Aggressive resistance(attempt to attack or harm)
+#> 3   19542     3 Verbal
 ```
 
 Note that it is not clear in the source data if “Aggressive resistance”

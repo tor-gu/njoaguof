@@ -7,6 +7,7 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  message = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
@@ -42,6 +43,7 @@ This is cleaned-up version of the NJ OAG Use of Force database
   + ```incident_subject_injury```
   + ```incident_subject_medical_treatment```
   + ```incident_subject_perceived_condition```
+  + ```incident_subject_reason_not_arrested```
   + ```incident_subject_resistance```
 * ```officer_name_variants``` Includes every variation in spelling and capitalization of the officer names found in the source data.
 * ```use_of_force_raw``` The source data.
