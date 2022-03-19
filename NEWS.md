@@ -1,5 +1,7 @@
 # njoaguof 1.1.1
 
+* README updated.
+
 # njoaguof 1.1.0
 
 * Updated to use most recent dataset from NJ OAG:
