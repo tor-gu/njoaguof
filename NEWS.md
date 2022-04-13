@@ -1,4 +1,10 @@
-# njoaguof (development version)
+# njoaguof 1.2.0
+
+* Updated to use most recent dataset from NJ OAG:
+  "NJOAG Use of Force Data Dashboard 10-01-20 to 03-31-22.dta"
+* New factor level `"Kneeling on Chest, Back"` in column `force_type`.
+* New factor levels `"Insufficient Probable Cause -includes continuing investigation"` and `"No Probable Cause- Crime Unfounded"` in column `reason_not_arrested`.
+* FIX to column `force_type`:  Previous releases erroneously treated `"Chokehold, Carotid artery restraint"` as two separate types, (`"Chokehold"` and `"Carotid artery restraint"`). This has been corrected in this release.
 
 # njoaguof 1.1.1
 
