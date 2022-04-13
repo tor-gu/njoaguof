@@ -198,13 +198,13 @@ subject_injury_levels <- c(
 force_type_levels <- c(
   "Canine bit (apprehension)",
   "Canine bit (spontaneous)",
-  "Carotid artery restraint",
   "CED Spark Display",
-  "Chokehold",
+  "Chokehold, Carotid artery restraint",
   "Compliance hold with impact weapon- not a strike",
   "Discharged Chemical at",
   "Discharged Firearm at",
   "High Volume OC Spray",
+  "Kneeling on Chest, Back",
   "Pointing Firearm",
   "Struck",
   "Used arm bar on",
@@ -249,7 +249,9 @@ county_levels <- c(
 reason_not_arrested_levels <- c(
   "Already in Custody",
   "Deceased",
+  "Insufficient Probable Cause -includes continuing investigation",
   "Medical/Mental Health Incident",
+  "No Probable Cause- Crime Unfounded",
   "Subject Fled",
   "Other"
 )

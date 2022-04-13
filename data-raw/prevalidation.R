@@ -3,6 +3,7 @@ library(njoaguof)
 trailing_comma_regex <- "(?<=.),?$"
 sep_comma_no_space <- ",(?! )"
 sep_comma_space_no_paren <- r"(,(?![^(]*\)) )"
+sep_comma_space_force_special <- r"(, (?!Back|Carotid))"
 
 check_list_levels <- function(tbl,
                               column,
@@ -42,7 +43,7 @@ raw_names <- c(
   "SubjectInjuredPrior"              ,"PerceivedCondition",
   "SubActions"                       ,"SubResist",
   "SubMedicalTreat"                  ,"SubjectInjuries",
-  "SubjectsArrested"                 ,"ReasonNotArrest",
+  "SubectsArrested"                  ,"ReasonNotArrest",
   "subject_type"                     ,"SubjectsAge",
   "SubjectRace"                      ,"SubjectsGender",
   "TypeofForce"                      ,"Incident_date1",
@@ -197,7 +198,7 @@ check_list_levels(
 check_list_levels(
   uof_raw,
   TypeofForce,
-  sep_comma_space_no_paren,
+  sep_comma_space_force_special,
   njoaguof:::force_type_levels,
   ""
 )

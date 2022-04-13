@@ -42,7 +42,7 @@ sep_comma_space_no_paren <- r"(,(?![^(]*\)) )"
 ```{r}
 subject <- uof_raw %>%
   select(form_id,
-         SubjectsArrested,
+         SubectsArrested,
          subject_type,
          SubjectsAge,
          SubjectRace,
@@ -54,13 +54,13 @@ subject <- uof_raw %>%
   filter(if_any(-form_id, ~ . != ""))
   
 max_subjects <- 
-  subject$SubjectsArrested %>% 
+  subject$SubectsArrested %>% 
   map_int(str_count, ",") %>% 
   max() + 1
 
 
 subject <- subject %>% 
-  separate(SubjectsArrested, 
+  separate(SubectsArrested, 
            paste0("arrested__", 1:max_subjects), 
            ",",
            fill="right") %>%
@@ -468,7 +468,7 @@ stopifnot(
     nrow()
 )
 ```
-#### ```SubjectsArrested```, ```subject_type```, ```SubjectsAge```, ```SubjectRace```, and ```SubjectsGender```
+#### ```SubectsArrested```, ```subject_type```, ```SubjectsAge```, ```SubjectRace```, and ```SubjectsGender```
 These fields are reflected in the ```subject``` table.
 
 #### ```KEEPDROP```, and ```IncidentYear```
