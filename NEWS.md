@@ -1,3 +1,11 @@
+# njoaguof 1.2.1
+
+* Use census values for "county" and "county subdivision" for `agency_county`,
+`incident_municipality` and `incident_municipality_county`. In particular, the
+county values `"Other"` and `"NJSP"` now map to `NA`.
+
+* Change some values of `agency_name` to agree with values in `NJOAGLEOD` 
+package.
 # njoaguof 1.2.0
 
 * Updated to use most recent dataset from NJ OAG:

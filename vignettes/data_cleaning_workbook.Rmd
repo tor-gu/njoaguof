@@ -25,22 +25,36 @@ library(njoaguof)
 ```
 
 ## Set up
+
 Load the Use of Force raw data.
+
 ```{r}
 data("use_of_force_raw")
 uof_raw <- use_of_force_raw
 ```
+
+We will also need county and municipality data from the US Census, gathered using the `tidycensus` package:
+```{r}
+data("census_counties")
+data("census_municipalities")
+```
+
 Some regular expressions we will use repeatedly
+
 ```{r}
 trailing_comma_regex <- "(?<=.),?$"
 sep_comma_no_space <- ",(?! )"
 sep_comma_space_no_paren <- r"(,(?![^(]*\)) )"
 ```
+
 ## Pre-validation
-Before we start parsing, we will verify some things. 
+
+Before we start parsing, we will verify some things.
 
 ### Column names
+
 First, here are the columns we are expecting.
+
 ```{r}
 raw_names <- c(
   "form_id"                          ,"County2",
@@ -72,8 +86,11 @@ raw_names <- c(
 )
 stopifnot(all.equal(names(uof_raw), raw_names))
 ```
+
 ### Levels
+
 We will use this function to check the levels of multi-valued fields.
+
 ```{r}
 check_list_levels <- function(tbl,
                               column,
@@ -93,7 +110,9 @@ check_list_levels <- function(tbl,
   }
 }
 ```
+
 And here are all the levels.
+
 ```{r}
 subject_type_levels <-
   c("Person", "Animal", "Other", "Unknown Subject(s)")
@@ -317,32 +336,6 @@ force_type_levels <- c(
   "Other"
 )
 
-county_levels <- c(
-  "Atlantic",
-  "Bergen",
-  "Burlington",
-  "Camden",
-  "Cape May",
-  "Cumberland",
-  "Essex",
-  "Gloucester",
-  "Hudson",
-  "Hunterdon",
-  "Mercer",
-  "Middlesex",
-  "Monmouth",
-  "Morris",
-  "Ocean",
-  "Passaic",
-  "Salem",
-  "Somerset",
-  "Sussex",
-  "Union",
-  "Warren",
-  "NJSP",
-  "Other"
-)
-
 reason_not_arrested_levels <- c(
   "Already in Custody",
   "Deceased",
@@ -352,8 +345,13 @@ reason_not_arrested_levels <- c(
   "Subject Fled",
   "Other"
 )
+
+county_levels <- census_counties %>% pull(county)
 ```
+
+
 Now we will check that the multi-value fields contain only these levels.
+
 ```{r}
 uof_raw_trimmed <- uof_raw %>%
   dplyr::mutate(across(
@@ -497,12 +495,20 @@ check_list_levels(
   c("Not Provided", "")
 )
 ```
-Finally, we check the county field.
+
+Finally, we check the county field.  There are two non-county values which we 
+are expecting (and will map to `NA`): `"Other"` and `"NJSP"`.
+
 ```{r}
-stopifnot(0 == 
-            setdiff(uof_raw %>% dplyr::pull(County2), county_levels))
+stopifnot(all(
+  setdiff(uof_raw %>% dplyr::pull(County2) %>% paste0(" County"),
+        county_levels) %in%
+    c("Other County", "NJSP County")
+  )
+)
 ```
-## ```subject``` table
+
+## `subject` table
 
 ```{r}
 subject <- uof_raw %>%
@@ -553,10 +559,13 @@ subject <- subject %>%
   pivot_wider(names_from="column", values_from="value") 
 
 ```
+
 Now we will clean up this table, column by column.
 
-#### ```index``` and ```arrested```
-```index``` is the index into the subject list. It should be an integer. ```arrested``` is a boolean.
+#### `index` and `arrested`
+
+`index` is the index into the subject list. It should be an integer. `arrested` is a boolean.
+
 ```{r}
 subject <- subject %>% 
   mutate(index=as.integer(index),
@@ -564,15 +573,21 @@ subject <- subject %>%
   )
 
 ```
-#### ```type``` and ```gender```
+
+#### `type` and `gender`
+
 We will convert these to factors.
+
 ```{r}
 subject <- subject %>% 
   mutate(type=factor(type, levels=subject_type_levels),
          gender=factor(gender, levels=gender_levels))
 ```
-#### ```age```
-This field is not currently strictly numeric -- it also contains values ```"Unknown"``` and ```"Juvenile"```.  We will add a boolean column, ```juvenile``` and convert ```age``` to an integer.  The value of ```"Unknown"``` will map to ```NA``` in both columns.
+
+#### `age`
+
+This field is not currently strictly numeric -- it also contains values `"Unknown"` and `"Juvenile"`. We will add a boolean column, `juvenile` and convert `age` to an integer. The value of `"Unknown"` will map to `NA` in both columns.
+
 ```{r}
 as_integer_or_na <- function(x) suppressWarnings(as.integer(x))
 subject <- subject %>% 
@@ -582,8 +597,11 @@ subject <- subject %>%
   )) %>%
   mutate(age=as_integer_or_na(age))
 ```
-#### ```race```
+
+#### `race`
+
 We need to normalize some names before converting to a factor.
+
 ```{r}
 subject <- subject %>%
   mutate(
@@ -595,24 +613,30 @@ subject <- subject %>%
     race=factor(race, levels=race_levels)
   )
 ```
+
 #### Cleanup and finish
+
 Finally, we reorder the columns.
+
 ```{r}
 subject <- subject %>% 
   select(form_id, index, arrested, type, age, juvenile, race, gender)
 ```
+
 ```{r purl=FALSE}
 subject
 ```
 
 ## Incident set membership tables
+
 These tables are built from columns that contain value-lists with the following properties:
 
-1. For each column, the set of values is drawn from a finite list
-2. For each field, there are no repeated values.
-3. The order of the list elements does not matter.
+1.  For each column, the set of values is drawn from a finite list
+2.  For each field, there are no repeated values.
+3.  The order of the list elements does not matter.
 
 For each of these columns, we will create a new table with one row per value, using this function:
+
 ```{r}
 ### table should have two columns: form_id and list_col
 make_set_membership_table <- function(table, levels, separating_regex = ",") {
@@ -640,7 +664,8 @@ make_set_membership_table <- function(table, levels, separating_regex = ",") {
 }
 ```
 
-### ```incident_weather```
+### `incident_weather`
+
 ```{r}
 incident_weather <- uof_raw %>% 
   select(form_id, list_col=incident_weather) %>%
@@ -649,7 +674,8 @@ incident_weather <- uof_raw %>%
   rename(weather=value)
 ```
 
-### ```incident_video_type```
+### `incident_video_type`
+
 ```{r}
 incident_video_type <- uof_raw %>% 
   select(form_id, list_col=video_type) %>%
@@ -657,7 +683,9 @@ incident_video_type <- uof_raw %>%
                             sep_comma_space_no_paren) %>%
   rename(video_type=value)
 ```
-### ```incident_lighting```
+
+### `incident_lighting`
+
 ```{r}
 incident_lighting <- uof_raw %>% 
   select(form_id, list_col=incident_lighting) %>%
@@ -665,7 +693,9 @@ incident_lighting <- uof_raw %>%
                             sep_comma_space_no_paren) %>%
   rename(lighting=value)
 ```
-### ```incident_location_type```
+
+### `incident_location_type`
+
 ```{r}
 incident_location_type <- uof_raw %>% 
   select(form_id, list_col=location_type) %>%
@@ -673,7 +703,9 @@ incident_location_type <- uof_raw %>%
                             sep_comma_space_no_paren) %>%
   rename(location_type=value)
 ```
-### ```incident_type```
+
+### `incident_type`
+
 ```{r}
 incident_type <- uof_raw %>%
   select(form_id, list_col=incident_type) %>%
@@ -683,7 +715,8 @@ incident_type <- uof_raw %>%
 
 ```
 
-### ```incident_contact_origin```
+### `incident_contact_origin`
+
 ```{r}
 incident_contact_origin <- uof_raw %>%
   select(form_id, list_col=contact_origin) %>%
@@ -692,7 +725,8 @@ incident_contact_origin <- uof_raw %>%
   rename(contact_origin=value)
 ```
 
-### ```incident_planned_contact```
+### `incident_planned_contact`
+
 ```{r}
 incident_planned_contact <- uof_raw %>%
   select(form_id, list_col=planned_contact) %>%
@@ -700,10 +734,11 @@ incident_planned_contact <- uof_raw %>%
                             sep_comma_space_no_paren) %>%
   rename(planned_contact=value)
 ```
-### ```incident_officer_injury_type```
-This is pulled from the field ```OffInjuryType```, which is of mixed type.
-The field may be equal to ```"No Injury"``` or to ```"Not Provided"```. Otherwise, it is value-list column, using the levels below.
-When it is a value-list column, we will use it to populate the ```incident_officer_injury_type``` table. The other values will be reflected in the ```incident``` table.
+
+### `incident_officer_injury_type`
+
+This is pulled from the field `OffInjuryType`, which is of mixed type. The field may be equal to `"No Injury"` or to `"Not Provided"`. Otherwise, it is value-list column, using the levels below. When it is a value-list column, we will use it to populate the `incident_officer_injury_type` table. The other values will be reflected in the `incident` table.
+
 ```{r}
 
 incident_officer_injury_type <- uof_raw %>%
@@ -712,7 +747,9 @@ incident_officer_injury_type <- uof_raw %>%
                             sep_comma_space_no_paren) %>%
   rename(officer_injury_type=value)
 ```
-### ```incident_officer_medical_treatment```
+
+### `incident_officer_medical_treatment`
+
 ```{r}
 incident_officer_medical_treatment <- uof_raw %>%
   select(form_id, list_col=OFFMEDTREAT2) %>%
@@ -722,8 +759,9 @@ incident_officer_medical_treatment <- uof_raw %>%
 ```
 
 ## Messy relationship tables
-These tables are built from columns that contain value-lists that are "messy" in the following sense.
-Each column contains value-lists with repeated values -- because the values apply to individual subjects -- but there is no reliable way to assign individual list elements to individual subjects.  For example, ```form_id``` ```20221``` has two subjects, but field ```SubActions``` has three values:
+
+These tables are built from columns that contain value-lists that are "messy" in the following sense. Each column contains value-lists with repeated values -- because the values apply to individual subjects -- but there is no reliable way to assign individual list elements to individual subjects. For example, `form_id` `20221` has two subjects, but field `SubActions` has three values:
+
 ```{r purl=FALSE}
 uof_raw %>% 
   filter(form_id==20221) %>%
@@ -732,9 +770,11 @@ uof_raw %>%
   separate(SubActions, into=paste0("SubActions_", 1:3), ",") %>% 
   glimpse()
 ```
-The value ```"Resisted arrest/police officer control"``` appears twice because it applies to both subjects. But ```"Prevent harm to another"``` appears only once, and it not clear if it applies to the first subject or to the second one.
+
+The value `"Resisted arrest/police officer control"` appears twice because it applies to both subjects. But `"Prevent harm to another"` appears only once, and it not clear if it applies to the first subject or to the second one.
 
 We will create a separate table for each of these columns, assigning all of the values -- including the repeated values -- to the incident. There will also be an index column, so that the list position can be reconstructed if necessary.
+
 ```{r}
 make_messy_relationship_table <- function(table, levels, separating_regex) {
   table <- table %>%
@@ -762,7 +802,9 @@ make_messy_relationship_table <- function(table, levels, separating_regex) {
     filter(!is.na(value))
 }
 ```
-### ```incident_subject_perceived_condition```
+
+### `incident_subject_perceived_condition`
+
 ```{r}
 incident_subject_perceived_condition <- uof_raw %>%
   select(form_id, list_col=PerceivedCondition) %>%
@@ -771,7 +813,8 @@ incident_subject_perceived_condition <- uof_raw %>%
   rename(perceived_condition=value)
 ```
 
-### ```incident_subject_action```
+### `incident_subject_action`
+
 ```{r}
 
 incident_subject_action <- uof_raw %>% 
@@ -781,7 +824,8 @@ incident_subject_action <- uof_raw %>%
   rename(subject_action=value)
 ```
 
-### ```incident_subject_resistance```
+### `incident_subject_resistance`
+
 ```{r}
 incident_subject_resistance <- uof_raw %>% 
   select(form_id, list_col=SubResist) %>%
@@ -789,7 +833,9 @@ incident_subject_resistance <- uof_raw %>%
                                 sep_comma_no_space) %>%
   rename(subject_resistance=value)
 ```
-### ```incident_subject_medical_treatment```
+
+### `incident_subject_medical_treatment`
+
 ```{r}
 incident_subject_medical_treatment <- uof_raw %>% 
   select(form_id, list_col=SubMedicalTreat) %>%
@@ -797,7 +843,9 @@ incident_subject_medical_treatment <- uof_raw %>%
                                 sep_comma_no_space) %>%
   rename(subject_medical_treatment=value)
 ```
-### ```incident_subject_injury```
+
+### `incident_subject_injury`
+
 ```{r}
 incident_subject_injury <- uof_raw %>% 
   select(form_id, list_col=SubjectInjuries) %>%
@@ -805,7 +853,9 @@ incident_subject_injury <- uof_raw %>%
                                 sep_comma_no_space) %>%
   rename(subject_injury=value)
 ```
-### ```incident_subject_force_type```
+
+### `incident_subject_force_type`
+
 ```{r}
 incident_subject_force_type <- uof_raw %>% 
   select(form_id, list_col=TypeofForce) %>%
@@ -813,7 +863,9 @@ incident_subject_force_type <- uof_raw %>%
                                 sep_comma_space_no_paren) %>%
   rename(force_type=value)
 ```
-### ```incident_subject_reason_not_arrested```
+
+### `incident_subject_reason_not_arrested`
+
 ```{r}
 incident_subject_reason_not_arrested <- uof_raw %>%
   select(form_id, list_col="ReasonNotArrest") %>%
@@ -822,9 +874,12 @@ incident_subject_reason_not_arrested <- uof_raw %>%
   rename(reason_not_arrested=value)
 ```
 
-## ```incident``` table
+## `incident` table
+
 ### Set up
+
 First, we select the columns we will need from the raw data.
+
 ```{r}
 incident <- uof_raw %>%
   select(
@@ -847,11 +902,15 @@ incident <- uof_raw %>%
     subject_injured_count = TotalSubInjuredIncident
   )
 ```
+
 ### Fields not selected
+
 Before we clean up these fields, let us review the fields we are omitting.
 
-#### ```INCIDENTID``` and ```Officer_Name_Agency```
+#### `INCIDENTID` and `Officer_Name_Agency`
+
 These are synthetic fields composed of other fields, so we do not need them.
+
 ```{r}
 stopifnot(
   0 ==
@@ -883,8 +942,10 @@ stopifnot(
 )
 ```
 
-#### ```IncidentDate1_old``` and ```Incident_date1```
-These fields are always identical to ```IncidentDate1```:
+#### `IncidentDate1_old` and `Incident_date1`
+
+These fields are always identical to `IncidentDate1`:
+
 ```{r}
 stopifnot(0 == 
             uof_raw %>% filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
@@ -893,25 +954,32 @@ stopifnot(0 ==
 )
 ```
 
-#### ```incident_date```, ```other_officer_involved``` and ```officer_in_uniform```
-These fields are always ```NA```:
+#### `incident_date`, `other_officer_involved` and `officer_in_uniform`
+
+These fields are always `NA`:
+
 ```{r}
 stopifnot(0 == uof_raw %>% filter(!is.na(incident_date)) %>% nrow(),
           0 == uof_raw %>% filter(!is.na(other_officer_involved)) %>% nrow(),
           0 == uof_raw %>% filter(!is.na(officer_in_uniform)) %>% nrow())
 ```
 
-#### ```incident_lighting2```
-This field is always ```1```:
+#### `incident_lighting2`
+
+This field is always `1`:
+
 ```{r}
 stopifnot(0 == uof_raw %>% filter(incident_lighting2 != 1) %>% nrow())
 ```
 
-#### ```incident_weather```, ```video_type```, ```incident_lighting```, ```location_type```, ```incident_type```, ```contact_origin```, ```planned_contact```, ```OFFMEDTREAT2```, ```PerceivedCondition```,```SubActions```,```SubResist```, ```SubMedicalTreat```, ```SubjectInjuries```, ```TypeofForce```, and ```ReasonNotArrest```
+#### `incident_weather`, `video_type`, `incident_lighting`, `location_type`, `incident_type`, `contact_origin`, `planned_contact`, `OFFMEDTREAT2`, `PerceivedCondition`,`SubActions`,`SubResist`, `SubMedicalTreat`, `SubjectInjuries`, `TypeofForce`, and `ReasonNotArrest`
+
 These fields are handled in other tables.
 
-#### ```OffInjuryType```
-We did not capture the ```"No Injury"``` value in the ```incident_officer_injury_type``` table, but that value is redundant with ```officer_injuries_injured``` which is ```"1"``` precisely when ```OffInjuryType```is ```"NoInjury"```.
+#### `OffInjuryType`
+
+We did not capture the `"No Injury"` value in the `incident_officer_injury_type` table, but that value is redundant with `officer_injuries_injured` which is `"1"` precisely when `OffInjuryType`is `"NoInjury"`.
+
 ```{r}
 stopifnot(
   0 == uof_raw %>%
@@ -921,8 +989,11 @@ stopifnot(
     nrow()
 )
 ```
-#### ```SubjectInjuredInIncident``` and ```SubjectInjuredPrior```
-This field is identical with ```TotalSubInjuredIncident```
+
+#### `SubjectInjuredInIncident` and `SubjectInjuredPrior`
+
+This field is identical with `TotalSubInjuredIncident`
+
 ```{r}
 stopifnot(
   0 ==
@@ -933,11 +1004,15 @@ stopifnot(
     nrow()
 )
 ```
-#### ```SubectsArrested```, ```subject_type```, ```SubjectsAge```, ```SubjectRace```, and ```SubjectsGender```
-These fields are reflected in the ```subject``` table.
 
-#### ```KEEPDROP```, and ```IncidentYear```
-```KEEPDROP``` is always ```"KEEP"``` and ```IncidentYear``` is redundant with ```IncidentDate1```.
+#### `SubectsArrested`, `subject_type`, `SubjectsAge`, `SubjectRace`, and `SubjectsGender`
+
+These fields are reflected in the `subject` table.
+
+#### `KEEPDROP`, and `IncidentYear`
+
+`KEEPDROP` is always `"KEEP"` and `IncidentYear` is redundant with `IncidentDate1`.
+
 ```{r}
 stopifnot(
   all(uof_raw$KEEPDROP == "KEEP"),
@@ -946,18 +1021,48 @@ stopifnot(
   )
 )
 ```
-### ```incident``` fields
-#### ```agency_county```
-In addition to the counties of New Jersey, we will have levels for ```"NJSP"``` and ```"Other"```.
+
+### `incident` fields
+
+#### `agency_county`
+
+Switch to using the census county names. In particular, the non-counties `"NJSP"` and `"Other"` will be mapped to `NA`.
+
 ```{r}
 incident <- incident %>% 
+  mutate(agency_county=paste0(agency_county, " County")) %>%
   mutate(agency_county = factor(agency_county, county_levels))
 ```
-#### ```agency_name```
+
+#### `agency_name`
 There are over 400 distinct values in this field, at least 19 of which appear exactly once, so we will not use a factor here.
 
-#### ```officer_name``` and ```officer_name_id```
-The ```officer_name``` associated to a single ```officer_name_id``` is not always consistent in spelling and capitalization.  For example:
+In order to reconcile the agency names in this dataset with the agency
+names in the NJ OAG Law Enforcement Officer Diversity dataset, we will make some modifications.
+```{r}
+incident <- incident %>%
+  mutate(
+    agency_name = case_when(
+      agency_name == "Burlington County Sheriffs Office" ~ "Burlington Co Sheriffs Office",
+      agency_name == "Mercer Co Prosecutor Off" ~ "Mercer Co Prosecutors Office",
+      agency_name == "Hudson Co ProsecutorOff-S/Force" ~ "Hudson Co Prosecutors Office",
+      agency_name == "Somerset Co Sheriffs Dept" ~ "Somerset Co Sheriffs Office",
+      agency_name == "Middle Twsp PD" ~ "Middle Twp PD",
+      agency_name == "State Police" ~ "New Jersey State Police",
+      agency_name == "Rutgers Univ Police" ~ "Rutgers University PD",
+      agency_name == "Division Of Fish And Wildlife" ~ "NJ Division Of Fish And Wildlife",
+      agency_name == "NJ State Human Services Police" ~ "NJ Department Of Human Services",
+      agency_name == "Division of Criminal Justice" ~ "NJ Division of Criminal Justice",
+      TRUE ~ agency_name
+    )
+  )
+```
+
+
+#### `officer_name` and `officer_name_id`
+
+The `officer_name` associated to a single `officer_name_id` is not always consistent in spelling and capitalization. For example:
+
 ```{r purl=FALSE}
 incident %>% 
   group_by(officer_name_id) %>% 
@@ -967,7 +1072,9 @@ incident %>%
             by="officer_name_id") %>%
   unique()
 ```
-Therefore, we will choose the most common variant for each name id and apply that to all rows.  We will save variant names in a new table, ```officer_name_variants```.
+
+Therefore, we will choose the most common variant for each name id and apply that to all rows. We will save variant names in a new table, `officer_name_variants`.
+
 ```{r}
 incident <- incident %>% 
   mutate(officer_name = na_if(officer_name, ""))
@@ -989,13 +1096,17 @@ incident <- incident %>%
 
 rm(standard_names)
 ```
-#### ```report_number```, ```incident_case_number```, and ```incident_date_1```
+
+#### `report_number`, `incident_case_number`, and `incident_date_1`
+
 We leave these fields as they are.
 
-#### ```incident_municipality```
-This field is of the form ```<municipality>, <county-name> County```.  We will break this field up into ```incident_municipality``` and ```incident_municipality_county```.  We will discard the trailing ```County```.
+#### `incident_municipality`
+This field is of 
+the form `<municipality>, <county-name>`. We will break this field up into `incident_municipality` and `incident_municipality_county`.
+
 ```{r}
-incident <- incident %>% 
+incident <- incident %>%
   separate(
     incident_municipality,
     c("incident_municipality", "incident_municipality_county"),
@@ -1003,32 +1114,120 @@ incident <- incident %>%
     fill = "right"
   ) %>%
   mutate(incident_municipality_county =
-           str_trim(incident_municipality_county)) %>%
-  mutate(incident_municipality_county =
-           str_remove(incident_municipality_county, " County"))
+           str_trim(incident_municipality_county))
 ```
-Every non-```NA``` value of ```incident_municipality_county``` is in ``county_levels```:
 
+Next, we will build a lookup table, matching the unique municipality/county
+values in the UOF dataset to the census municipality names.  This is done in
+three steps.  
 ```{r}
-stopifnot(0 == setdiff(
-  incident %>% pull(incident_municipality_county) %>% discard(is.na),
-  county_levels
-) %>% length())
+unique_municipalities <- incident %>%
+  select(incident_municipality_county, incident_municipality) %>%
+  unique()
 ```
-So we will use same levels as the ```agency_county``` column.
+
+First step:  Exact matches:
 ```{r}
-incident <- incident %>%
+lookup_1 <- unique_municipalities %>%
+  inner_join(census_municipalities,
+             by=c("incident_municipality"="municipality_and_type",
+                  "incident_municipality_county"="county")) %>%
+  mutate(census_municipality=incident_municipality) %>%
+  select(incident_municipality, incident_municipality_county, census_municipality)
+```
+Second step: Matches with the base name (excluding the municipality "type", such as "borough" or "township"):
+```{r}
+lookup_2 <- unique_municipalities %>%
+  anti_join(lookup_1,
+            by=c("incident_municipality", "incident_municipality_county")) %>%
+  inner_join(census_municipalities,
+             by=c("incident_municipality"="municipality",
+                  "incident_municipality_county"="county")) %>%
+  mutate(census_municipality=municipality_and_type) %>%
+  select(incident_municipality, incident_municipality_county, census_municipality)
+```
+Third step:  The remaining municipalities require ad-hoc logic.
+```{r}
+lookup_3 <- unique_municipalities %>%
+  anti_join(
+    lookup_1,
+    by = c("incident_municipality", "incident_municipality_county")
+  ) %>%
+  anti_join(
+    lookup_2,
+    by = c("incident_municipality", "incident_municipality_county")
+  ) %>%
   mutate(
-    incident_municipality_county =
-      factor(incident_municipality_county, levels = county_levels)
+    census_municipality = case_when(
+      # Name changes:  Dover, Ocean County -->           Toms River
+      #                Washington, Mercer County -->     Robbinsville
+      #                West Paterson, Essex County -->   Woodland Park
+      #                South Belmar, Monmouth County --> Spring Lake
+      incident_municipality_county == "Ocean County" &
+        incident_municipality == "Dover" ~ "Toms River township",
+      incident_municipality_county == "Mercer County" &
+        incident_municipality == "Washington" ~ "Robbinsville township",
+      incident_municipality_county == "Passaic County" &
+        incident_municipality == "West Paterson" ~ "Woodland Park borough",
+      incident_municipality_county == "Monmouth County" &
+        incident_municipality == "South Belmar" ~ "Spring Lake borough",
+      # "Princeton township" and "Princeton borough" merged to form just-plain
+      # "Princeton" -- the only municipality in NJ without a type!
+      incident_municipality_county == "Mercer County" &
+        incident_municipality == "Princeton township" ~ "Princeton",
+      # Cleanup miscellaneous idiosyncrasies.
+      incident_municipality_county == "Essex County" &
+        incident_municipality == "Village of South Orange" ~ "South Orange Village township",
+      incident_municipality_county == "Essex County" &
+        incident_municipality == "Caldwell Borough" ~ "Caldwell borough",
+      incident_municipality_county == "Monmouth County" &
+        incident_municipality == "Spring Lake Boro" ~ "Spring Lake borough"
+    )
   )
 ```
-#### ```indoor_or_outdoor```
+
+Now build the full lookup table:
+```{r}
+lookup <- rbind(lookup_1, lookup_2, lookup_3)
+```
+Check that we have no duplicates, and that the only municipality we are mapping
+to `NA` is `"Other"`:
+```{r}
+stopifnot(0 ==
+  lookup %>% count(incident_municipality, incident_municipality_county) %>%
+    filter(n>1) %>% nrow()
+)
+stopifnot("Other" == 
+            lookup %>% filter(is.na(census_municipality)) %>% pull(incident_municipality)
+)
+```
+
+Now, finally, we can use the lookup table to tidy the `incident_municipality field`:
+```{r}
+incident <- incident %>% 
+  left_join(lookup, 
+            by = c("incident_municipality", "incident_municipality_county")) %>% 
+  mutate(incident_municipality=census_municipality) %>%
+  select(-census_municipality) 
+```
+
+Let's also use the county levels for `incident_municipality_county`:
+```{r}
+incident <- incident %>%
+  mutate(incident_municipality_county =
+         factor(incident_municipality_county, county_levels))
+```
+
+#### `indoor_or_outdoor`
+
 This field could indicate one or the other, or both, though the order is not consistent:
+
 ```{r purl=FALSE}
 incident %>% count(indoor_or_outdoor)
 ```
+
 We will break this into a pair of booleans.
+
 ```{r}
 incident <- incident %>%
   mutate(
@@ -1037,24 +1236,33 @@ incident <- incident %>%
   ) %>%
   select(-indoor_or_outdoor)
 ```
-#### ```video_footage```.
-We will correct the spelling of ```"Unknown"``` before using a factor.
+
+#### `video_footage`.
+
+We will correct the spelling of `"Unknown"` before using a factor.
+
 ```{r}
 video_footage_levels <- c("Yes", "No", "Unknown")
 incident <- incident %>%
   mutate(video_footage=str_replace(video_footage, "Unknow", "Unknown")) %>%
   mutate(video_footage=factor(video_footage, levels=video_footage_levels))
 ```
-#### ```officer_age```
+
+#### `officer_age`
+
 We remove implausible ages and convert to an integer:
+
 ```{r}
 incident <- incident %>%
   dplyr::mutate(officer_age = ifelse(dplyr::between(officer_age, 18, 67),
                                      as.integer(officer_age),
                                      NA)) 
 ```
-#### ```officer_race``` and ```officer_gender```
-We perform the same transformations as we did on the ```subject``` ```race``` and ```gender``` columns. 
+
+#### `officer_race` and `officer_gender`
+
+We perform the same transformations as we did on the `subject` `race` and `gender` columns.
+
 ```{r}
 incident <- incident %>%
   mutate(
@@ -1070,20 +1278,28 @@ incident <- incident %>%
   mutate(officer_gender=factor(officer_gender, levels=gender_levels))
 
 ```
-#### ```officer_rank```
+
+#### `officer_rank`
+
 This field appears to be free text, and there are a lot of variations. We leave the column unchanged.
 
-#### ```officer_injured```
+#### `officer_injured`
+
 We will convert this to a boolean.
+
 ```{r}
 incident <- incident %>% 
   mutate(officer_injured = (officer_injured=="1"))
 ```
-#### ```subject_injured_count```
+
+#### `subject_injured_count`
+
 We leave this field unchanged.
 
 ### Clean up and finish
-#### Add a ```subject_count``` column
+
+#### Add a `subject_count` column
+
 ```{r}
 incident <- incident %>%
   left_join(count(subject, form_id, name = "subject_count"),
@@ -1091,6 +1307,7 @@ incident <- incident %>%
 ```
 
 #### Order the columns
+
 ```{r}
 incident <- incident %>%
   relocate(
@@ -1116,8 +1333,7 @@ incident <- incident %>%
     subject_injured_count
   )
 ```
+
 ```{r purl=FALSE}
 incident
 ```
-
-

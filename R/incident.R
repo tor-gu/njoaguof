@@ -16,7 +16,7 @@
 #'  is column \code{IncidentDate1}, and is the date the OAG dashboard uses as the
 #'  incident date.}
 #'
-#'  \item{agency_county}{The county of the \emph{agency}, or "NJSP" or "Other".
+#'  \item{agency_county}{The county of the \emph{agency}.
 #'  Note that this is not the incident location. This is column
 #'  \code{County2}.}
 #'

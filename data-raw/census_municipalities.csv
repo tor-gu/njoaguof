@@ -1,0 +1,566 @@
+municipality,type,municipality_and_type,county
+Absecon,city,Absecon city,Atlantic County
+Atlantic City,city,Atlantic City city,Atlantic County
+Brigantine,city,Brigantine city,Atlantic County
+Buena,borough,Buena borough,Atlantic County
+Buena Vista,township,Buena Vista township,Atlantic County
+Corbin City,city,Corbin City city,Atlantic County
+Egg Harbor City,city,Egg Harbor City city,Atlantic County
+Egg Harbor,township,Egg Harbor township,Atlantic County
+Estell Manor,city,Estell Manor city,Atlantic County
+Folsom,borough,Folsom borough,Atlantic County
+Galloway,township,Galloway township,Atlantic County
+Hamilton,township,Hamilton township,Atlantic County
+Hammonton,town,Hammonton town,Atlantic County
+Linwood,city,Linwood city,Atlantic County
+Longport,borough,Longport borough,Atlantic County
+Margate City,city,Margate City city,Atlantic County
+Mullica,township,Mullica township,Atlantic County
+Northfield,city,Northfield city,Atlantic County
+Pleasantville,city,Pleasantville city,Atlantic County
+Port Republic,city,Port Republic city,Atlantic County
+Somers Point,city,Somers Point city,Atlantic County
+Ventnor City,city,Ventnor City city,Atlantic County
+Weymouth,township,Weymouth township,Atlantic County
+Allendale,borough,Allendale borough,Bergen County
+Alpine,borough,Alpine borough,Bergen County
+Bergenfield,borough,Bergenfield borough,Bergen County
+Bogota,borough,Bogota borough,Bergen County
+Carlstadt,borough,Carlstadt borough,Bergen County
+Cliffside Park,borough,Cliffside Park borough,Bergen County
+Closter,borough,Closter borough,Bergen County
+Cresskill,borough,Cresskill borough,Bergen County
+Demarest,borough,Demarest borough,Bergen County
+Dumont,borough,Dumont borough,Bergen County
+East Rutherford,borough,East Rutherford borough,Bergen County
+Edgewater,borough,Edgewater borough,Bergen County
+Elmwood Park,borough,Elmwood Park borough,Bergen County
+Emerson,borough,Emerson borough,Bergen County
+Englewood,city,Englewood city,Bergen County
+Englewood Cliffs,borough,Englewood Cliffs borough,Bergen County
+Fair Lawn,borough,Fair Lawn borough,Bergen County
+Fairview,borough,Fairview borough,Bergen County
+Fort Lee,borough,Fort Lee borough,Bergen County
+Franklin Lakes,borough,Franklin Lakes borough,Bergen County
+Garfield,city,Garfield city,Bergen County
+Glen Rock,borough,Glen Rock borough,Bergen County
+Hackensack,city,Hackensack city,Bergen County
+Harrington Park,borough,Harrington Park borough,Bergen County
+Hasbrouck Heights,borough,Hasbrouck Heights borough,Bergen County
+Haworth,borough,Haworth borough,Bergen County
+Hillsdale,borough,Hillsdale borough,Bergen County
+Ho-Ho-Kus,borough,Ho-Ho-Kus borough,Bergen County
+Leonia,borough,Leonia borough,Bergen County
+Little Ferry,borough,Little Ferry borough,Bergen County
+Lodi,borough,Lodi borough,Bergen County
+Lyndhurst,township,Lyndhurst township,Bergen County
+Mahwah,township,Mahwah township,Bergen County
+Maywood,borough,Maywood borough,Bergen County
+Midland Park,borough,Midland Park borough,Bergen County
+Montvale,borough,Montvale borough,Bergen County
+Moonachie,borough,Moonachie borough,Bergen County
+New Milford,borough,New Milford borough,Bergen County
+North Arlington,borough,North Arlington borough,Bergen County
+Northvale,borough,Northvale borough,Bergen County
+Norwood,borough,Norwood borough,Bergen County
+Oakland,borough,Oakland borough,Bergen County
+Old Tappan,borough,Old Tappan borough,Bergen County
+Oradell,borough,Oradell borough,Bergen County
+Palisades Park,borough,Palisades Park borough,Bergen County
+Paramus,borough,Paramus borough,Bergen County
+Park Ridge,borough,Park Ridge borough,Bergen County
+Ramsey,borough,Ramsey borough,Bergen County
+Ridgefield,borough,Ridgefield borough,Bergen County
+Ridgefield Park,village,Ridgefield Park village,Bergen County
+Ridgewood,village,Ridgewood village,Bergen County
+River Edge,borough,River Edge borough,Bergen County
+River Vale,township,River Vale township,Bergen County
+Rochelle Park,township,Rochelle Park township,Bergen County
+Rockleigh,borough,Rockleigh borough,Bergen County
+Rutherford,borough,Rutherford borough,Bergen County
+Saddle Brook,township,Saddle Brook township,Bergen County
+Saddle River,borough,Saddle River borough,Bergen County
+South Hackensack,township,South Hackensack township,Bergen County
+Teaneck,township,Teaneck township,Bergen County
+Tenafly,borough,Tenafly borough,Bergen County
+Teterboro,borough,Teterboro borough,Bergen County
+Upper Saddle River,borough,Upper Saddle River borough,Bergen County
+Waldwick,borough,Waldwick borough,Bergen County
+Wallington,borough,Wallington borough,Bergen County
+Washington,township,Washington township,Bergen County
+Westwood,borough,Westwood borough,Bergen County
+Wood-Ridge,borough,Wood-Ridge borough,Bergen County
+Woodcliff Lake,borough,Woodcliff Lake borough,Bergen County
+Wyckoff,township,Wyckoff township,Bergen County
+Bass River,township,Bass River township,Burlington County
+Beverly,city,Beverly city,Burlington County
+Bordentown,city,Bordentown city,Burlington County
+Bordentown,township,Bordentown township,Burlington County
+Burlington,city,Burlington city,Burlington County
+Burlington,township,Burlington township,Burlington County
+Chesterfield,township,Chesterfield township,Burlington County
+Cinnaminson,township,Cinnaminson township,Burlington County
+Delanco,township,Delanco township,Burlington County
+Delran,township,Delran township,Burlington County
+Eastampton,township,Eastampton township,Burlington County
+Edgewater Park,township,Edgewater Park township,Burlington County
+Evesham,township,Evesham township,Burlington County
+Fieldsboro,borough,Fieldsboro borough,Burlington County
+Florence,township,Florence township,Burlington County
+Hainesport,township,Hainesport township,Burlington County
+Lumberton,township,Lumberton township,Burlington County
+Mansfield,township,Mansfield township,Burlington County
+Maple Shade,township,Maple Shade township,Burlington County
+Medford Lakes,borough,Medford Lakes borough,Burlington County
+Medford,township,Medford township,Burlington County
+Moorestown,township,Moorestown township,Burlington County
+Mount Holly,township,Mount Holly township,Burlington County
+Mount Laurel,township,Mount Laurel township,Burlington County
+New Hanover,township,New Hanover township,Burlington County
+North Hanover,township,North Hanover township,Burlington County
+Palmyra,borough,Palmyra borough,Burlington County
+Pemberton,borough,Pemberton borough,Burlington County
+Pemberton,township,Pemberton township,Burlington County
+Riverside,township,Riverside township,Burlington County
+Riverton,borough,Riverton borough,Burlington County
+Shamong,township,Shamong township,Burlington County
+Southampton,township,Southampton township,Burlington County
+Springfield,township,Springfield township,Burlington County
+Tabernacle,township,Tabernacle township,Burlington County
+Washington,township,Washington township,Burlington County
+Westampton,township,Westampton township,Burlington County
+Willingboro,township,Willingboro township,Burlington County
+Woodland,township,Woodland township,Burlington County
+Wrightstown,borough,Wrightstown borough,Burlington County
+Audubon,borough,Audubon borough,Camden County
+Audubon Park,borough,Audubon Park borough,Camden County
+Barrington,borough,Barrington borough,Camden County
+Bellmawr,borough,Bellmawr borough,Camden County
+Berlin,borough,Berlin borough,Camden County
+Berlin,township,Berlin township,Camden County
+Brooklawn,borough,Brooklawn borough,Camden County
+Camden,city,Camden city,Camden County
+Cherry Hill,township,Cherry Hill township,Camden County
+Chesilhurst,borough,Chesilhurst borough,Camden County
+Clementon,borough,Clementon borough,Camden County
+Collingswood,borough,Collingswood borough,Camden County
+Gibbsboro,borough,Gibbsboro borough,Camden County
+Gloucester City,city,Gloucester City city,Camden County
+Gloucester,township,Gloucester township,Camden County
+Haddon Heights,borough,Haddon Heights borough,Camden County
+Haddon,township,Haddon township,Camden County
+Haddonfield,borough,Haddonfield borough,Camden County
+Hi-Nella,borough,Hi-Nella borough,Camden County
+Laurel Springs,borough,Laurel Springs borough,Camden County
+Lawnside,borough,Lawnside borough,Camden County
+Lindenwold,borough,Lindenwold borough,Camden County
+Magnolia,borough,Magnolia borough,Camden County
+Merchantville,borough,Merchantville borough,Camden County
+Mount Ephraim,borough,Mount Ephraim borough,Camden County
+Oaklyn,borough,Oaklyn borough,Camden County
+Pennsauken,township,Pennsauken township,Camden County
+Pine Hill,borough,Pine Hill borough,Camden County
+Pine Valley,borough,Pine Valley borough,Camden County
+Runnemede,borough,Runnemede borough,Camden County
+Somerdale,borough,Somerdale borough,Camden County
+Stratford,borough,Stratford borough,Camden County
+Tavistock,borough,Tavistock borough,Camden County
+Voorhees,township,Voorhees township,Camden County
+Waterford,township,Waterford township,Camden County
+Winslow,township,Winslow township,Camden County
+Woodlynne,borough,Woodlynne borough,Camden County
+Avalon,borough,Avalon borough,Cape May County
+Cape May,city,Cape May city,Cape May County
+Cape May Point,borough,Cape May Point borough,Cape May County
+Dennis,township,Dennis township,Cape May County
+Lower,township,Lower township,Cape May County
+Middle,township,Middle township,Cape May County
+North Wildwood,city,North Wildwood city,Cape May County
+Ocean City,city,Ocean City city,Cape May County
+Sea Isle City,city,Sea Isle City city,Cape May County
+Stone Harbor,borough,Stone Harbor borough,Cape May County
+Upper,township,Upper township,Cape May County
+West Cape May,borough,West Cape May borough,Cape May County
+West Wildwood,borough,West Wildwood borough,Cape May County
+Wildwood,city,Wildwood city,Cape May County
+Wildwood Crest,borough,Wildwood Crest borough,Cape May County
+Woodbine,borough,Woodbine borough,Cape May County
+Bridgeton,city,Bridgeton city,Cumberland County
+Commercial,township,Commercial township,Cumberland County
+Deerfield,township,Deerfield township,Cumberland County
+Downe,township,Downe township,Cumberland County
+Fairfield,township,Fairfield township,Cumberland County
+Greenwich,township,Greenwich township,Cumberland County
+Hopewell,township,Hopewell township,Cumberland County
+Lawrence,township,Lawrence township,Cumberland County
+Maurice River,township,Maurice River township,Cumberland County
+Millville,city,Millville city,Cumberland County
+Shiloh,borough,Shiloh borough,Cumberland County
+Stow Creek,township,Stow Creek township,Cumberland County
+Upper Deerfield,township,Upper Deerfield township,Cumberland County
+Vineland,city,Vineland city,Cumberland County
+Belleville,township,Belleville township,Essex County
+Bloomfield,township,Bloomfield township,Essex County
+Caldwell,borough,Caldwell borough,Essex County
+Cedar Grove,township,Cedar Grove township,Essex County
+City of Orange,township,City of Orange township,Essex County
+East Orange,city,East Orange city,Essex County
+Essex Fells,borough,Essex Fells borough,Essex County
+Fairfield,township,Fairfield township,Essex County
+Glen Ridge,borough,Glen Ridge borough,Essex County
+Irvington,township,Irvington township,Essex County
+Livingston,township,Livingston township,Essex County
+Maplewood,township,Maplewood township,Essex County
+Millburn,township,Millburn township,Essex County
+Montclair,township,Montclair township,Essex County
+Newark,city,Newark city,Essex County
+North Caldwell,borough,North Caldwell borough,Essex County
+Nutley,township,Nutley township,Essex County
+Roseland,borough,Roseland borough,Essex County
+South Orange Village,township,South Orange Village township,Essex County
+Verona,township,Verona township,Essex County
+West Caldwell,township,West Caldwell township,Essex County
+West Orange,township,West Orange township,Essex County
+Clayton,borough,Clayton borough,Gloucester County
+Deptford,township,Deptford township,Gloucester County
+East Greenwich,township,East Greenwich township,Gloucester County
+Elk,township,Elk township,Gloucester County
+Franklin,township,Franklin township,Gloucester County
+Glassboro,borough,Glassboro borough,Gloucester County
+Greenwich,township,Greenwich township,Gloucester County
+Harrison,township,Harrison township,Gloucester County
+Logan,township,Logan township,Gloucester County
+Mantua,township,Mantua township,Gloucester County
+Monroe,township,Monroe township,Gloucester County
+National Park,borough,National Park borough,Gloucester County
+Newfield,borough,Newfield borough,Gloucester County
+Paulsboro,borough,Paulsboro borough,Gloucester County
+Pitman,borough,Pitman borough,Gloucester County
+South Harrison,township,South Harrison township,Gloucester County
+Swedesboro,borough,Swedesboro borough,Gloucester County
+Washington,township,Washington township,Gloucester County
+Wenonah,borough,Wenonah borough,Gloucester County
+West Deptford,township,West Deptford township,Gloucester County
+Westville,borough,Westville borough,Gloucester County
+Woodbury,city,Woodbury city,Gloucester County
+Woodbury Heights,borough,Woodbury Heights borough,Gloucester County
+Woolwich,township,Woolwich township,Gloucester County
+Bayonne,city,Bayonne city,Hudson County
+East Newark,borough,East Newark borough,Hudson County
+Guttenberg,town,Guttenberg town,Hudson County
+Harrison,town,Harrison town,Hudson County
+Hoboken,city,Hoboken city,Hudson County
+Jersey City,city,Jersey City city,Hudson County
+Kearny,town,Kearny town,Hudson County
+North Bergen,township,North Bergen township,Hudson County
+Secaucus,town,Secaucus town,Hudson County
+Union City,city,Union City city,Hudson County
+Weehawken,township,Weehawken township,Hudson County
+West New York,town,West New York town,Hudson County
+Alexandria,township,Alexandria township,Hunterdon County
+Bethlehem,township,Bethlehem township,Hunterdon County
+Bloomsbury,borough,Bloomsbury borough,Hunterdon County
+Califon,borough,Califon borough,Hunterdon County
+Clinton,town,Clinton town,Hunterdon County
+Clinton,township,Clinton township,Hunterdon County
+Delaware,township,Delaware township,Hunterdon County
+East Amwell,township,East Amwell township,Hunterdon County
+Flemington,borough,Flemington borough,Hunterdon County
+Franklin,township,Franklin township,Hunterdon County
+Frenchtown,borough,Frenchtown borough,Hunterdon County
+Glen Gardner,borough,Glen Gardner borough,Hunterdon County
+Hampton,borough,Hampton borough,Hunterdon County
+High Bridge,borough,High Bridge borough,Hunterdon County
+Holland,township,Holland township,Hunterdon County
+Kingwood,township,Kingwood township,Hunterdon County
+Lambertville,city,Lambertville city,Hunterdon County
+Lebanon,borough,Lebanon borough,Hunterdon County
+Lebanon,township,Lebanon township,Hunterdon County
+Milford,borough,Milford borough,Hunterdon County
+Raritan,township,Raritan township,Hunterdon County
+Readington,township,Readington township,Hunterdon County
+Stockton,borough,Stockton borough,Hunterdon County
+Tewksbury,township,Tewksbury township,Hunterdon County
+Union,township,Union township,Hunterdon County
+West Amwell,township,West Amwell township,Hunterdon County
+East Windsor,township,East Windsor township,Mercer County
+Ewing,township,Ewing township,Mercer County
+Hamilton,township,Hamilton township,Mercer County
+Hightstown,borough,Hightstown borough,Mercer County
+Hopewell,borough,Hopewell borough,Mercer County
+Hopewell,township,Hopewell township,Mercer County
+Lawrence,township,Lawrence township,Mercer County
+Pennington,borough,Pennington borough,Mercer County
+Princeton,NA,Princeton,Mercer County
+Robbinsville,township,Robbinsville township,Mercer County
+Trenton,city,Trenton city,Mercer County
+West Windsor,township,West Windsor township,Mercer County
+Carteret,borough,Carteret borough,Middlesex County
+Cranbury,township,Cranbury township,Middlesex County
+Dunellen,borough,Dunellen borough,Middlesex County
+East Brunswick,township,East Brunswick township,Middlesex County
+Edison,township,Edison township,Middlesex County
+Helmetta,borough,Helmetta borough,Middlesex County
+Highland Park,borough,Highland Park borough,Middlesex County
+Jamesburg,borough,Jamesburg borough,Middlesex County
+Metuchen,borough,Metuchen borough,Middlesex County
+Middlesex,borough,Middlesex borough,Middlesex County
+Milltown,borough,Milltown borough,Middlesex County
+Monroe,township,Monroe township,Middlesex County
+New Brunswick,city,New Brunswick city,Middlesex County
+North Brunswick,township,North Brunswick township,Middlesex County
+Old Bridge,township,Old Bridge township,Middlesex County
+Perth Amboy,city,Perth Amboy city,Middlesex County
+Piscataway,township,Piscataway township,Middlesex County
+Plainsboro,township,Plainsboro township,Middlesex County
+Sayreville,borough,Sayreville borough,Middlesex County
+South Amboy,city,South Amboy city,Middlesex County
+South Brunswick,township,South Brunswick township,Middlesex County
+South Plainfield,borough,South Plainfield borough,Middlesex County
+South River,borough,South River borough,Middlesex County
+Spotswood,borough,Spotswood borough,Middlesex County
+Woodbridge,township,Woodbridge township,Middlesex County
+Aberdeen,township,Aberdeen township,Monmouth County
+Allenhurst,borough,Allenhurst borough,Monmouth County
+Allentown,borough,Allentown borough,Monmouth County
+Asbury Park,city,Asbury Park city,Monmouth County
+Atlantic Highlands,borough,Atlantic Highlands borough,Monmouth County
+Avon-by-the-Sea,borough,Avon-by-the-Sea borough,Monmouth County
+Belmar,borough,Belmar borough,Monmouth County
+Bradley Beach,borough,Bradley Beach borough,Monmouth County
+Brielle,borough,Brielle borough,Monmouth County
+Colts Neck,township,Colts Neck township,Monmouth County
+Deal,borough,Deal borough,Monmouth County
+Eatontown,borough,Eatontown borough,Monmouth County
+Englishtown,borough,Englishtown borough,Monmouth County
+Fair Haven,borough,Fair Haven borough,Monmouth County
+Farmingdale,borough,Farmingdale borough,Monmouth County
+Freehold,borough,Freehold borough,Monmouth County
+Freehold,township,Freehold township,Monmouth County
+Hazlet,township,Hazlet township,Monmouth County
+Highlands,borough,Highlands borough,Monmouth County
+Holmdel,township,Holmdel township,Monmouth County
+Howell,township,Howell township,Monmouth County
+Interlaken,borough,Interlaken borough,Monmouth County
+Keansburg,borough,Keansburg borough,Monmouth County
+Keyport,borough,Keyport borough,Monmouth County
+Lake Como,borough,Lake Como borough,Monmouth County
+Little Silver,borough,Little Silver borough,Monmouth County
+Loch Arbour,village,Loch Arbour village,Monmouth County
+Long Branch,city,Long Branch city,Monmouth County
+Manalapan,township,Manalapan township,Monmouth County
+Manasquan,borough,Manasquan borough,Monmouth County
+Marlboro,township,Marlboro township,Monmouth County
+Matawan,borough,Matawan borough,Monmouth County
+Middletown,township,Middletown township,Monmouth County
+Millstone,township,Millstone township,Monmouth County
+Monmouth Beach,borough,Monmouth Beach borough,Monmouth County
+Neptune City,borough,Neptune City borough,Monmouth County
+Neptune,township,Neptune township,Monmouth County
+Ocean,township,Ocean township,Monmouth County
+Oceanport,borough,Oceanport borough,Monmouth County
+Red Bank,borough,Red Bank borough,Monmouth County
+Roosevelt,borough,Roosevelt borough,Monmouth County
+Rumson,borough,Rumson borough,Monmouth County
+Sea Bright,borough,Sea Bright borough,Monmouth County
+Sea Girt,borough,Sea Girt borough,Monmouth County
+Shrewsbury,borough,Shrewsbury borough,Monmouth County
+Shrewsbury,township,Shrewsbury township,Monmouth County
+Spring Lake,borough,Spring Lake borough,Monmouth County
+Spring Lake Heights,borough,Spring Lake Heights borough,Monmouth County
+Tinton Falls,borough,Tinton Falls borough,Monmouth County
+Union Beach,borough,Union Beach borough,Monmouth County
+Upper Freehold,township,Upper Freehold township,Monmouth County
+Wall,township,Wall township,Monmouth County
+West Long Branch,borough,West Long Branch borough,Monmouth County
+Boonton,town,Boonton town,Morris County
+Boonton,township,Boonton township,Morris County
+Butler,borough,Butler borough,Morris County
+Chatham,borough,Chatham borough,Morris County
+Chatham,township,Chatham township,Morris County
+Chester,borough,Chester borough,Morris County
+Chester,township,Chester township,Morris County
+Denville,township,Denville township,Morris County
+Dover,town,Dover town,Morris County
+East Hanover,township,East Hanover township,Morris County
+Florham Park,borough,Florham Park borough,Morris County
+Hanover,township,Hanover township,Morris County
+Harding,township,Harding township,Morris County
+Jefferson,township,Jefferson township,Morris County
+Kinnelon,borough,Kinnelon borough,Morris County
+Lincoln Park,borough,Lincoln Park borough,Morris County
+Long Hill,township,Long Hill township,Morris County
+Madison,borough,Madison borough,Morris County
+Mendham,borough,Mendham borough,Morris County
+Mendham,township,Mendham township,Morris County
+Mine Hill,township,Mine Hill township,Morris County
+Montville,township,Montville township,Morris County
+Morris Plains,borough,Morris Plains borough,Morris County
+Morris,township,Morris township,Morris County
+Morristown,town,Morristown town,Morris County
+Mount Arlington,borough,Mount Arlington borough,Morris County
+Mount Olive,township,Mount Olive township,Morris County
+Mountain Lakes,borough,Mountain Lakes borough,Morris County
+Netcong,borough,Netcong borough,Morris County
+Parsippany-Troy Hills,township,Parsippany-Troy Hills township,Morris County
+Pequannock,township,Pequannock township,Morris County
+Randolph,township,Randolph township,Morris County
+Riverdale,borough,Riverdale borough,Morris County
+Rockaway,borough,Rockaway borough,Morris County
+Rockaway,township,Rockaway township,Morris County
+Roxbury,township,Roxbury township,Morris County
+Victory Gardens,borough,Victory Gardens borough,Morris County
+Washington,township,Washington township,Morris County
+Wharton,borough,Wharton borough,Morris County
+Barnegat Light,borough,Barnegat Light borough,Ocean County
+Barnegat,township,Barnegat township,Ocean County
+Bay Head,borough,Bay Head borough,Ocean County
+Beach Haven,borough,Beach Haven borough,Ocean County
+Beachwood,borough,Beachwood borough,Ocean County
+Berkeley,township,Berkeley township,Ocean County
+Brick,township,Brick township,Ocean County
+Eagleswood,township,Eagleswood township,Ocean County
+Harvey Cedars,borough,Harvey Cedars borough,Ocean County
+Island Heights,borough,Island Heights borough,Ocean County
+Jackson,township,Jackson township,Ocean County
+Lacey,township,Lacey township,Ocean County
+Lakehurst,borough,Lakehurst borough,Ocean County
+Lakewood,township,Lakewood township,Ocean County
+Lavallette,borough,Lavallette borough,Ocean County
+Little Egg Harbor,township,Little Egg Harbor township,Ocean County
+Long Beach,township,Long Beach township,Ocean County
+Manchester,township,Manchester township,Ocean County
+Mantoloking,borough,Mantoloking borough,Ocean County
+Ocean Gate,borough,Ocean Gate borough,Ocean County
+Ocean,township,Ocean township,Ocean County
+Pine Beach,borough,Pine Beach borough,Ocean County
+Plumsted,township,Plumsted township,Ocean County
+Point Pleasant Beach,borough,Point Pleasant Beach borough,Ocean County
+Point Pleasant,borough,Point Pleasant borough,Ocean County
+Seaside Heights,borough,Seaside Heights borough,Ocean County
+Seaside Park,borough,Seaside Park borough,Ocean County
+Ship Bottom,borough,Ship Bottom borough,Ocean County
+South Toms River,borough,South Toms River borough,Ocean County
+Stafford,township,Stafford township,Ocean County
+Surf City,borough,Surf City borough,Ocean County
+Toms River,township,Toms River township,Ocean County
+Tuckerton,borough,Tuckerton borough,Ocean County
+Bloomingdale,borough,Bloomingdale borough,Passaic County
+Clifton,city,Clifton city,Passaic County
+Haledon,borough,Haledon borough,Passaic County
+Hawthorne,borough,Hawthorne borough,Passaic County
+Little Falls,township,Little Falls township,Passaic County
+North Haledon,borough,North Haledon borough,Passaic County
+Passaic,city,Passaic city,Passaic County
+Paterson,city,Paterson city,Passaic County
+Pompton Lakes,borough,Pompton Lakes borough,Passaic County
+Prospect Park,borough,Prospect Park borough,Passaic County
+Ringwood,borough,Ringwood borough,Passaic County
+Totowa,borough,Totowa borough,Passaic County
+Wanaque,borough,Wanaque borough,Passaic County
+Wayne,township,Wayne township,Passaic County
+West Milford,township,West Milford township,Passaic County
+Woodland Park,borough,Woodland Park borough,Passaic County
+Alloway,township,Alloway township,Salem County
+Carneys Point,township,Carneys Point township,Salem County
+Elmer,borough,Elmer borough,Salem County
+Elsinboro,township,Elsinboro township,Salem County
+Lower Alloways Creek,township,Lower Alloways Creek township,Salem County
+Mannington,township,Mannington township,Salem County
+Oldmans,township,Oldmans township,Salem County
+Penns Grove,borough,Penns Grove borough,Salem County
+Pennsville,township,Pennsville township,Salem County
+Pilesgrove,township,Pilesgrove township,Salem County
+Pittsgrove,township,Pittsgrove township,Salem County
+Quinton,township,Quinton township,Salem County
+Salem,city,Salem city,Salem County
+Upper Pittsgrove,township,Upper Pittsgrove township,Salem County
+Woodstown,borough,Woodstown borough,Salem County
+Bedminster,township,Bedminster township,Somerset County
+Bernards,township,Bernards township,Somerset County
+Bernardsville,borough,Bernardsville borough,Somerset County
+Bound Brook,borough,Bound Brook borough,Somerset County
+Branchburg,township,Branchburg township,Somerset County
+Bridgewater,township,Bridgewater township,Somerset County
+Far Hills,borough,Far Hills borough,Somerset County
+Franklin,township,Franklin township,Somerset County
+Green Brook,township,Green Brook township,Somerset County
+Hillsborough,township,Hillsborough township,Somerset County
+Manville,borough,Manville borough,Somerset County
+Millstone,borough,Millstone borough,Somerset County
+Montgomery,township,Montgomery township,Somerset County
+North Plainfield,borough,North Plainfield borough,Somerset County
+Peapack and Gladstone,borough,Peapack and Gladstone borough,Somerset County
+Raritan,borough,Raritan borough,Somerset County
+Rocky Hill,borough,Rocky Hill borough,Somerset County
+Somerville,borough,Somerville borough,Somerset County
+South Bound Brook,borough,South Bound Brook borough,Somerset County
+Warren,township,Warren township,Somerset County
+Watchung,borough,Watchung borough,Somerset County
+Andover,borough,Andover borough,Sussex County
+Andover,township,Andover township,Sussex County
+Branchville,borough,Branchville borough,Sussex County
+Byram,township,Byram township,Sussex County
+Frankford,township,Frankford township,Sussex County
+Franklin,borough,Franklin borough,Sussex County
+Fredon,township,Fredon township,Sussex County
+Green,township,Green township,Sussex County
+Hamburg,borough,Hamburg borough,Sussex County
+Hampton,township,Hampton township,Sussex County
+Hardyston,township,Hardyston township,Sussex County
+Hopatcong,borough,Hopatcong borough,Sussex County
+Lafayette,township,Lafayette township,Sussex County
+Montague,township,Montague township,Sussex County
+Newton,town,Newton town,Sussex County
+Ogdensburg,borough,Ogdensburg borough,Sussex County
+Sandyston,township,Sandyston township,Sussex County
+Sparta,township,Sparta township,Sussex County
+Stanhope,borough,Stanhope borough,Sussex County
+Stillwater,township,Stillwater township,Sussex County
+Sussex,borough,Sussex borough,Sussex County
+Vernon,township,Vernon township,Sussex County
+Walpack,township,Walpack township,Sussex County
+Wantage,township,Wantage township,Sussex County
+Berkeley Heights,township,Berkeley Heights township,Union County
+Clark,township,Clark township,Union County
+Cranford,township,Cranford township,Union County
+Elizabeth,city,Elizabeth city,Union County
+Fanwood,borough,Fanwood borough,Union County
+Garwood,borough,Garwood borough,Union County
+Hillside,township,Hillside township,Union County
+Kenilworth,borough,Kenilworth borough,Union County
+Linden,city,Linden city,Union County
+Mountainside,borough,Mountainside borough,Union County
+New Providence,borough,New Providence borough,Union County
+Plainfield,city,Plainfield city,Union County
+Rahway,city,Rahway city,Union County
+Roselle,borough,Roselle borough,Union County
+Roselle Park,borough,Roselle Park borough,Union County
+Scotch Plains,township,Scotch Plains township,Union County
+Springfield,township,Springfield township,Union County
+Summit,city,Summit city,Union County
+Union,township,Union township,Union County
+Westfield,town,Westfield town,Union County
+Winfield,township,Winfield township,Union County
+Allamuchy,township,Allamuchy township,Warren County
+Alpha,borough,Alpha borough,Warren County
+Belvidere,town,Belvidere town,Warren County
+Blairstown,township,Blairstown township,Warren County
+Franklin,township,Franklin township,Warren County
+Frelinghuysen,township,Frelinghuysen township,Warren County
+Greenwich,township,Greenwich township,Warren County
+Hackettstown,town,Hackettstown town,Warren County
+Hardwick,township,Hardwick township,Warren County
+Harmony,township,Harmony township,Warren County
+Hope,township,Hope township,Warren County
+Independence,township,Independence township,Warren County
+Knowlton,township,Knowlton township,Warren County
+Liberty,township,Liberty township,Warren County
+Lopatcong,township,Lopatcong township,Warren County
+Mansfield,township,Mansfield township,Warren County
+Oxford,township,Oxford township,Warren County
+Phillipsburg,town,Phillipsburg town,Warren County
+Pohatcong,township,Pohatcong township,Warren County
+Washington,borough,Washington borough,Warren County
+Washington,township,Washington township,Warren County
+White,township,White township,Warren County

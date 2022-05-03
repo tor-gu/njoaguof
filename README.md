@@ -59,20 +59,20 @@ incident %>%
   select(form_id, agency_county) %>%
   right_join(incident_video_type, by = "form_id") %>%
   count(agency_county, video_type)
-#> # A tibble: 180 × 3
-#>    agency_county video_type              n
-#>    <fct>         <fct>               <int>
-#>  1 Atlantic      Body Worn             516
-#>  2 Atlantic      CED Camera              6
-#>  3 Atlantic      Cell Phone              3
-#>  4 Atlantic      Commercial Building    25
-#>  5 Atlantic      Motor Vehicle         143
-#>  6 Atlantic      Residential/Home        2
-#>  7 Atlantic      Station House          31
-#>  8 Atlantic      Other                  31
-#>  9 Bergen        Body Worn             527
-#> 10 Bergen        CED Camera             36
-#> # … with 170 more rows
+#> # A tibble: 171 × 3
+#>    agency_county   video_type              n
+#>    <fct>           <fct>               <int>
+#>  1 Atlantic County Body Worn             516
+#>  2 Atlantic County CED Camera              6
+#>  3 Atlantic County Cell Phone              3
+#>  4 Atlantic County Commercial Building    25
+#>  5 Atlantic County Motor Vehicle         143
+#>  6 Atlantic County Residential/Home        2
+#>  7 Atlantic County Station House          31
+#>  8 Atlantic County Other                  31
+#>  9 Bergen County   Body Worn             527
+#> 10 Bergen County   CED Camera             36
+#> # … with 161 more rows
 ```
 
 ``` r
@@ -148,7 +148,6 @@ use_of_force_raw %>% filter(form_id == 16301) %>%
 #>   form_id SubectsArrested subject_type  SubjectsAge SubjectRace   SubjectsGender
 #>     <dbl> <chr>           <chr>         <chr>       <chr>         <chr>         
 #> 1   16301 True,False      Person,Person 26,23       Hispanic,Bla… Male,Female
-
 subject %>% filter(form_id == 16301)
 #> # A tibble: 2 × 8
 #>   form_id index arrested type     age juvenile race     gender
