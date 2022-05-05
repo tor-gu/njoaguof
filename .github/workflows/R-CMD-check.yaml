@@ -39,8 +39,18 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
-        with:
-          extra-packages: rcmdcheck
+      - name: Install dependencies (source)
+        if: runner.os != 'macOS'
+        run: |
+          install.packages(c('remotes', 'rcmdcheck'))
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install dependencies (binary, for macOS)
+        if: runner.os == 'macOS'
+        run: |
+          install.packages(c('remotes', 'rcmdcheck'))
+          remotes::install_deps(dependencies = TRUE, type="binary")
+        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v1
