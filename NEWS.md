@@ -1,3 +1,6 @@
+# njoaguof 1.2.2
+* Changed agency "Park Police" to "New Jersey State Park Police", to agree with value in njoagleod v1.1.0.
+
 # njoaguof 1.2.1
 
 * Use census values for "county" and "county subdivision" for `agency_county`,
