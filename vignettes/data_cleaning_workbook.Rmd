@@ -1043,6 +1043,7 @@ names in the NJ OAG Law Enforcement Officer Diversity dataset, we will make some
 incident <- incident %>%
   mutate(
     agency_name = case_when(
+      # TODO map park police name 
       agency_name == "Burlington County Sheriffs Office" ~ "Burlington Co Sheriffs Office",
       agency_name == "Mercer Co Prosecutor Off" ~ "Mercer Co Prosecutors Office",
       agency_name == "Hudson Co ProsecutorOff-S/Force" ~ "Hudson Co Prosecutors Office",
@@ -1053,6 +1054,7 @@ incident <- incident %>%
       agency_name == "Division Of Fish And Wildlife" ~ "NJ Division Of Fish And Wildlife",
       agency_name == "NJ State Human Services Police" ~ "NJ Department Of Human Services",
       agency_name == "Division of Criminal Justice" ~ "NJ Division of Criminal Justice",
+      agency_name == "Park Police" ~ "New Jersey State Park Police",
       TRUE ~ agency_name
     )
   )
