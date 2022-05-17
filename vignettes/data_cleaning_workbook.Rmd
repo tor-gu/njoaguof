@@ -1055,6 +1055,9 @@ incident <- incident %>%
       agency_name == "NJ State Human Services Police" ~ "NJ Department Of Human Services",
       agency_name == "Division of Criminal Justice" ~ "NJ Division of Criminal Justice",
       agency_name == "Park Police" ~ "New Jersey State Park Police",
+      agency_name == "Toms River Township" ~ "Toms River Twp PD",
+      agency_name == "Hardyston Twp Police Dept" ~ "Hardyston Twp PD",
+      agency_name == "Linden Police Department" ~ "Linden PD",
       TRUE ~ agency_name
     )
   )
