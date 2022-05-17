@@ -865,7 +865,6 @@ incident <- incident %>%
 incident <- incident %>%
   mutate(
     agency_name = case_when(
-      # TODO map park police name 
       agency_name == "Burlington County Sheriffs Office" ~ "Burlington Co Sheriffs Office",
       agency_name == "Mercer Co Prosecutor Off" ~ "Mercer Co Prosecutors Office",
       agency_name == "Hudson Co ProsecutorOff-S/Force" ~ "Hudson Co Prosecutors Office",
