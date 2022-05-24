@@ -1,11 +1,11 @@
-## ---- include = FALSE-----------------------------------------------------
+## ---- include = FALSE-----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
 
-## ----setup, include=FALSE-------------------------------------------------
+## ----setup, include=FALSE-------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(magrittr)
@@ -15,23 +15,23 @@ library(tidyr)
 library(njoaguof)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 data("use_of_force_raw")
 uof_raw <- use_of_force_raw
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 data("census_counties")
 data("census_municipalities")
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 trailing_comma_regex <- "(?<=.),?$"
 sep_comma_no_space <- ",(?! )"
 sep_comma_space_no_paren <- r"(,(?![^(]*\)) )"
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 raw_names <- c(
   "form_id"                          ,"County2",
   "agency_name3"                     ,"Officer_Name2",
@@ -63,7 +63,7 @@ raw_names <- c(
 stopifnot(all.equal(names(uof_raw), raw_names))
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 check_list_levels <- function(tbl,
                               column,
                               separating_regex,
@@ -83,7 +83,7 @@ check_list_levels <- function(tbl,
 }
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 subject_type_levels <-
   c("Person", "Animal", "Other", "Unknown Subject(s)")
 
@@ -309,9 +309,10 @@ force_type_levels <- c(
 reason_not_arrested_levels <- c(
   "Already in Custody",
   "Deceased",
-  "Insufficient Probable Cause -includes continuing investigation",
+  "Insufficient Probable Cause- includes continuing investigation",
   "Medical/Mental Health Incident",
   "No Probable Cause- Crime Unfounded",
+  "No Probable Cause- Subject Not Involved",  
   "Subject Fled",
   "Other"
 )
@@ -319,7 +320,7 @@ reason_not_arrested_levels <- c(
 county_levels <- census_counties %>% pull(county)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 uof_raw_trimmed <- uof_raw %>%
   dplyr::mutate(across(
   where(is.character),
@@ -334,7 +335,7 @@ check_list_levels(
   ""
 )
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 check_list_levels(
   uof_raw_trimmed,
   SubjectsGender,
@@ -457,17 +458,17 @@ check_list_levels(
   ""
 )
 
-## -------------------------------------------------------------------------
-# check_list_levels(
-#   uof_raw_trimmed,
-#   ReasonNotArrest,
-#   sep_comma_no_space,
-#   reason_not_arrested_levels,
-#   c("Not Provided", "")
-#)
+## -------------------------------------------------------------------
+ check_list_levels(
+   uof_raw_trimmed,
+   ReasonNotArrest,
+   sep_comma_no_space,
+   reason_not_arrested_levels,
+  c("Not Provided", "", "NoProbableCause-SubjectNotInvolved")
+)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 stopifnot(all(
   setdiff(uof_raw %>% dplyr::pull(County2) %>% paste0(" County"),
         county_levels) %in%
@@ -476,7 +477,7 @@ stopifnot(all(
 )
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 subject <- uof_raw %>%
   select(form_id,
          SubjectsArrested,
@@ -526,7 +527,7 @@ subject <- subject %>%
 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 subject <- subject %>% 
   mutate(index=as.integer(index),
          arrested=as.logical(arrested)
@@ -534,13 +535,13 @@ subject <- subject %>%
 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 subject <- subject %>% 
   mutate(type=factor(type, levels=subject_type_levels),
          gender=factor(gender, levels=gender_levels))
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 as_integer_or_na <- function(x) suppressWarnings(as.integer(x))
 subject <- subject %>% 
   mutate(juvenile=case_when(
@@ -550,7 +551,7 @@ subject <- subject %>%
   mutate(age=as_integer_or_na(age))
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 subject <- subject %>%
   mutate(
     race = case_when(
@@ -562,14 +563,14 @@ subject <- subject %>%
   )
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 subject <- subject %>% 
   select(form_id, index, arrested, type, age, juvenile, race, gender)
 
 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 ### table should have two columns: form_id and list_col
 make_set_membership_table <- function(table, levels, separating_regex = ",") {
   table <- table %>%
@@ -596,7 +597,7 @@ make_set_membership_table <- function(table, levels, separating_regex = ",") {
 }
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_weather <- uof_raw %>% 
   select(form_id, list_col=incident_weather) %>%
   make_set_membership_table(weather_levels, 
@@ -604,7 +605,7 @@ incident_weather <- uof_raw %>%
   rename(weather=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_video_type <- uof_raw %>% 
   select(form_id, list_col=video_type) %>%
   make_set_membership_table(video_type_levels,
@@ -612,7 +613,7 @@ incident_video_type <- uof_raw %>%
   rename(video_type=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_lighting <- uof_raw %>% 
   select(form_id, list_col=incident_lighting) %>%
   make_set_membership_table(lighting_levels,
@@ -620,7 +621,7 @@ incident_lighting <- uof_raw %>%
   rename(lighting=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_location_type <- uof_raw %>% 
   select(form_id, list_col=location_type) %>%
   make_set_membership_table(location_type_levels, 
@@ -628,7 +629,7 @@ incident_location_type <- uof_raw %>%
   rename(location_type=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_type <- uof_raw %>%
   select(form_id, list_col=incident_type) %>%
   make_set_membership_table(incident_type_levels,
@@ -637,7 +638,7 @@ incident_type <- uof_raw %>%
 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_contact_origin <- uof_raw %>%
   select(form_id, list_col=contact_origin) %>%
   make_set_membership_table(contact_origin_levels,
@@ -645,7 +646,7 @@ incident_contact_origin <- uof_raw %>%
   rename(contact_origin=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_planned_contact <- uof_raw %>%
   select(form_id, list_col=planned_contact) %>%
   make_set_membership_table(planned_contact_levels,
@@ -653,7 +654,7 @@ incident_planned_contact <- uof_raw %>%
   rename(planned_contact=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 
 incident_officer_injury_type <- uof_raw %>%
   select(form_id, list_col=OffInjuryType) %>%
@@ -662,7 +663,7 @@ incident_officer_injury_type <- uof_raw %>%
   rename(officer_injury_type=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_officer_medical_treatment <- uof_raw %>%
   select(form_id, list_col=OFFMEDTREAT2) %>%
   make_set_membership_table(officer_medical_treatment_levels,
@@ -672,7 +673,7 @@ incident_officer_medical_treatment <- uof_raw %>%
 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 make_messy_relationship_table <- function(table, levels, separating_regex) {
   table <- table %>%
     mutate(list_col = str_replace(list_col, trailing_comma_regex, "")) %>%
@@ -700,7 +701,7 @@ make_messy_relationship_table <- function(table, levels, separating_regex) {
 }
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_subject_perceived_condition <- uof_raw %>%
   select(form_id, list_col=PerceivedCondition) %>%
   make_messy_relationship_table(perceived_condition_levels,
@@ -708,7 +709,7 @@ incident_subject_perceived_condition <- uof_raw %>%
   rename(perceived_condition=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 
 incident_subject_action <- uof_raw %>% 
   select(form_id, list_col=SubActions) %>%
@@ -717,7 +718,7 @@ incident_subject_action <- uof_raw %>%
   rename(subject_action=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_subject_resistance <- uof_raw %>% 
   select(form_id, list_col=SubResist) %>%
   make_messy_relationship_table(subject_resistance_levels,
@@ -725,7 +726,7 @@ incident_subject_resistance <- uof_raw %>%
   rename(subject_resistance=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_subject_medical_treatment <- uof_raw %>% 
   select(form_id, list_col=SubMedicalTreat) %>%
   make_messy_relationship_table(subject_medical_treatment_levels,
@@ -733,7 +734,7 @@ incident_subject_medical_treatment <- uof_raw %>%
   rename(subject_medical_treatment=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_subject_injury <- uof_raw %>% 
   select(form_id, list_col=SubjectInjuries) %>%
   make_messy_relationship_table(subject_injury_levels,
@@ -741,7 +742,7 @@ incident_subject_injury <- uof_raw %>%
   rename(subject_injury=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_subject_force_type <- uof_raw %>% 
   select(form_id, list_col=TypeofForce) %>%
   make_messy_relationship_table(force_type_levels,
@@ -749,15 +750,20 @@ incident_subject_force_type <- uof_raw %>%
   rename(force_type=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident_subject_reason_not_arrested <- uof_raw %>%
+  mutate(ReasonNotArrest = str_replace_all(
+    ReasonNotArrest,
+    "NoProbableCause-SubjectNotInvolved",
+    "No Probable Cause- Subject Not Involved"
+  )) %>%
   select(form_id, list_col="ReasonNotArrest") %>%
   make_messy_relationship_table(reason_not_arrested_levels,
                                 sep_comma_no_space) %>%
   rename(reason_not_arrested=value)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- uof_raw %>%
   select(
     form_id,
@@ -780,7 +786,7 @@ incident <- uof_raw %>%
   )
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 stopifnot(
   0 ==
     uof_raw %>%
@@ -811,25 +817,30 @@ stopifnot(
 )
 
 
-## -------------------------------------------------------------------------
-stopifnot(0 == 
-            uof_raw %>% filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
-          0 ==
-            uof_raw %>% filter(Incident_date1 != IncidentDate1_old) %>% nrow()
+## -------------------------------------------------------------------
+stopifnot(
+  0 ==
+    uof_raw %>% filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
+  0 ==
+    uof_raw %>%
+    mutate(Incident_date1 = as.Date(Incident_date1 / 86400, origin =
+                                      "1582-10-14")) %>%
+    filter(Incident_date1 != IncidentDate1_old) %>% nrow(),
+  0 ==
+    uof_raw %>% filter(incident_date != IncidentDate1) %>% nrow()
 )
 
 
-## -------------------------------------------------------------------------
-stopifnot(0 == uof_raw %>% filter(!is.na(incident_date)) %>% nrow(),
-          0 == uof_raw %>% filter(!is.na(other_officer_involved)) %>% nrow(),
+## -------------------------------------------------------------------
+stopifnot(0 == uof_raw %>% filter(!is.na(other_officer_involved)) %>% nrow(),
           0 == uof_raw %>% filter(!is.na(officer_in_uniform)) %>% nrow())
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 stopifnot(0 == uof_raw %>% filter(incident_lighting2 != 1) %>% nrow())
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 stopifnot(
   0 == uof_raw %>%
     select(OffInjuryType, officer_injuries_injured) %>%
@@ -839,7 +850,7 @@ stopifnot(
 )
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 stopifnot(
   0 ==
     uof_raw %>% filter(TotalSubInjuredIncident != SubjectInjuredInIncident) %>%
@@ -850,7 +861,7 @@ stopifnot(
 )
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 stopifnot(
   all(uof_raw$KEEPDROP == "KEEP"),
   all(
@@ -859,13 +870,13 @@ stopifnot(
 )
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>% 
   mutate(agency_county=paste0(agency_county, " County")) %>%
   mutate(agency_county = factor(agency_county, county_levels))
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>%
   mutate(
     agency_name = case_when(
@@ -890,7 +901,7 @@ incident <- incident %>%
 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>% 
   mutate(officer_name = na_if(officer_name, ""))
 
@@ -912,7 +923,7 @@ incident <- incident %>%
 rm(standard_names)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>%
   separate(
     incident_municipality,
@@ -924,13 +935,13 @@ incident <- incident %>%
            str_trim(incident_municipality_county))
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 unique_municipalities <- incident %>%
   select(incident_municipality_county, incident_municipality) %>%
   unique()
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 lookup_1 <- unique_municipalities %>%
   inner_join(census_municipalities,
              by=c("incident_municipality"="municipality_and_type",
@@ -939,7 +950,7 @@ lookup_1 <- unique_municipalities %>%
   select(incident_municipality, incident_municipality_county, census_municipality)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 lookup_2 <- unique_municipalities %>%
   anti_join(lookup_1,
             by=c("incident_municipality", "incident_municipality_county")) %>%
@@ -950,7 +961,7 @@ lookup_2 <- unique_municipalities %>%
   select(incident_municipality, incident_municipality_county, census_municipality)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 lookup_3 <- unique_municipalities %>%
   anti_join(
     lookup_1,
@@ -989,11 +1000,11 @@ lookup_3 <- unique_municipalities %>%
   )
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 lookup <- rbind(lookup_1, lookup_2, lookup_3)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 stopifnot(0 ==
   lookup %>% count(incident_municipality, incident_municipality_county) %>%
     filter(n>1) %>% nrow()
@@ -1003,7 +1014,7 @@ stopifnot("Other" ==
 )
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>% 
   left_join(lookup, 
             by = c("incident_municipality", "incident_municipality_county")) %>% 
@@ -1011,7 +1022,7 @@ incident <- incident %>%
   select(-census_municipality) 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>%
   mutate(incident_municipality_county =
          factor(incident_municipality_county, county_levels))
@@ -1019,7 +1030,7 @@ incident <- incident %>%
 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>%
   mutate(
     indoors = str_detect(indoor_or_outdoor, "Indoors"),
@@ -1028,21 +1039,21 @@ incident <- incident %>%
   select(-indoor_or_outdoor)
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 video_footage_levels <- c("Yes", "No", "Unknown")
 incident <- incident %>%
   mutate(video_footage=str_replace(video_footage, "Unknow", "Unknown")) %>%
   mutate(video_footage=factor(video_footage, levels=video_footage_levels))
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>%
   dplyr::mutate(officer_age = ifelse(dplyr::between(officer_age, 18, 67),
                                      as.integer(officer_age),
                                      NA)) 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>%
   mutate(
     officer_race = case_when(
@@ -1058,18 +1069,18 @@ incident <- incident %>%
 
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>% 
   mutate(officer_injured = (officer_injured=="1"))
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>%
   left_join(count(subject, form_id, name = "subject_count"),
             by = "form_id")
 
 
-## -------------------------------------------------------------------------
+## -------------------------------------------------------------------
 incident <- incident %>%
   relocate(
     form_id,
