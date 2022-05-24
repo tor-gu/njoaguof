@@ -1,3 +1,14 @@
+# njoaguof 1.3.0
+* Updated to use most recent dataset from NJ OAG:
+  "NJOAG Use of Force Data Dashboard 10-01-20 to 04-30-22.dta"
+  
+* Changes in incident_subject_reason_not_arrested:
+
+  - New level `"No Probable Cause- Subject Not Involved"`.
+  - Level `"Insufficient Probable Cause -includes continuing investigation"`
+  changed to `"Insufficient Probable Cause- includes continuing investigation"`.
+  (The whitespace around the `-` changed. This reflects a change in the raw data, and is more consistent with the other levels.)
+  
 # njoaguof 1.2.3
 * Changed three agency names to agree with njoagleod v1.1.2:
 

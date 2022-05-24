@@ -77,7 +77,7 @@ raw_names <- c(
   "SubjectInjuredPrior"              ,"PerceivedCondition",
   "SubActions"                       ,"SubResist",
   "SubMedicalTreat"                  ,"SubjectInjuries",
-  "SubectsArrested"                  ,"ReasonNotArrest",
+  "SubjectsArrested"                 ,"ReasonNotArrest",
   "subject_type"                     ,"SubjectsAge",
   "SubjectRace"                      ,"SubjectsGender",
   "TypeofForce"                      ,"Incident_date1",
@@ -339,9 +339,10 @@ force_type_levels <- c(
 reason_not_arrested_levels <- c(
   "Already in Custody",
   "Deceased",
-  "Insufficient Probable Cause -includes continuing investigation",
+  "Insufficient Probable Cause- includes continuing investigation",
   "Medical/Mental Health Incident",
   "No Probable Cause- Crime Unfounded",
+  "No Probable Cause- Subject Not Involved",  
   "Subject Fled",
   "Other"
 )
@@ -366,6 +367,8 @@ check_list_levels(
   subject_type_levels,
   ""
 )
+```
+```{r}
 check_list_levels(
   uof_raw_trimmed,
   SubjectsGender,
@@ -487,12 +490,14 @@ check_list_levels(
   force_type_levels,
   ""
 )
-check_list_levels(
-  uof_raw_trimmed,
-  ReasonNotArrest,
-  sep_comma_no_space,
-  reason_not_arrested_levels,
-  c("Not Provided", "")
+```
+```{r}
+ check_list_levels(
+   uof_raw_trimmed,
+   ReasonNotArrest,
+   sep_comma_no_space,
+   reason_not_arrested_levels,
+  c("Not Provided", "", "NoProbableCause-SubjectNotInvolved")
 )
 ```
 
@@ -513,7 +518,7 @@ stopifnot(all(
 ```{r}
 subject <- uof_raw %>%
   select(form_id,
-         SubectsArrested,
+         SubjectsArrested,
          subject_type,
          SubjectsAge,
          SubjectRace,
@@ -525,13 +530,13 @@ subject <- uof_raw %>%
   filter(if_any(-form_id, ~ . != ""))
   
 max_subjects <- 
-  subject$SubectsArrested %>% 
+  subject$SubjectsArrested %>% 
   map_int(str_count, ",") %>% 
   max() + 1
 
 
 subject <- subject %>% 
-  separate(SubectsArrested, 
+  separate(SubjectsArrested, 
            paste0("arrested__", 1:max_subjects), 
            ",",
            fill="right") %>%
@@ -866,8 +871,16 @@ incident_subject_force_type <- uof_raw %>%
 
 ### `incident_subject_reason_not_arrested`
 
+One value in this field needs to be normalized: We will replace
+`"NoProbableCause-SubjectNotInvolved"` with `"No Probable Cause- Subject Not Involved"`.
+
 ```{r}
 incident_subject_reason_not_arrested <- uof_raw %>%
+  mutate(ReasonNotArrest = str_replace_all(
+    ReasonNotArrest,
+    "NoProbableCause-SubjectNotInvolved",
+    "No Probable Cause- Subject Not Involved"
+  )) %>%
   select(form_id, list_col="ReasonNotArrest") %>%
   make_messy_relationship_table(reason_not_arrested_levels,
                                 sep_comma_no_space) %>%
@@ -942,25 +955,31 @@ stopifnot(
 )
 ```
 
-#### `IncidentDate1_old` and `Incident_date1`
+#### `IncidentDate1_old` `Incident_date1` and `incident_date`
 
-These fields are always identical to `IncidentDate1`:
+These fields are always identical to `IncidentDate1`. 
+For some reason, `haven` didn't catch that `Incident_date1` is an SPSS date, so we will do that conversion manually here.
 
 ```{r}
-stopifnot(0 == 
-            uof_raw %>% filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
-          0 ==
-            uof_raw %>% filter(Incident_date1 != IncidentDate1_old) %>% nrow()
+stopifnot(
+  0 ==
+    uof_raw %>% filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
+  0 ==
+    uof_raw %>%
+    mutate(Incident_date1 = as.Date(Incident_date1 / 86400, origin =
+                                      "1582-10-14")) %>%
+    filter(Incident_date1 != IncidentDate1_old) %>% nrow(),
+  0 ==
+    uof_raw %>% filter(incident_date != IncidentDate1) %>% nrow()
 )
 ```
 
-#### `incident_date`, `other_officer_involved` and `officer_in_uniform`
+#### `other_officer_involved` and `officer_in_uniform`
 
 These fields are always `NA`:
 
 ```{r}
-stopifnot(0 == uof_raw %>% filter(!is.na(incident_date)) %>% nrow(),
-          0 == uof_raw %>% filter(!is.na(other_officer_involved)) %>% nrow(),
+stopifnot(0 == uof_raw %>% filter(!is.na(other_officer_involved)) %>% nrow(),
           0 == uof_raw %>% filter(!is.na(officer_in_uniform)) %>% nrow())
 ```
 
@@ -1005,11 +1024,11 @@ stopifnot(
 )
 ```
 
-#### `SubectsArrested`, `subject_type`, `SubjectsAge`, `SubjectRace`, and `SubjectsGender`
+#### `SubjectsArrested`, `subject_type`, `SubjectsAge`, `SubjectRace`, and `SubjectsGender`
 
 These fields are reflected in the `subject` table.
 
-#### `KEEPDROP`, and `IncidentYear`
+#### `KEEPDROP`, and `IncidentYear`incident_date
 
 `KEEPDROP` is always `"KEEP"` and `IncidentYear` is redundant with `IncidentDate1`.
 
