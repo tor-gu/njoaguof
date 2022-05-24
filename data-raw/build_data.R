@@ -334,8 +334,6 @@ check_list_levels(
   subject_type_levels,
   ""
 )
-
-## -------------------------------------------------------------------
 check_list_levels(
   uof_raw_trimmed,
   SubjectsGender,
@@ -457,8 +455,10 @@ check_list_levels(
   force_type_levels,
   ""
 )
-
-## -------------------------------------------------------------------
+# There is one value here that we want to normalize --
+# The value "NoProbableCause-SubjectNotInvolved. We will do that
+# later, when we build the incident_subject_reason_not_arrested
+# table.
  check_list_levels(
    uof_raw_trimmed,
    ReasonNotArrest,
