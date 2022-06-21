@@ -1,3 +1,10 @@
+# njoaguof 1.4.0
+* Updated to use most recent dataset from NJ OAG:
+  "NJOAG Use of Force Data Dashboard 10-01-20 to 05-31-22.dta"
+
+* Change to incident_subject_force_type:
+  - New level ``CS Gas``.
+  
 # njoaguof 1.3.0
 * Updated to use most recent dataset from NJ OAG:
   "NJOAG Use of Force Data Dashboard 10-01-20 to 04-30-22.dta"
