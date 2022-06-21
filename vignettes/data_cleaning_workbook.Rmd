@@ -317,6 +317,7 @@ force_type_levels <- c(
   "CED Spark Display",
   "Chokehold, Carotid artery restraint",
   "Compliance hold with impact weapon- not a strike",
+  "CS Gas",
   "Discharged Chemical at",
   "Discharged Firearm at",
   "High Volume OC Spray",
