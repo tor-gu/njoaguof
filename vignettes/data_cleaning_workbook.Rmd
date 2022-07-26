@@ -1017,10 +1017,16 @@ This field is identical with `TotalSubInjuredIncident`
 ```{r}
 stopifnot(
   0 ==
-    uof_raw %>% filter(TotalSubInjuredIncident != SubjectInjuredInIncident) %>%
+    uof_raw %>% filter( 
+      (TotalSubInjuredIncident != SubjectInjuredInIncident),
+        !(TotalSubInjuredIncident == 0 & SubjectInjuredInIncident == "")
+    ) %>%
     nrow(),
   0 ==
-    uof_raw %>% filter(TotalSubInjuredIncident != SubjectInjuredPrior) %>%
+    uof_raw %>% filter(
+      (TotalSubInjuredIncident != SubjectInjuredPrior),
+        !(TotalSubInjuredIncident == 0 & SubjectInjuredPrior == "")
+    ) %>%
     nrow()
 )
 ```
