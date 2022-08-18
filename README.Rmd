@@ -84,7 +84,7 @@ Several fields contain one value for each subject. We presume that the order is 
 use_of_force_raw %>% filter(form_id == 16301) %>%
   select(
     form_id,
-    SubectsArrested,
+    SubjectsArrested,
     subject_type,
     SubjectsAge,
     SubjectRace,
