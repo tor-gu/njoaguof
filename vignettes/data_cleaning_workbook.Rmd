@@ -964,12 +964,19 @@ For some reason, `haven` didn't catch that `Incident_date1` is an SPSS date, so 
 ```{r}
 stopifnot(
   0 ==
-    uof_raw %>% filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
+    uof_raw %>% 
+    mutate(IncidentDate1_old = as.Date(IncidentDate1_old / 86400, origin =
+                                      "1582-10-14")) %>%
+    mutate(IncidentDate1_old = lubridate::floor_date(IncidentDate1_old,
+                                                   unit="day")) %>%
+    filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
   0 ==
     uof_raw %>%
     mutate(Incident_date1 = as.Date(Incident_date1 / 86400, origin =
                                       "1582-10-14")) %>%
-    filter(Incident_date1 != IncidentDate1_old) %>% nrow(),
+    mutate(Incident_date1 = lubridate::floor_date(Incident_date1,
+                                                   unit="day")) %>%
+    filter(IncidentDate1 != Incident_date1) %>% nrow(),
   0 ==
     uof_raw %>% filter(incident_date != IncidentDate1) %>% nrow()
 )
