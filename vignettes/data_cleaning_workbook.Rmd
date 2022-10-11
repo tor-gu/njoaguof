@@ -948,19 +948,19 @@ stopifnot(
     nrow(),
   0 ==
     uof_raw %>%
-    filter(
-      Officer_Name_Agency !=
-        glue::glue("{agency_name3}-{Officer_Name2}")
-    ) %>%
-    filter(
-      Officer_Name_Agency !=
-        glue::glue("{agency_name3}-\t\t{Officer_Name2}")
-    ) %>%
-    filter(
-      Officer_Name_Agency !=
-        glue::glue("{agency_name3}-\t\t\t{Officer_Name2}")
-    ) %>%
-    nrow()
+      filter(
+        Officer_Name_Agency !=
+          str_to_upper(glue::glue("{agency_name3}-{Officer_Name2}"))
+      ) %>%
+      filter(
+        Officer_Name_Agency !=
+          str_to_upper(glue::glue("{agency_name3}-\t\t{Officer_Name2}"))
+      ) %>%
+      filter(
+        Officer_Name_Agency !=
+          str_to_upper(glue::glue("{agency_name3}-\t\t\t{Officer_Name2}"))
+      ) %>%
+      nrow()
 )
 ```
 
@@ -980,10 +980,7 @@ stopifnot(
     filter(IncidentDate1 != IncidentDate1_old) %>% nrow(),
   0 ==
     uof_raw %>%
-    mutate(Incident_date1 = as.Date(as.double(Incident_date1) / 86400, origin =
-                                      "1582-10-14")) %>%
-    mutate(Incident_date1 = lubridate::floor_date(Incident_date1,
-                                                   unit="day")) %>%
+    mutate(Incident_date1 = as.Date(Incident_date1)) %>%
     filter(IncidentDate1 != Incident_date1) %>% nrow(),
   0 ==
     uof_raw %>% filter(incident_date != IncidentDate1) %>% nrow()
