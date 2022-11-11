@@ -435,7 +435,7 @@ check_list_levels(
   OffInjuryType,
   sep_comma_space_no_paren,
   officer_injury_type_levels,
-  c("No Injury", "Not Provided")
+  c("No Injury", "Not Provided", "")
 )
 check_list_levels(
   uof_raw_trimmed,
@@ -1010,13 +1010,14 @@ These fields are handled in other tables.
 
 #### `OffInjuryType`
 
-We did not capture the `"No Injury"` value in the `incident_officer_injury_type` table, but that value is redundant with `officer_injuries_injured` which is `"1"` precisely when `OffInjuryType`is `"NoInjury"`.
+We did not capture the `"No Injury"` or empty-string value in the `incident_officer_injury_type` table, but that value is redundant with `officer_injuries_injured` which is `"1"` precisely when `OffInjuryType`is `"NoInjury"` or the empty string.
 
 ```{r}
 stopifnot(
   0 == uof_raw %>%
     select(OffInjuryType, officer_injuries_injured) %>%
-    mutate(NoInjury = str_detect(OffInjuryType, "No Injury")) %>%
+    mutate(NoInjury = str_detect(OffInjuryType, "No Injury") |
+             OffInjuryType == "") %>%
     filter(NoInjury == (officer_injuries_injured == "1")) %>%
     nrow()
 )
