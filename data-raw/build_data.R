@@ -34,8 +34,8 @@ sep_comma_space_no_paren <- r"(,(?![^(]*\)) )"
 ## ----------------------------------------------------------------
 raw_names <- c(
   "form_id"                          ,"County2",
-  "agency_name3"                     ,"Officer_Name2",
-  "officer_name"                     ,"Officer_Name_Agency",
+  "agency_name3"                     ,"officer_name",
+  "Officer_Name2"                    ,"Officer_Name_Agency",
   "INCIDENTID"                       ,"report_number",
   "incident_case_number"             ,"IncidentDate1",
   "incident_date"                    ,"IncidentDate1_old",
@@ -49,16 +49,15 @@ raw_names <- c(
   "officer_rank"                     ,"officer_gender_fill",
   "OffInjuryType"                    ,"officer_injuries_injured",
   "OFFMEDTREAT2"                     ,"officer_hospital_treatment",
-  "TotalSubInjuredIncident"          ,"SubjectInjuredInIncident",
+  "TotalSubInjuredIncdient"          ,"SubjectInjuredInIncident",
   "SubjectInjuredPrior"              ,"PerceivedCondition",
   "SubActions"                       ,"SubResist",
   "SubMedicalTreat"                  ,"SubjectInjuries",
   "SubjectsArrested"                 ,"ReasonNotArrest",
-  "subject_type"                     ,"SubjectsAge",
-  "SubjectRace"                      ,"SubjectsGender",
+  "subject_type"                     ,"SubectsAge",
+  "SubjectRace"                      ,"SubectsGender",
   "TypeofForce"                      ,"Incident_date1",
-  "incident_lighting2"               ,"IncidentYear",
-  "KEEPDROP"
+  "incident_lighting2"               ,"IncidentYear"
 )
 stopifnot(all.equal(names(uof_raw), raw_names))
 
@@ -337,7 +336,7 @@ check_list_levels(
 )
 check_list_levels(
   uof_raw_trimmed,
-  SubjectsGender,
+  SubectsGender,
   sep_comma_no_space,
   gender_levels,
   c("", "Not Provided")
@@ -483,9 +482,9 @@ subject <- uof_raw %>%
   select(form_id,
          SubjectsArrested,
          subject_type,
-         SubjectsAge,
+         SubectsAge,
          SubjectRace,
-         SubjectsGender) %>%
+         SubectsGender) %>%
   mutate(across(
     where(is.character),
     ~ str_replace(., trailing_comma_regex, "")
@@ -507,7 +506,7 @@ subject <- subject %>%
            paste0("type__", 1:max_subjects), 
            ",",
            fill="right") %>%
-  separate(SubjectsAge, 
+  separate(SubectsAge, 
            paste0("age__", 1:max_subjects), 
            ",",
            fill="right") %>%
@@ -515,7 +514,7 @@ subject <- subject %>%
            paste0("race__", 1:max_subjects), 
            ",",
            fill="right") %>%
-  separate(SubjectsGender, 
+  separate(SubectsGender, 
            paste0("gender__", 1:max_subjects), 
            ",",
            fill="right") %>%
@@ -783,7 +782,7 @@ incident <- uof_raw %>%
     officer_rank,
     officer_gender = officer_gender_fill,
     officer_injured = officer_injuries_injured,
-    subject_injured_count = TotalSubInjuredIncident
+    subject_injured_count = TotalSubInjuredIncdient
   )
 
 
@@ -868,14 +867,14 @@ stopifnot(
 stopifnot(
   0 ==
     uof_raw %>% filter( 
-      (TotalSubInjuredIncident != SubjectInjuredInIncident),
-        !(TotalSubInjuredIncident == 0 & SubjectInjuredInIncident == "")
+      (TotalSubInjuredIncdient != SubjectInjuredInIncident),
+        !(TotalSubInjuredIncdient == 0 & SubjectInjuredInIncident == "")
     ) %>%
     nrow(),
   0 ==
     uof_raw %>% filter(
-      (TotalSubInjuredIncident != SubjectInjuredPrior),
-        !(TotalSubInjuredIncident == 0 & SubjectInjuredPrior == "")
+      (TotalSubInjuredIncdient != SubjectInjuredPrior),
+        !(TotalSubInjuredIncdient == 0 & SubjectInjuredPrior == "")
     ) %>%
     nrow()
 )
@@ -883,7 +882,6 @@ stopifnot(
 
 ## ----------------------------------------------------------------
 stopifnot(
-  all(uof_raw$KEEPDROP == "KEEP"),
   all(
     uof_raw$IncidentYear == lubridate::year(uof_raw$IncidentDate1)
   )
