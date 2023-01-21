@@ -79,7 +79,7 @@ raw_names <- c(
   "SubMedicalTreat"                  ,"SubjectInjuries",
   "SubjectsArrested"                 ,"ReasonNotArrest",
   "subject_type"                     ,"SubectsAge",
-  "SubjectRace"                      ,"SubectsGender",
+  "SubjectRace"                      ,"SubjectsGender",
   "TypeofForce"                      ,"Incident_date1",
   "incident_lighting2"               ,"IncidentYear"
 )
@@ -369,7 +369,7 @@ check_list_levels(
 )
 check_list_levels(
   uof_raw_trimmed,
-  SubectsGender,
+  SubjectsGender,
   sep_comma_no_space,
   gender_levels,
   c("", "Not Provided")
@@ -522,7 +522,7 @@ subject <- uof_raw %>%
          subject_type,
          SubectsAge,
          SubjectRace,
-         SubectsGender) %>%
+         SubjectsGender) %>%
   mutate(across(
     where(is.character),
     ~ str_replace(., trailing_comma_regex, "")
@@ -552,7 +552,7 @@ subject <- subject %>%
            paste0("race__", 1:max_subjects), 
            ",",
            fill="right") %>%
-  separate(SubectsGender, 
+  separate(SubjectsGender, 
            paste0("gender__", 1:max_subjects), 
            ",",
            fill="right") %>%
@@ -1043,7 +1043,7 @@ stopifnot(
 )
 ```
 
-#### `SubjectsArrested`, `subject_type`, `SubectsAge`, `SubjectRace`, and `SubectsGender`
+#### `SubjectsArrested`, `subject_type`, `SubectsAge`, `SubjectRace`, and `SubjectsGender`
 
 These fields are reflected in the `subject` table.
 
