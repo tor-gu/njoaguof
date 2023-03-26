@@ -1222,7 +1222,9 @@ lookup_3 <- unique_municipalities %>%
       incident_municipality_county == "Essex County" &
         incident_municipality == "Caldwell Borough" ~ "Caldwell borough",
       incident_municipality_county == "Monmouth County" &
-        incident_municipality == "Spring Lake Boro" ~ "Spring Lake borough"
+        incident_municipality == "Spring Lake Boro" ~ "Spring Lake borough",
+      incident_municipality_county == "Somerset County" &
+        incident_municipality == "Peapack & Gladstone" ~ "Peapack and Gladstone borough"
     )
   )
 ```
