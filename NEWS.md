@@ -1,3 +1,5 @@
+# njoaguof 1.12.1
+
 # njoaguof 1.12.0
 * Update to most recent dataset from NJ OAG:
   "NJOAG Use of Force Data Dashboard 10-01-20 to 02-28-23.dta"
