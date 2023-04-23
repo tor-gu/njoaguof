@@ -1,6 +1,6 @@
 use_of_force_raw <-
   system.file("extdata",
-              "NJOAGUOF_Data_100120_to_022823.dta",
+              "NJOAGUOF_Data_100120_to_033123.dta",
               package = "njoaguof") %>%
   haven::read_dta() %>%
   haven::zap_formats() %>%
