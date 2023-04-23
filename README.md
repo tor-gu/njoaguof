@@ -13,37 +13,37 @@ available from <https://www.njoag.gov/force/>.
 
 ## Dataset Overview
 
--   `incident` This is the main data table. Each use of force incident
-    is recorded here. A single incident may involve multiple subjects.
--   `subject` The subjects of the use of force – includes persons and
-    animals.
--   `incident`-specific data tables. Each of these data tables are for
-    multi-value fields associated to incidents. For example – a single
-    incident may have both `"Rain"` and `"Fog"` weather conditions, and
-    this will result in two rows in `incident_weather`.
-    -   `incident_contact_origin`
-    -   `incident_lighting`
-    -   `incident_location_type`
-    -   `incident_officer_injury_type`
-    -   `incident_officer_medical_treatment`
-    -   `incident_planned_contact`
-    -   `incident_type`
-    -   `incident_video_type`
-    -   `incident_weather`
--   `incident`-`subject` data tables These data tables are for
-    multi-value fields that should be associated to individual incident
-    subjects. Unfortunately, these tables reflect some irreducible
-    messiness of the source data. See the notes below.
-    -   `incident_subject_action`
-    -   `incident_subject_force_type`
-    -   `incident_subject_injury`
-    -   `incident_subject_medical_treatment`
-    -   `incident_subject_perceived_condition`
-    -   `incident_subject_reason_not_arrested`
-    -   `incident_subject_resistance`
--   `officer_name_variants` Includes every variation in spelling and
-    capitalization of the officer names found in the source data.
--   `use_of_force_raw` The source data.
+- `incident` This is the main data table. Each use of force incident is
+  recorded here. A single incident may involve multiple subjects.
+- `subject` The subjects of the use of force – includes persons and
+  animals.
+- `incident`-specific data tables. Each of these data tables are for
+  multi-value fields associated to incidents. For example – a single
+  incident may have both `"Rain"` and `"Fog"` weather conditions, and
+  this will result in two rows in `incident_weather`.
+  - `incident_contact_origin`
+  - `incident_lighting`
+  - `incident_location_type`
+  - `incident_officer_injury_type`
+  - `incident_officer_medical_treatment`
+  - `incident_planned_contact`
+  - `incident_type`
+  - `incident_video_type`
+  - `incident_weather`
+- `incident`-`subject` data tables These data tables are for multi-value
+  fields that should be associated to individual incident subjects.
+  Unfortunately, these tables reflect some irreducible messiness of the
+  source data. See the notes below.
+  - `incident_subject_action`
+  - `incident_subject_force_type`
+  - `incident_subject_injury`
+  - `incident_subject_medical_treatment`
+  - `incident_subject_perceived_condition`
+  - `incident_subject_reason_not_arrested`
+  - `incident_subject_resistance`
+- `officer_name_variants` Includes every variation in spelling and
+  capitalization of the officer names found in the source data.
+- `use_of_force_raw` The source data.
 
 ## Examples
 
@@ -59,20 +59,20 @@ incident %>%
   select(form_id, agency_county) %>%
   right_join(incident_video_type, by = "form_id") %>%
   count(agency_county, video_type)
-#> # A tibble: 176 × 3
+#> # A tibble: 179 × 3
 #>    agency_county   video_type              n
 #>    <fct>           <fct>               <int>
-#>  1 Atlantic County Body Worn             863
-#>  2 Atlantic County CED Camera              6
-#>  3 Atlantic County Cell Phone              6
-#>  4 Atlantic County Commercial Building    47
-#>  5 Atlantic County Motor Vehicle         205
+#>  1 Atlantic County Body Worn            1026
+#>  2 Atlantic County CED Camera              7
+#>  3 Atlantic County Cell Phone              8
+#>  4 Atlantic County Commercial Building    57
+#>  5 Atlantic County Motor Vehicle         235
 #>  6 Atlantic County Residential/Home        2
-#>  7 Atlantic County Station House          38
+#>  7 Atlantic County Station House          55
 #>  8 Atlantic County Other                  31
-#>  9 Bergen County   Body Worn            1037
-#> 10 Bergen County   CED Camera             51
-#> # … with 166 more rows
+#>  9 Bergen County   Body Worn            1295
+#> 10 Bergen County   CED Camera             61
+#> # ℹ 169 more rows
 ```
 
 ``` r
@@ -86,24 +86,24 @@ incident %>%
 #> # A tibble: 18 × 3
 #>    officer_gender          subject_gender              n
 #>    <fct>                   <fct>                   <int>
-#>  1 Male                    Male                    23309
-#>  2 Male                    Female                   6260
-#>  3 Male                    Gender Non-Conforming/X    33
-#>  4 Male                    <NA>                      539
-#>  5 Female                  Male                     1113
-#>  6 Female                  Female                    661
-#>  7 Female                  Gender Non-Conforming/X     3
-#>  8 Female                  <NA>                       30
-#>  9 Gender Non-Conforming/X Male                       15
-#> 10 Gender Non-Conforming/X Female                      6
-#> 11 Gender Non-Conforming/X Gender Non-Conforming/X     1
-#> 12 Other                   Male                     2830
-#> 13 Other                   Female                    750
+#>  1 Male                    Male                    26177
+#>  2 Male                    Female                   7109
+#>  3 Male                    Gender Non-Conforming/X    48
+#>  4 Male                    <NA>                      254
+#>  5 Female                  Male                     1274
+#>  6 Female                  Female                    779
+#>  7 Female                  Gender Non-Conforming/X     4
+#>  8 Female                  <NA>                       11
+#>  9 Gender Non-Conforming/X Male                       17
+#> 10 Gender Non-Conforming/X Female                      8
+#> 11 Gender Non-Conforming/X Gender Non-Conforming/X     2
+#> 12 Other                   Male                     3075
+#> 13 Other                   Female                    811
 #> 14 Other                   Gender Non-Conforming/X     4
-#> 15 Other                   <NA>                       92
-#> 16 <NA>                    Male                      550
-#> 17 <NA>                    Female                    151
-#> 18 <NA>                    <NA>                      100
+#> 15 Other                   <NA>                       48
+#> 16 <NA>                    Male                      634
+#> 17 <NA>                    Female                    172
+#> 18 <NA>                    <NA>                       48
 ```
 
 ## Notes
@@ -113,13 +113,13 @@ which has one row for each use of force incident. Fields with multiple
 values are recorded as comma separated lists. For example:
 
 ``` r
-use_of_force_raw %>% count(SubectsGender) %>% head(5)
+use_of_force_raw %>% count(SubjectsGender) %>% head(5)
 #> # A tibble: 5 × 2
-#>   SubectsGender                     n
+#>   SubjectsGender                    n
 #>   <chr>                         <int>
 #> 1 ""                                1
-#> 2 "Female,"                      7473
-#> 3 "Female,Female"                  71
+#> 2 "Female,"                      8517
+#> 3 "Female,Female"                  73
 #> 4 "Female,Female,Female,"           4
 #> 5 "Female,Female,Female,Female"     4
 ```
@@ -141,12 +141,12 @@ use_of_force_raw %>% filter(form_id == 16301) %>%
     subject_type,
     SubectsAge,
     SubjectRace,
-    SubectsGender
+    SubjectsGender
   )
 #> # A tibble: 1 × 6
-#>   form_id SubjectsArrested subject_type  SubectsAge SubjectRace    SubectsGender
-#>     <dbl> <chr>            <chr>         <chr>      <chr>          <chr>        
-#> 1   16301 True,False       Person,Person 26,23      Hispanic,Blac… Male,Female
+#>   form_id SubjectsArrested subject_type  SubectsAge SubjectRace   SubjectsGender
+#>     <dbl> <chr>            <chr>         <chr>      <chr>         <chr>         
+#> 1   16301 True,False       Person,Person 26,23      Hispanic,Bla… Male,Female
 
 subject %>% filter(form_id == 16301)
 #> # A tibble: 2 × 8
