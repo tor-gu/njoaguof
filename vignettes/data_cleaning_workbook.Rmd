@@ -81,7 +81,8 @@ raw_names <- c(
   "subject_type"                     ,"SubectsAge",
   "SubjectRace"                      ,"SubjectsGender",
   "TypeofForce"                      ,"Incident_date1",
-  "incident_lighting2"               ,"IncidentYear"
+  "incident_lighting2"               ,"IncidentYear",
+  "KEEPDROP"
 )
 stopifnot(all.equal(names(uof_raw), raw_names))
 ```
@@ -320,6 +321,7 @@ force_type_levels <- c(
   "Discharged Chemical at",
   "Discharged Firearm at",
   "High Volume OC Spray",
+  "Intent to strike with a motor vehicle",
   "Kneeling on Chest, Back",
   "Pointing Firearm",
   "Struck",

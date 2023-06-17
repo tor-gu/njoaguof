@@ -1,4 +1,9 @@
 # njoaguof (development version)
+* Update to most recent dataset from NJ OAG:
+  "NJOAG Use of Force Data Dashboard 10-01-20 to 05-31-23.dta"
+
+* Change to incident_subject_force_type:
+  - New level `"Intent to strike with a motor vehicle"`.
 
 # njoaguof 1.14.0
 * Update to most recent dataset from NJ OAG:
