@@ -1,3 +1,21 @@
+# njoaguof 1.16.0
+* Update to most recent dataset from NJ OAG:
+  "NJOAG Use of Force Data Dashboard 10-01-20 to 09-30-24.dta"
+
+* Change to `incident`:
+  - New variable `other_officer_involved`
+  - New variable `officer_in_uniform`
+
+* Change to `subject`:
+  - New variable `injured`
+  - New variable `injured_prior`
+
+* Change to `incident_contact_origin`:
+  - New level `Officer Dispatched`
+  
+* Change to `incident_planned_contact`:
+  - New level `No Knock Warrant`
+  
 # njoaguof 1.15.0
 * Update to most recent dataset from NJ OAG:
   "NJOAG Use of Force Data Dashboard 10-01-20 to 05-31-23.dta"
