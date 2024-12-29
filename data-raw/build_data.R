@@ -12,6 +12,7 @@ library(magrittr)
 library(purrr)
 library(stringr)
 library(tidyr)
+library(readr)
 library(njoaguof)
 
 
@@ -43,22 +44,22 @@ raw_names <- c(
   "IndoorOrOutdoor"                ,"IncidentWeather",
   "VideoFootage"                   ,"VideoType",
   "IncidentLighting",
-  "LocationType"                    ,"IncidentType",
-  "ContactOrigin"                   ,"PlannedContact",
-  "OfficerAge"                      ,"OfficerRaceEthnicity",
-  "OfficerRank"                     ,"OfficerGender",
-  "OfficerInjuryType"                    ,"OfficerInjuriesInjured",
-  "OfficerMedicalTreatment"                     ,"OfficerHospitalTreatment",
-  "TotalSubInjuredInIncident"          ,"SubjectInjuredInIncident",
-  "SubjectInjuredPriorToIncident"              ,"PerceivedConditionOfSubject",
-  "SubjectActions"                       ,"SubjectResistance",
-  "SubjectMedicalTreatment"                  ,"SubjectInjuryType",
-  "SubjectArrested"                 ,"ReasonSubjectNotArrested",
-  "SubjectType"                     ,"SubjectAge",
-  "SubjectRaceEthnicity"                      ,"SubjectGender",
+  "LocationType"                   ,"IncidentType",
+  "ContactOrigin"                  ,"PlannedContact",
+  "OfficerAge"                     ,"OfficerRaceEthnicity",
+  "OfficerRank"                    ,"OfficerGender",
+  "OfficerInjuryType"              ,"OfficerInjuriesInjured",
+  "OfficerMedicalTreatment"        ,"OfficerHospitalTreatment",
+  "TotalSubInjuredInIncident"      ,"SubjectInjuredInIncident",
+  "SubjectInjuredPriorToIncident"  ,"PerceivedConditionOfSubject",
+  "SubjectActions"                 ,"SubjectResistance",
+  "SubjectMedicalTreatment"        ,"SubjectInjuryType",
+  "SubjectArrested"                ,"ReasonSubjectNotArrested",
+  "SubjectType"                    ,"SubjectAge",
+  "SubjectRaceEthnicity"           ,"SubjectGender",
   "ForceType",
   "IncidentYear",
-  "KEEPDROP"
+  "KEEPDROP"                       ,"staticContent976"
 )
 stopifnot(all.equal(names(uof_raw), raw_names))
 
