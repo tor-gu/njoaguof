@@ -26,7 +26,8 @@ Suggests:
     glue,
     tidycensus,
     rlang,
-    readr
+    readr,
+    devtools
 Depends: 
     R (>= 3.5)
 LazyData: true

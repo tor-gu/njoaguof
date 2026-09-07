@@ -1,3 +1,6 @@
+^\.Rprofile$
+^renv$
+^renv\.lock$
 ^njoaguof\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$

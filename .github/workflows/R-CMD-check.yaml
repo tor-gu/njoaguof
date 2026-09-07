@@ -27,6 +27,10 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      # renv is for reproducing the local data-build environment only.
+      # R CMD check should test against current CRAN across the matrix,
+      # so keep the renv autoloader in .Rprofile out of CI.
+      RENV_CONFIG_AUTOLOADER_ENABLED: false
 
     steps:
       - uses: actions/checkout@v3

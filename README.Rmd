@@ -97,7 +97,7 @@ subject %>% filter(form_id == 16301)
 #### Multi-value incident fields
 Some fields contain multiple values which apply to the entire incident. For each such column, we create a separate table expressing this many-to-one relationship. For example, this row in the source data has three values for ```incident_type```, and this results in three rows in the ```incident_type``` table.
 ```{r}
-library(tidyverse)
+library(dplyr)
 use_of_force_raw %>% filter(FormID == 16301) %>%
   select(IncidentType)
 incident_type %>% filter(form_id == 16301)
