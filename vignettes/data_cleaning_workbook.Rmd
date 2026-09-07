@@ -1400,7 +1400,9 @@ incident <- incident %>%
     indoors,
     outdoors,
     subject_count,
-    subject_injured_count
+    subject_injured_count,
+    other_officer_involved,
+    officer_in_uniform
   )
 ```
 

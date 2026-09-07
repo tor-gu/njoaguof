@@ -5,7 +5,7 @@
 \alias{subject}
 \title{Use of force subjects.}
 \format{
-A dataframe with 8 columns
+A dataframe with 10 columns
 \describe{
 \item{form_id}{Unique identifier for the \code{incident} table.}
 \item{index}{Subject index}
@@ -15,6 +15,13 @@ A dataframe with 8 columns
 \item{juvenile}{Subject is a juvenile.}
 \item{race}{Subject race}
 \item{gender}{Subject gender.}
+\item{injured}{\code{TRUE} if the subject was injured in the incident.
+\code{NA} where the source recorded \code{"Unknown"} or left the field
+blank. \emph{C.f.} table \code{incident_subject_injury} for injury types,
+and note the warning on \code{incident$subject_injured_count}.}
+\item{injured_prior}{\code{TRUE} if the subject was injured \emph{before}
+the incident. \code{NA} where the source recorded \code{"Unknown"} or left
+the field blank.}
 }
 }
 \source{

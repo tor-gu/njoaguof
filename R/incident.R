@@ -2,7 +2,7 @@
 #'
 #' Use of force incidents from the NJ OAG Use of Force database.
 #'
-#' @format A dataframe with 23 columns
+#' @format A dataframe with 22 columns
 #' \describe{
 #'  \item{form_id}{A unique identifier for the row, present in the source data}
 #'
@@ -71,6 +71,18 @@
 #'  incidents with \code{subject_injured_count > subject_count} and over
 #'  3500 rows with \code{subject_injured_count == 0} that have matching rows
 #'  in \code{incident_subject_injury} indicating specific injury types.}}
+#'
+#'  \item{other_officer_involved}{\code{TRUE} if another officer was involved
+#'  in the incident.
+#'
+#'  \emph{\strong{Warning} This field is largely unpopulated. The source data
+#'  records \code{"Not Provided"} for over 53,000 of the incidents, which
+#'  becomes \code{NA} here. In practice the field was only collected during
+#'  2020 and 2021 -- from 2022 onward it is \code{NA} for effectively every
+#'  incident.}}
+#'
+#'  \item{officer_in_uniform}{\code{TRUE} if the officer was in uniform. This
+#'  field is populated for every incident.}
 #'
 #' }
 #' @source \url{https://www.njoag.gov/force/}
