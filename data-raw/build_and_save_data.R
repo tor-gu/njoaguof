@@ -5,7 +5,6 @@ source("data-raw/build_data.R")
 
 usethis::use_data(incident, overwrite = TRUE)
 usethis::use_data(incident_contact_origin, overwrite = TRUE)
-usethis::use_data(incident_subject_force_type, overwrite = TRUE)
 usethis::use_data(incident_lighting, overwrite = TRUE)
 usethis::use_data(incident_location_type, overwrite = TRUE)
 usethis::use_data(incident_officer_injury_type, overwrite = TRUE)

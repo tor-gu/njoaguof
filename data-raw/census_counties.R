@@ -1,4 +1,7 @@
 # This requires a census API key
+library(dplyr)
+library(tidyr)
+
 census_counties <-
   tidycensus::get_estimates(
     geography = "county",
