@@ -5,7 +5,7 @@
 \alias{use_of_force_raw}
 \title{Raw use of force data from the NJ OAG}
 \format{
-A dataframe with 51 columns
+A dataframe with 46 columns, one row per use of force incident
 }
 \source{
 \url{https://www.njoag.gov/force/}

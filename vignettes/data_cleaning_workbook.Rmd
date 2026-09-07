@@ -17,13 +17,13 @@ knitr::opts_chunk$set(
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
-library(magrittr)
 library(purrr)
 library(stringr)
 library(tidyr)
 library(readr)
 library(njoaguof)
 ```
+
 
 ## Set up
 
@@ -34,11 +34,14 @@ data("use_of_force_raw")
 uof_raw <- use_of_force_raw
 ```
 
+
 We will also need county and municipality data from the US Census, gathered using the `tidycensus` package:
+
 ```{r}
 data("census_counties")
 data("census_municipalities")
 ```
+
 
 Some regular expressions we will use repeatedly
 
@@ -48,6 +51,7 @@ sep_comma_no_space <- ",(?! )"
 sep_comma_space_no_paren <- r"( ?,(?![^(]*\)) )"
 sep_comma_optional_space <- r"( ?, ?)"
 ```
+
 
 ## Pre-validation
 
@@ -83,10 +87,11 @@ raw_names <- c(
   "SubjectRaceEthnicity"           ,"SubjectGender",
   "ForceType",
   "IncidentYear",
-  "KEEPDROP"                       ,"staticContent976"
+  "KEEPDROP"
 )
 stopifnot(all.equal(names(uof_raw), raw_names))
 ```
+
 
 ### Levels
 
@@ -100,17 +105,18 @@ check_list_levels <- function(tbl,
                               other_acceptable_values = character(0)) {
   message("Checking for unmatched values in ",
           rlang::as_label(rlang::enquo(column)))
-  unmatched_values <- tbl %>%
-    dplyr::pull({{column}}) %>%
-    stringr::str_split(separating_regex) %>%
-    unlist() %>% unique() %>%
-    setdiff(levels) %>% setdiff(other_acceptable_values)
+  unmatched_values <- tbl |>
+    dplyr::pull({{column}}) |>
+    stringr::str_split(separating_regex) |>
+    unlist() |> unique() |>
+    setdiff(levels) |> setdiff(other_acceptable_values)
   if (length(unmatched_values) != 0) {
     message(paste(unmatched_values, collapse = " | "))
     stop()
   }
 }
 ```
+
 
 And here are all the levels.
 
@@ -327,7 +333,7 @@ force_type_levels <- c(
   "Discharged Firearm at",
   "High Volume OC Spray",
   "Intent to strike with a motor vehicle",
-  "Kneeling on Chest, Back",
+  "Kneeling on Chest, Back for prolonged period",
   "Pointing Firearm",
   "Struck",
   "Used arm bar on",
@@ -354,14 +360,15 @@ reason_not_arrested_levels <- c(
   "Other"
 )
 
-county_levels <- census_counties %>% pull(county)
+county_levels <- census_counties |> pull(county)
 ```
+
 
 
 Now we will check that the multi-value fields contain only these levels.
 
 ```{r}
-uof_raw_trimmed <- uof_raw %>%
+uof_raw_trimmed <- uof_raw |>
   dplyr::mutate(across(
   where(is.character),
   ~ stringr::str_replace(., trailing_comma_regex, "")
@@ -512,7 +519,10 @@ check_list_levels(
   ForceType,
   sep_comma_space_force_special,
   force_type_levels,
-  c("Not Provided", "")
+  # "Kneeling on Chest, Back" is the superseded wording of
+  # "Kneeling on Chest, Back for prolonged period"; it is normalized to the
+  # newer form when incident_subject_force_type is built.
+  c("Not Provided", "", "Kneeling on Chest, Back")
 )
 # There are two values here that we want to normalize --
 # The values "NoProbableCause-SubjectNotInvolved and 
@@ -526,25 +536,26 @@ check_list_levels(
    reason_not_arrested_levels,
   c("Not Provided", "", "NoProbableCause-SubjectNotInvolved", "Insufficient Probable Cause-includes continuing investigation")
 )
-
 ```
+
 
 Finally, we check the county field.  There are two non-county values which we 
 are expecting (and will map to `NA`): `"Other"` and `"NJSP"`.
 
 ```{r}
 stopifnot(all(
-  setdiff(uof_raw %>% dplyr::pull(County) %>% paste0(" County"),
+  setdiff(uof_raw |> dplyr::pull(County) |> paste0(" County"),
         county_levels) %in%
     c("Other County", "NJSP County")
   )
 )
 ```
 
+
 ## `subject` table
 
 ```{r}
-subject <- uof_raw %>%
+subject <- uof_raw |>
   select(FormID,
          SubjectArrested,
          SubjectType,
@@ -552,57 +563,57 @@ subject <- uof_raw %>%
          SubjectRaceEthnicity,
          SubjectGender,
          SubjectInjuredInIncident,
-         SubjectInjuredPriorToIncident) %>%
+         SubjectInjuredPriorToIncident) |>
   mutate(across(
     where(is.character),
     ~ str_replace(., trailing_comma_regex, "")
-  )) %>%
+  )) |>
   filter(if_any(-FormID, ~ . != ""))
   
 max_subjects <- 
-  subject$SubjectArrested %>% 
-  map_int(str_count, ",") %>% 
+  subject$SubjectArrested |> 
+  map_int(str_count, ",") |> 
   max() + 1
 
 
-subject <- subject %>% 
+subject <- subject |> 
   separate(SubjectArrested, 
            paste0("arrested__", 1:max_subjects), 
            ",",
-           fill="right") %>%
+           fill="right") |>
   separate(SubjectType, 
            paste0("type__", 1:max_subjects), 
            ",",
-           fill="right") %>%
+           fill="right") |>
   separate(SubjectAge, 
            paste0("age__", 1:max_subjects), 
            ",",
-           fill="right") %>%
+           fill="right") |>
   separate(SubjectRaceEthnicity, 
            paste0("race__", 1:max_subjects), 
            ",",
-           fill="right") %>%
+           fill="right") |>
   separate(SubjectGender, 
            paste0("gender__", 1:max_subjects), 
            ",",
-           fill="right") %>%
+           fill="right") |>
   separate(SubjectInjuredInIncident, 
            paste0("injured__", 1:max_subjects),
            ",",
-           fill="right") %>%
+           fill="right") |>
   separate(SubjectInjuredPriorToIncident, 
            paste0("injured_prior__", 1:max_subjects),
            ",",
-           fill="right") %>%
+           fill="right") |>
   pivot_longer(cols = -FormID,
                names_to="column",
                values_to="value",
-               values_drop_na=TRUE) %>%
-  separate(column, c("column", "index"), "__") %>%
-  pivot_wider(names_from="column", values_from="value") %>%
+               values_drop_na=TRUE) |>
+  separate(column, c("column", "index"), "__") |>
+  pivot_wider(names_from="column", values_from="value") |>
   rename(form_id=FormID)
-
 ```
+
 
 Now we will clean up this table, column by column.
 
@@ -611,22 +622,23 @@ Now we will clean up this table, column by column.
 `index` is the index into the subject list. It should be an integer. `arrested` is a boolean.
 
 ```{r}
-subject <- subject %>% 
+subject <- subject |> 
   mutate(index=as.integer(index),
          arrested=as.logical(arrested)
   )
-
 ```
+
 
 #### `type` and `gender`
 
 We will convert these to factors.
 
 ```{r}
-subject <- subject %>% 
+subject <- subject |> 
   mutate(type=factor(type, levels=subject_type_levels),
          gender=factor(gender, levels=gender_levels))
 ```
+
 
 #### `age`
 
@@ -634,20 +646,21 @@ This field is not currently strictly numeric -- it also contains values `"Unknow
 
 ```{r}
 as_integer_or_na <- function(x) suppressWarnings(as.integer(x))
-subject <- subject %>% 
+subject <- subject |> 
   mutate(juvenile=case_when(
     age=="Juvenile" ~ TRUE,
     !is.na(as_integer_or_na(age)) ~ FALSE
-  )) %>%
+  )) |>
   mutate(age=as_integer_or_na(age))
 ```
+
 
 #### `race`
 
 We need to normalize some names before converting to a factor.
 
 ```{r}
-subject <- subject %>%
+subject <- subject |>
   mutate(
     race = case_when(
       race == "Black or African American" ~ "Black",
@@ -657,24 +670,25 @@ subject <- subject %>%
     race=factor(race, levels=race_levels)
   )
 ```
+
 ### `injured`
 We expect only "Yes", "No", "Unknown" and "".  We will convert this to a boolean (or `NA`)
 
 ```{r}
-subject <- subject %>% mutate(injured = str_trim(injured),
+subject <- subject |> mutate(injured = str_trim(injured),
                    injured_prior = str_trim(injured_prior))
 stopifnot(
   0 == 
-    subject %>% 
-    filter(!(injured %in% c("Yes", "No", "Unknown", "", NA))) %>% 
+    subject |> 
+    filter(!(injured %in% c("Yes", "No", "Unknown", "", NA))) |> 
     nrow()
   ,
   0 == 
-    subject %>%
-    filter(!(injured_prior %in% c("Yes", "No", "Unknown", "", NA))) %>% 
+    subject |>
+    filter(!(injured_prior %in% c("Yes", "No", "Unknown", "", NA))) |> 
     nrow()
 ) 
-subject <- subject %>% mutate(
+subject <- subject |> mutate(
   injured = case_when(
     injured == "Yes" ~ TRUE,
     injured == "No" ~ FALSE,
@@ -689,18 +703,20 @@ subject <- subject %>% mutate(
 ```
 
 
+
 #### Cleanup and finish
 
 Finally, we reorder the columns.
 
 ```{r}
-subject <- subject %>% 
+subject <- subject |> 
   select(form_id, index, arrested, type, age, juvenile, race, gender, injured, injured_prior)
 ```
 
 ```{r purl=FALSE}
 subject
 ```
+
 
 ## Incident set membership tables
 
@@ -715,101 +731,108 @@ For each of these columns, we will create a new table with one row per value, us
 ```{r}
 ### table should have two columns: FormID and list_col
 make_set_membership_table <- function(table, levels, separating_regex = ",") {
-  table <- table %>%
-    mutate(list_col = str_replace(list_col, trailing_comma_regex, "")) %>%
+  table <- table |>
+    mutate(list_col = str_replace(list_col, trailing_comma_regex, "")) |>
     filter(list_col != "")
 
-  max_values <- table$list_col %>%
-    map_int(str_count, separating_regex) %>%
+  max_values <- table$list_col |>
+    map_int(str_count, separating_regex) |>
     max() + 1
 
-  table %>%
+  table |>
     separate(list_col,
              paste0("list_col__", 1:max_values),
              separating_regex,
              fill="right"
-    ) %>%
+    ) |>
     pivot_longer(cols=-FormID,
                  names_to="column",
                  values_to="value",
-                 values_drop_na = TRUE) %>%
-    mutate(value=factor(str_trim(value), levels=levels)) %>%
-    filter(!is.na(value)) %>%
-    rename(form_id=FormID) %>%
+                 values_drop_na = TRUE) |>
+    mutate(value=factor(str_trim(value), levels=levels)) |>
+    filter(!is.na(value)) |>
+    rename(form_id=FormID) |>
     select(form_id, value)
 }
 ```
 
+
 ### `incident_weather`
 
 ```{r}
-incident_weather <- uof_raw %>% 
-  select(FormID, list_col=IncidentWeather) %>%
+incident_weather <- uof_raw |> 
+  select(FormID, list_col=IncidentWeather) |>
   make_set_membership_table(weather_levels, 
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(weather=value)
 ```
+
 
 ### `incident_video_type`
 
 ```{r}
-incident_video_type <- uof_raw %>% 
-  select(FormID, list_col=VideoType) %>%
+incident_video_type <- uof_raw |> 
+  select(FormID, list_col=VideoType) |>
   make_set_membership_table(video_type_levels,
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(video_type=value)
 ```
+
 
 ### `incident_lighting`
 
 ```{r}
-incident_lighting <- uof_raw %>% 
-  select(FormID, list_col=IncidentLighting) %>%
+incident_lighting <- uof_raw |> 
+  select(FormID, list_col=IncidentLighting) |>
   make_set_membership_table(lighting_levels,
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(lighting=value)
 ```
+
 
 ### `incident_location_type`
 
 ```{r}
-incident_location_type <- uof_raw %>% 
-  select(FormID, list_col=LocationType) %>%
+incident_location_type <- uof_raw |> 
+  select(FormID, list_col=LocationType) |>
   make_set_membership_table(location_type_levels, 
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(location_type=value)
 ```
+
 
 ### `incident_type`
 
 ```{r}
-incident_type <- uof_raw %>%
-  select(FormID, list_col=IncidentType) %>%
+incident_type <- uof_raw |>
+  select(FormID, list_col=IncidentType) |>
   make_set_membership_table(incident_type_levels,
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(type=value)
-
 ```
+
 
 ### `incident_contact_origin`
 
 ```{r}
-incident_contact_origin <- uof_raw %>%
-  select(FormID, list_col=ContactOrigin) %>%
+incident_contact_origin <- uof_raw |>
+  select(FormID, list_col=ContactOrigin) |>
   make_set_membership_table(contact_origin_levels,
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(contact_origin=value)
 ```
+
 
 ### `incident_planned_contact`
 
 ```{r}
-incident_planned_contact <- uof_raw %>%
-  select(FormID, list_col=PlannedContact) %>%
+incident_planned_contact <- uof_raw |>
+  select(FormID, list_col=PlannedContact) |>
   make_set_membership_table(planned_contact_levels,
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(planned_contact=value)
 ```
+
 
 ### `incident_officer_injury_type`
 
@@ -817,35 +840,38 @@ This is pulled from the field `OfficerInjuryType`, which is of mixed type. The f
 
 ```{r}
 
-incident_officer_injury_type <- uof_raw %>%
-  select(FormID, list_col=OfficerInjuryType) %>%
+incident_officer_injury_type <- uof_raw |>
+  select(FormID, list_col=OfficerInjuryType) |>
   make_set_membership_table(officer_injury_type_levels,
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(officer_injury_type=value)
 ```
+
 
 ### `incident_officer_medical_treatment`
 
 ```{r}
-incident_officer_medical_treatment <- uof_raw %>%
-  select(FormID, list_col=OfficerMedicalTreatment) %>%
+incident_officer_medical_treatment <- uof_raw |>
+  select(FormID, list_col=OfficerMedicalTreatment) |>
   make_set_membership_table(officer_medical_treatment_levels,
-                            sep_comma_space_no_paren) %>%
+                            sep_comma_space_no_paren) |>
   rename(officer_medical_treatment=value)
 ```
+
 
 ## Messy relationship tables
 
 These tables are built from columns that contain value-lists that are "messy" in the following sense. Each column contains value-lists with repeated values -- because the values apply to individual subjects -- but there is no reliable way to assign individual list elements to individual subjects. For example, `FormID` `20221` has two subjects, but field `SubjectActions` has three values:
 
 ```{r purl=FALSE}
-uof_raw %>% 
-  filter(FormID==20221) %>%
-  mutate(SubjectActions=str_replace(SubjectActions, ",?$", "")) %>%
-  select(FormID, SubjectType, SubjectActions) %>%
-  separate(SubjectActions, into=paste0("SubjectActions_", 1:3), ",") %>% 
+uof_raw |> 
+  filter(FormID==20221) |>
+  mutate(SubjectActions=str_replace(SubjectActions, ",?$", "")) |>
+  select(FormID, SubjectType, SubjectActions) |>
+  separate(SubjectActions, into=paste0("SubjectActions_", 1:3), ",") |> 
   glimpse()
 ```
+
 
 The value `"Resisted arrest/police officer control"` appears twice because it applies to both subjects. But `"Prevent harm to another"` appears only once, and it not clear if it applies to the first subject or to the second one.
 
@@ -853,93 +879,114 @@ We will create a separate table for each of these columns, assigning all of the 
 
 ```{r}
 make_messy_relationship_table <- function(table, levels, separating_regex) {
-  table <- table %>%
-    mutate(list_col = str_replace(list_col, trailing_comma_regex, "")) %>%
+  table <- table |>
+    mutate(list_col = str_replace(list_col, trailing_comma_regex, "")) |>
     filter(list_col != "")
 
-  max_values <- table$list_col %>%
-    map_int(str_count, separating_regex) %>%
+  max_values <- table$list_col |>
+    map_int(str_count, separating_regex) |>
     max() + 1
 
-  table %>%
+  table |>
     separate(list_col,
              paste0("value__", 1:max_values),
              separating_regex,
              fill="right"
-    ) %>%
+    ) |>
     pivot_longer(cols = -FormID,
                  names_to="column",
                  values_to="value",
-                 values_drop_na=TRUE) %>%
-    separate(column, c("column", "index"), "__") %>%
-    mutate(index=as.integer(index)) %>%
-    pivot_wider(names_from="column", values_from="value") %>%
-    mutate(value=factor(str_trim(value), levels=levels)) %>%
-    rename(form_id=FormID) %>%
+                 values_drop_na=TRUE) |>
+    separate(column, c("column", "index"), "__") |>
+    mutate(index=as.integer(index)) |>
+    pivot_wider(names_from="column", values_from="value") |>
+    mutate(value=factor(str_trim(value), levels=levels)) |>
+    rename(form_id=FormID) |>
     filter(!is.na(value))
 }
 ```
 
+
 ### `incident_subject_perceived_condition`
 
 ```{r}
-incident_subject_perceived_condition <- uof_raw %>%
-  select(FormID, list_col=PerceivedConditionOfSubject) %>%
+incident_subject_perceived_condition <- uof_raw |>
+  select(FormID, list_col=PerceivedConditionOfSubject) |>
   make_messy_relationship_table(perceived_condition_levels,
-                                sep_comma_space_no_paren) %>%
+                                sep_comma_space_no_paren) |>
   rename(perceived_condition=value)
 ```
+
 
 ### `incident_subject_action`
 
 ```{r}
 
-incident_subject_action <- uof_raw_trimmed %>% 
-  select(FormID, list_col=SubjectActions) %>%
+incident_subject_action <- uof_raw_trimmed |> 
+  select(FormID, list_col=SubjectActions) |>
   make_messy_relationship_table(subject_action_levels,
-                                sep_comma_optional_space) %>%
+                                sep_comma_optional_space) |>
   rename(subject_action=value)
 ```
+
 
 ### `incident_subject_resistance`
 
 ```{r}
-incident_subject_resistance <- uof_raw_trimmed %>% 
-  select(FormID, list_col=SubjectResistance) %>%
+incident_subject_resistance <- uof_raw_trimmed |> 
+  select(FormID, list_col=SubjectResistance) |>
   make_messy_relationship_table(subject_resistance_levels,
-                                sep_comma_optional_space) %>%
+                                sep_comma_optional_space) |>
   rename(subject_resistance=value)
 ```
+
 
 ### `incident_subject_medical_treatment`
 
 ```{r}
-incident_subject_medical_treatment <- uof_raw %>% 
-  select(FormID, list_col=SubjectMedicalTreatment) %>%
+incident_subject_medical_treatment <- uof_raw |> 
+  select(FormID, list_col=SubjectMedicalTreatment) |>
   make_messy_relationship_table(subject_medical_treatment_levels,
-                                sep_comma_optional_space) %>%
+                                sep_comma_optional_space) |>
   rename(subject_medical_treatment=value)
 ```
+
 
 ### `incident_subject_injury`
 
 ```{r}
-incident_subject_injury <- uof_raw %>% 
-  select(FormID, list_col=SubjectInjuryType) %>%
+incident_subject_injury <- uof_raw |> 
+  select(FormID, list_col=SubjectInjuryType) |>
   make_messy_relationship_table(subject_injury_levels,
-                                sep_comma_optional_space) %>%
+                                sep_comma_optional_space) |>
   rename(subject_injury=value)
 ```
+
 
 ### `incident_subject_force_type`
 
 ```{r}
-incident_subject_force_type <- uof_raw %>% 
-  select(FormID, list_col=ForceType) %>%
+incident_subject_force_type <- uof_raw |> 
+  # The OAG reworded this option during 2025: "Kneeling on Chest, Back"
+  # appears 2022-2025 and "Kneeling on Chest, Back for prolonged period" from
+  # 2025 on. They are the same category, so collapse to the newer wording.
+  # The lookahead stops the already-current wording being extended again.
+  mutate(ForceType = str_replace_all(
+    ForceType,
+    "Kneeling on Chest, Back(?! for prolonged period)",
+    "Kneeling on Chest, Back for prolonged period"
+  )) |>
+  select(FormID, list_col=ForceType) |>
+  # Use the same ad-hoc separator as the pre-validation above: two force
+  # types contain an internal comma ("Kneeling on Chest, Back" and
+  # "Chokehold, Carotid artery restraint"). Splitting on the general
+  # separator breaks them into fragments that match no level and are then
+  # silently dropped by make_messy_relationship_table().
   make_messy_relationship_table(force_type_levels,
-                                sep_comma_space_no_paren) %>%
+                                sep_comma_space_force_special) |>
   rename(force_type=value)
 ```
+
 
 ### `incident_subject_reason_not_arrested`
 
@@ -947,24 +994,24 @@ Two values in this field needs to be normalized: We will replace
 `"NoProbableCause-SubjectNotInvolved"` with `"No Probable Cause- Subject Not Involved"`
 and 
 
-
 ```{r}
-incident_subject_reason_not_arrested <- uof_raw %>%
+incident_subject_reason_not_arrested <- uof_raw |>
   mutate(ReasonSubjectNotArrested = str_replace_all(
     ReasonSubjectNotArrested,
     "NoProbableCause-SubjectNotInvolved",
     "No Probable Cause- Subject Not Involved"
-  )) %>%
+  )) |>
   mutate(ReasonSubjectNotArrested = str_replace_all(
     ReasonSubjectNotArrested,
     "Insufficient Probable Cause-includes continuing investigation",
     "Insufficient Probable Cause- includes continuing investigation"
-  )) %>%
-  select(FormID, list_col="ReasonSubjectNotArrested") %>%
+  )) |>
+  select(FormID, list_col="ReasonSubjectNotArrested") |>
   make_messy_relationship_table(reason_not_arrested_levels,
-                                sep_comma_optional_space) %>%
+                                sep_comma_optional_space) |>
   rename(reason_not_arrested=value)
 ```
+
 
 ## `incident` table
 
@@ -973,7 +1020,7 @@ incident_subject_reason_not_arrested <- uof_raw %>%
 First, we select the columns we will need from the raw data.
 
 ```{r}
-incident <- uof_raw %>%
+incident <- uof_raw |>
   select(
     form_id = FormID,
     agency_county = County,
@@ -997,6 +1044,7 @@ incident <- uof_raw %>%
   )
 ```
 
+
 ### Fields not selected
 
 Before we clean up these fields, let us review the fields we are omitting.
@@ -1008,26 +1056,33 @@ This is a synthetic field composed of other fields, so we do not need it.
 ```{r}
 stopifnot(
   0 ==
-    uof_raw %>%
+    uof_raw |>
     filter(
       IncidentID !=
         str_to_upper(glue::glue("{County}-{AgencyName}-{IncidentCaseNumber}"))
-    ) %>%
+    ) |>
     filter(
       IncidentID !=
         str_to_upper(glue::glue("{County}-{AgencyName}- {IncidentCaseNumber}"))
-    ) %>%
+    ) |>
     filter(
       IncidentID !=
         str_to_upper(glue::glue("{County}-{AgencyName}-\t{IncidentCaseNumber}"))
-    ) %>%
+    ) |>
     filter(
       IncidentID !=
         str_to_upper(glue::glue("{County}-{AgencyName}-  {IncidentCaseNumber}"))
-    ) %>%
+    ) |>
+    # One 2026 incident has an empty IncidentCaseNumber, for which the
+    # source wrote the literal placeholder "blank" into IncidentID.
+    filter(
+      IncidentID !=
+        paste0(str_to_upper(glue::glue("{County}-{AgencyName}-")), "blank")
+    ) |>
     nrow()
 )
 ```
+
 
 
 
@@ -1038,18 +1093,19 @@ These fields are handled in other tables.
 
 #### `OfficerInjuryType`
 
-We did not capture the `"Not injured"` or empty-string value in the `incident_officer_injury_type` table, but that value is largely redundant with `OfficerInjuriesInjured` which is `"True"` precisely when `OfficerInjuryType`is `"Not Injured"` or the empty string, except in 8 rows, which are evidently miscoded.
+We did not capture the `"Not injured"` or empty-string value in the `incident_officer_injury_type` table, but that value is largely redundant with `OfficerInjuriesInjured` which is true precisely when `OfficerInjuryType`is `"Not Injured"` or the empty string, except in 8 rows, which are evidently miscoded. (Compare case-insensitively: this field arrived as `"True"`/`"False"` through the 2024-10-31 release and as `"true"`/`"false"` from 2026-08-31 on.)
 
 ```{r}
 stopifnot(
-  8 == uof_raw %>%
-    select(OfficerInjuryType, OfficerInjuriesInjured) %>%
+  8 == uof_raw |>
+    select(OfficerInjuryType, OfficerInjuriesInjured) |>
     mutate(NoInjury = str_detect(OfficerInjuryType, "Not injured") |
-           OfficerInjuryType == "") %>%
-    filter(NoInjury == (OfficerInjuriesInjured == "True")) %>%
+           OfficerInjuryType == "") |>
+    filter(NoInjury == (tolower(OfficerInjuriesInjured) == "true")) |>
     nrow()
 )
 ```
+
 
 #### `SubjectArrested`, `SubjectType`, `SubjectAge`, `SubjectRaceEthnicity`, `SubjectsGender`, `SubjectInjuredInIncident`, `SubjectInjuredPriorToIncident`
 
@@ -1067,6 +1123,7 @@ stopifnot(
 )
 ```
 
+
 ### `incident` fields
 
 #### `agency_county`
@@ -1074,18 +1131,20 @@ stopifnot(
 Switch to using the census county names. In particular, the non-counties `"NJSP"` and `"Other"` will be mapped to `NA`.
 
 ```{r}
-incident <- incident %>% 
-  mutate(agency_county=paste0(agency_county, " County")) %>%
+incident <- incident |> 
+  mutate(agency_county=paste0(agency_county, " County")) |>
   mutate(agency_county = factor(agency_county, county_levels))
 ```
+
 
 #### `agency_name`
 There are over 400 distinct values in this field, at least 19 of which appear exactly once, so we will not use a factor here.
 
 In order to reconcile the agency names in this dataset with the agency
 names in the NJ OAG Law Enforcement Officer Diversity dataset, we will make some modifications.
+
 ```{r}
-incident <- incident %>%
+incident <- incident |>
   mutate(
     agency_name = case_when(
       agency_name == "Burlington County Sheriffs Office" ~ "Burlington Co Sheriffs Office",
@@ -1108,43 +1167,46 @@ incident <- incident %>%
 ```
 
 
+
 #### `officer_name` and `officer_name_id`
 
 The `officer_name` associated to a single `officer_name_id` is not always consistent in spelling and capitalization. For example:
 
 ```{r purl=FALSE}
-incident %>% 
-  group_by(officer_name_id) %>% 
-  summarise(distinct_names=n_distinct(officer_name)) %>%
-  filter(distinct_names>1) %>%
+incident |> 
+  group_by(officer_name_id) |> 
+  summarise(distinct_names=n_distinct(officer_name)) |>
+  filter(distinct_names>1) |>
   left_join(select(incident, officer_name, officer_name_id), 
-            by="officer_name_id") %>%
+            by="officer_name_id") |>
   unique()
 ```
+
 
 Therefore, we will choose the most common variant for each name id and apply that to all rows. We will save variant names in a new table, `officer_name_variants`.
 
 ```{r}
-incident <- incident %>% 
+incident <- incident |> 
   mutate(officer_name = na_if(officer_name, ""))
 
-standard_names <- incident %>% 
-  count(officer_name, officer_name_id) %>%
-  group_by(officer_name_id) %>%
-  slice(which.max(n)) %>%
-  ungroup() %>%
+standard_names <- incident |> 
+  count(officer_name, officer_name_id) |>
+  group_by(officer_name_id) |>
+  slice(which.max(n)) |>
+  ungroup() |>
   select(officer_name_id, officer_name)
 
-officer_name_variants <- incident %>%
-  select(officer_name_id, officer_name) %>%
+officer_name_variants <- incident |>
+  select(officer_name_id, officer_name) |>
   unique()
 
-incident <- incident %>% 
-  select(-officer_name) %>%
+incident <- incident |> 
+  select(-officer_name) |>
   left_join(standard_names, by="officer_name_id") 
 
 rm(standard_names)
 ```
+
 
 #### `report_number`, `incident_case_number`, and `incident_date_1`
 
@@ -1155,57 +1217,65 @@ This field is of
 the form `<municipality>, <county-name>`. We will break this field up into `incident_municipality` and `incident_municipality_county`.
 
 ```{r}
-incident <- incident %>%
+incident <- incident |>
   separate(
     incident_municipality,
     c("incident_municipality", "incident_municipality_county"),
     sep = ",",
     fill = "right"
-  ) %>%
+  ) |>
   mutate(incident_municipality_county =
            str_trim(incident_municipality_county))
 ```
 
+
 Next, we will build a lookup table, matching the unique municipality/county
 values in the UOF dataset to the census municipality names.  This is done in
 three steps.  
+
 ```{r}
-unique_municipalities <- incident %>%
-  select(incident_municipality_county, incident_municipality) %>%
+unique_municipalities <- incident |>
+  select(incident_municipality_county, incident_municipality) |>
   unique()
 ```
 
+
 First step:  Exact matches:
+
 ```{r}
-lookup_1 <- unique_municipalities %>%
+lookup_1 <- unique_municipalities |>
   inner_join(census_municipalities,
              by=c("incident_municipality"="municipality_and_type",
-                  "incident_municipality_county"="county")) %>%
-  mutate(census_municipality=incident_municipality) %>%
+                  "incident_municipality_county"="county")) |>
+  mutate(census_municipality=incident_municipality) |>
   select(incident_municipality, incident_municipality_county, census_municipality)
 ```
+
 Second step: Matches with the base name (excluding the municipality "type", such as "borough" or "township"):
+
 ```{r}
-lookup_2 <- unique_municipalities %>%
+lookup_2 <- unique_municipalities |>
   anti_join(lookup_1,
-            by=c("incident_municipality", "incident_municipality_county")) %>%
+            by=c("incident_municipality", "incident_municipality_county")) |>
   inner_join(census_municipalities,
              by=c("incident_municipality"="municipality",
-                  "incident_municipality_county"="county")) %>%
-  mutate(census_municipality=municipality_and_type) %>%
+                  "incident_municipality_county"="county")) |>
+  mutate(census_municipality=municipality_and_type) |>
   select(incident_municipality, incident_municipality_county, census_municipality)
 ```
+
 Third step:  The remaining municipalities require ad-hoc logic.
+
 ```{r}
-lookup_3 <- unique_municipalities %>%
+lookup_3 <- unique_municipalities |>
   anti_join(
     lookup_1,
     by = c("incident_municipality", "incident_municipality_county")
-  ) %>%
+  ) |>
   anti_join(
     lookup_2,
     by = c("incident_municipality", "incident_municipality_county")
-  ) %>%
+  ) |>
   mutate(
     census_municipality = case_when(
       # Name changes:  Dover, Ocean County -->           Toms River
@@ -1237,64 +1307,77 @@ lookup_3 <- unique_municipalities %>%
   )
 ```
 
+
 Now build the full lookup table:
+
 ```{r}
 lookup <- rbind(lookup_1, lookup_2, lookup_3)
 ```
+
 Check that we have no duplicates, and that the only municipality we are mapping
 to `NA` is `"Other"`:
+
 ```{r}
 stopifnot(0 ==
-  lookup %>% count(incident_municipality, incident_municipality_county) %>%
-    filter(n>1) %>% nrow()
+  lookup |> count(incident_municipality, incident_municipality_county) |>
+    filter(n>1) |> nrow()
 )
 stopifnot("Other" == 
-            lookup %>% filter(is.na(census_municipality)) %>% pull(incident_municipality)
+            lookup |> filter(is.na(census_municipality)) |> pull(incident_municipality)
 )
 ```
 
+
 Now, finally, we can use the lookup table to tidy the `incident_municipality field`:
+
 ```{r}
-incident <- incident %>% 
+incident <- incident |> 
   left_join(lookup, 
-            by = c("incident_municipality", "incident_municipality_county")) %>% 
-  mutate(incident_municipality=census_municipality) %>%
+            by = c("incident_municipality", "incident_municipality_county")) |> 
+  mutate(incident_municipality=census_municipality) |>
   select(-census_municipality) 
 ```
 
+
 Let's also use the county levels for `incident_municipality_county`:
+
 ```{r}
-incident <- incident %>%
+incident <- incident |>
   mutate(incident_municipality_county =
          factor(incident_municipality_county, county_levels))
 ```
+
 #### `other_officer_involved` and `officer_in_uniform`
 These fields are booleans. 
+
 ```{r}
-incident <- incident %>% mutate(
+incident <- incident |> mutate(
   other_officer_involved = as.logical(other_officer_involved),
   officer_in_uniform = as.logical(officer_in_uniform)
 )
 ```
+
 
 #### `indoor_or_outdoor`
 
 This field could indicate one or the other, or both, though the order is not consistent:
 
 ```{r purl=FALSE}
-incident %>% count(indoor_or_outdoor)
+incident |> count(indoor_or_outdoor)
 ```
+
 
 We will break this into a pair of booleans.
 
 ```{r}
-incident <- incident %>%
+incident <- incident |>
   mutate(
     indoors = str_detect(indoor_or_outdoor, "Indoors"),
     outdoors = str_detect(indoor_or_outdoor, "Outdoors")
-  ) %>%
+  ) |>
   select(-indoor_or_outdoor)
 ```
+
 
 #### `video_footage`.
 
@@ -1302,10 +1385,11 @@ We will correct the spelling of `"Unknown"` before using a factor.
 
 ```{r}
 video_footage_levels <- c("Yes", "No", "Unknown")
-incident <- incident %>%
-  mutate(video_footage=str_replace(video_footage, "Unknow", "Unknown")) %>%
+incident <- incident |>
+  mutate(video_footage=str_replace(video_footage, "Unknow", "Unknown")) |>
   mutate(video_footage=factor(video_footage, levels=video_footage_levels))
 ```
+
 
 #### `officer_age`
 This column requires some cleanup. We also remove implausible ages.
@@ -1315,12 +1399,19 @@ incident <- incident |>
   mutate(officer_age = str_remove(officer_age, regex("\\s*years\\s*old", ignore_case=TRUE))) |>
   mutate(officer_age = str_remove_all(officer_age, "/|`")) |>
   mutate(officer_age = str_replace(officer_age, regex("twenty-nine", ignore_case=TRUE), "29")) |>
-  mutate(officer_age = str_replace(officer_age, regex("twenty four", ignore_case=TRUE), "24"))
+  mutate(officer_age = str_replace(officer_age, regex("twenty four", ignore_case=TRUE), "24")) |>
+  # Some ages are recorded fractionally ("26.5", "3.5"). Truncate to whole
+  # years; implausible values are dropped by the range filter below.
+  mutate(officer_age = str_remove(officer_age, "\\.\\d+$"))
 
-# After this cleanup, we expect only three exceptions
-exceptions <- c("NA", "3.5", "NEWARK POLICE VEST")
+# After this cleanup, we expect only these exceptions. Compared as a set, so
+# that a change in the order values happen to appear in is not a failure.
+exceptions <- c("NA", "NEWARK POLICE VEST")
 stopifnot(
-  exceptions == incident |> filter(!str_detect(officer_age, "^\\d+$")) |> pull(officer_age) |> unique()
+  setequal(
+    exceptions,
+    incident |> filter(!str_detect(officer_age, "^\\d+$")) |> pull(officer_age) |> unique()
+  )
 )
 
 # Convert to integer and remove implausible ages
@@ -1329,12 +1420,13 @@ incident <- incident |>
   mutate(officer_age = ifelse(between(officer_age, 18, 67), officer_age, NA))
 ```
 
+
 #### `officer_race` and `officer_gender`
 
 We perform the same transformations as we did on the `subject` `race` and `gender` columns.
 
 ```{r}
-incident <- incident %>%
+incident <- incident |>
   mutate(
     officer_race = case_when(
       officer_race == "Black or African American" ~ "Black",
@@ -1344,10 +1436,10 @@ incident <- incident %>%
     officer_race = factor(officer_race, levels = race_levels)
   )
 
-incident <- incident %>% 
+incident <- incident |> 
   mutate(officer_gender=factor(officer_gender, levels=gender_levels))
-
 ```
+
 
 #### `officer_rank`
 
@@ -1358,9 +1450,10 @@ This field appears to be free text, and there are a lot of variations. We leave 
 We will convert this to a boolean.
 
 ```{r}
-incident <- incident %>% 
-  mutate(officer_injured = (officer_injured=="1"))
+incident <- incident |> 
+  mutate(officer_injured = as.logical(officer_injured))
 ```
+
 
 #### `subject_injured_count`
 
@@ -1371,15 +1464,16 @@ We leave this field unchanged.
 #### Add a `subject_count` column
 
 ```{r}
-incident <- incident %>%
+incident <- incident |>
   left_join(count(subject, form_id, name = "subject_count"),
             by = "form_id")
 ```
 
+
 #### Order the columns
 
 ```{r}
-incident <- incident %>%
+incident <- incident |>
   relocate(
     form_id,
     report_number,

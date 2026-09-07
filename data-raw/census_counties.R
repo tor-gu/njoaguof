@@ -8,9 +8,9 @@ census_counties <-
     state = "NJ",
     year = 2019,
     variables = "POP"
-  ) %>%
-  separate(NAME, sep = ", ", into = c("county", "state")) %>%
-  select(county) %>%
+  ) |>
+  separate(NAME, sep = ", ", into = c("county", "state")) |>
+  select(county) |>
   arrange(county)
 
 readr::write_csv(census_counties, "data-raw/census_counties.csv")

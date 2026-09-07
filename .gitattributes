@@ -1,1 +1,2 @@
 data-raw/*.dta filter=lfs diff=lfs merge=lfs -text
+data-raw/*.sav filter=lfs diff=lfs merge=lfs -text

@@ -55,53 +55,53 @@ specific incidents:
 library(njoaguof)
 library(dplyr)
 # Summarize video_type by agency_county
-incident %>%
-  select(form_id, agency_county) %>%
-  right_join(incident_video_type, by = "form_id") %>%
+incident |>
+  select(form_id, agency_county) |>
+  right_join(incident_video_type, by = "form_id") |>
   count(agency_county, video_type)
-#> # A tibble: 187 × 3
+#> # A tibble: 191 × 3
 #>    agency_county   video_type              n
 #>    <fct>           <fct>               <int>
-#>  1 Atlantic County Body Worn            2269
-#>  2 Atlantic County CED Camera             14
-#>  3 Atlantic County Cell Phone             11
-#>  4 Atlantic County Commercial Building   100
-#>  5 Atlantic County Motor Vehicle         322
-#>  6 Atlantic County Residential/Home       13
-#>  7 Atlantic County Station House          97
+#>  1 Atlantic County Body Worn            3834
+#>  2 Atlantic County CED Camera             26
+#>  3 Atlantic County Cell Phone             15
+#>  4 Atlantic County Commercial Building   177
+#>  5 Atlantic County Motor Vehicle         444
+#>  6 Atlantic County Residential/Home       19
+#>  7 Atlantic County Station House         173
 #>  8 Atlantic County Other                  31
-#>  9 Bergen County   Body Worn            2855
-#> 10 Bergen County   CED Camera             72
-#> # ℹ 177 more rows
+#>  9 Atlantic County Unknown                 6
+#> 10 Bergen County   Body Worn            4677
+#> # ℹ 181 more rows
 ```
 
 ``` r
 library(njoaguof)
 library(dplyr)
 # Summarize subject gender by officer gender
-incident %>% 
-  select(form_id, officer_gender) %>% 
-  right_join(subject, by="form_id") %>%
+incident |> 
+  select(form_id, officer_gender) |> 
+  right_join(subject, by="form_id") |>
   count(officer_gender, subject_gender=gender)
 #> # A tibble: 16 × 3
 #>    officer_gender subject_gender     n
 #>    <fct>          <fct>          <int>
-#>  1 Male           Male           19940
-#>  2 Male           Female          5313
-#>  3 Male           Non-Binary/X      36
-#>  4 Male           <NA>             874
-#>  5 Female         Male            1139
-#>  6 Female         Female           694
-#>  7 Female         Non-Binary/X       2
-#>  8 Female         <NA>              76
-#>  9 Other          Male           33845
-#> 10 Other          Female          9740
-#> 11 Other          Non-Binary/X      42
-#> 12 Other          <NA>            1305
-#> 13 <NA>           Male              27
-#> 14 <NA>           Female             9
+#>  1 Male           Male           26841
+#>  2 Male           Female          7006
+#>  3 Male           Non-Binary/X      41
+#>  4 Male           <NA>             971
+#>  5 Female         Male            1507
+#>  6 Female         Female           930
+#>  7 Female         Non-Binary/X       4
+#>  8 Female         <NA>              85
+#>  9 Other          Male           55495
+#> 10 Other          Female         15677
+#> 11 Other          Non-Binary/X      60
+#> 12 Other          <NA>            1666
+#> 13 <NA>           Male              34
+#> 14 <NA>           Female            11
 #> 15 <NA>           Non-Binary/X       4
-#> 16 <NA>           <NA>               7
+#> 16 <NA>           <NA>               8
 ```
 
 ## Notes
@@ -111,14 +111,14 @@ which has one row for each use of force incident. Fields with multiple
 values are recorded as comma separated lists. For example:
 
 ``` r
-use_of_force_raw %>% count(SubjectGender) %>% head(5)
+use_of_force_raw |> count(SubjectGender) |> head(5)
 #> # A tibble: 5 × 2
 #>   SubjectGender                              n
 #>   <chr>                                  <int>
-#> 1 Female                                 15359
-#> 2 Female, Female                           114
-#> 3 Female, Female, Female                    12
-#> 4 Female, Female, Female, Female             4
+#> 1 Female                                 23099
+#> 2 Female, Female                           149
+#> 3 Female, Female, Female                    16
+#> 4 Female, Female, Female, Female             5
 #> 5 Female, Female, Female, Female, Female     1
 ```
 
@@ -132,7 +132,7 @@ order is preserved, so that we may create one row for each subject in
 the `subject` table.
 
 ``` r
-use_of_force_raw %>% filter(FormID == 16301) %>%
+use_of_force_raw |> filter(FormID == 16301) |>
   select(
     FormID,
     SubjectArrested,
@@ -144,10 +144,10 @@ use_of_force_raw %>% filter(FormID == 16301) %>%
 #> # A tibble: 1 × 6
 #>   FormID SubjectArrested SubjectType    SubjectAge SubjectRaceEthnicity         
 #>    <dbl> <chr>           <chr>          <chr>      <chr>                        
-#> 1  16301 False, True     Person, Person 23, 26     Black or African American, H…
+#> 1  16301 false, true     Person, Person 23, 26     Black or African American, H…
 #> # ℹ 1 more variable: SubjectGender <chr>
 
-subject %>% filter(form_id == 16301)
+subject |> filter(form_id == 16301)
 #> # A tibble: 2 × 10
 #>   form_id index arrested type    age juvenile race  gender injured injured_prior
 #>     <dbl> <int> <lgl>    <fct> <int> <lgl>    <fct> <fct>  <lgl>   <lgl>        
@@ -164,14 +164,14 @@ three values for `incident_type`, and this results in three rows in the
 `incident_type` table.
 
 ``` r
-library(tidyverse)
-use_of_force_raw %>% filter(FormID == 16301) %>%
+library(dplyr)
+use_of_force_raw |> filter(FormID == 16301) |>
   select(IncidentType)
 #> # A tibble: 1 × 1
 #>   IncidentType                                                                  
 #>   <chr>                                                                         
 #> 1 Potential Mental Health Incident, Suspicious person, Disturbance (drinking, f…
-incident_type %>% filter(form_id == 16301)
+incident_type |> filter(form_id == 16301)
 #> # A tibble: 3 × 2
 #>   form_id type                                        
 #>     <dbl> <fct>                                       
@@ -190,14 +190,14 @@ the `incident_subject_resistance` table, indicating the position of each
 item in the list with the `index` value.
 
 ``` r
-use_of_force_raw %>% 
-  filter(FormID == 19542) %>% 
+use_of_force_raw |> 
+  filter(FormID == 19542) |> 
   select(SubjectType,SubjectResistance)
 #> # A tibble: 1 × 2
 #>   SubjectType    SubjectResistance                                              
 #>   <chr>          <chr>                                                          
 #> 1 Person, Person Verbal, Verbal, Aggressive resistance (attempt to attack or ha…
-incident_subject_resistance %>% filter(form_id == 19542)
+incident_subject_resistance |> filter(form_id == 19542)
 #> # A tibble: 3 × 3
 #>   form_id index subject_resistance                               
 #>     <dbl> <int> <fct>                                            

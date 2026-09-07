@@ -2,7 +2,7 @@
 #'
 #' Type of force applied.
 #'
-#' This data is extracted from the \code{TypeofForce} field in
+#' This data is extracted from the \code{ForceType} field in
 #' \code{use_of_force_raw}.
 #'
 #' There may be multiple rows in this table linking to a single incident or

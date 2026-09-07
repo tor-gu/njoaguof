@@ -1,3 +1,24 @@
+# njoaguof 2.0.0
+* Breaking changes:
+  - `Depends: R (>= 4.1)`, up from `3.5`
+  - magrittr pipe `%>%` no longer exported.
+
+* Update to most recent dataset from NJ OAG:
+  "NJOAG Use of Force Data Dashboard 10-01-20 to 08-31-26.sav"
+
+* Fix for `incident`:
+  - `officer_injured` was `FALSE` for every row in all previous release.
+
+* Fix for `incident_subject_force_type`:
+  - Two force types containing an internal comma, `"Kneeling on Chest, Back"`
+    and `"Chokehold, Carotid artery restraint"`, previously dropped, are restored.
+
+* Change to `incident_subject_force_type`:
+  - Collapsed `Kneeling on Chest, Back` and 
+    `Kneeling on Chest, Back for prolonged period`. The OAG started using
+    using the longer form in 2025. We have combined them, using the current,
+    longer form.
+
 # njoaguof 1.17.0
 * Update to most recent dataset from NJ OAG:
   "NJOAG Use of Force Data Dashboard 10-01-20 to 10-31-24.dta"

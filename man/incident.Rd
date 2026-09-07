@@ -79,10 +79,10 @@ in \code{incident_subject_injury} indicating specific injury types.}}
 in the incident.
 
 \emph{\strong{Warning} This field is largely unpopulated. The source data
-records \code{"Not Provided"} for over 53,000 of the incidents, which
+records \code{"Not Provided"} for 88,608 of the 108,210 incidents, which
 becomes \code{NA} here. In practice the field was only collected during
-2020 and 2021 -- from 2022 onward it is \code{NA} for effectively every
-incident.}}
+2020 and 2021 -- from 2022 onward it is \code{NA} for every incident but
+one.}}
 
 \item{officer_in_uniform}{\code{TRUE} if the officer was in uniform. This
 field is populated for every incident.}

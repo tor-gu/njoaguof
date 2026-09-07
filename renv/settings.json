@@ -2,7 +2,18 @@
   "bioconductor.enabled": true,
   "bioconductor.version": null,
   "external.libraries": [],
-  "ignored.packages": [],
+  "ignored.packages": [
+    "languageserver",
+    "lintr",
+    "styler",
+    "collections",
+    "rex",
+    "xmlparsedata",
+    "R.cache",
+    "R.methodsS3",
+    "R.oo",
+    "R.utils"
+  ],
   "lockfile.sanitize": true,
   "package.dependency.fields": [
     "Imports",

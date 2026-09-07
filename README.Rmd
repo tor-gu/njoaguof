@@ -54,9 +54,9 @@ Every incident has a unique ```form_id```, and this field is used to link the ``
 library(njoaguof)
 library(dplyr)
 # Summarize video_type by agency_county
-incident %>%
-  select(form_id, agency_county) %>%
-  right_join(incident_video_type, by = "form_id") %>%
+incident |>
+  select(form_id, agency_county) |>
+  right_join(incident_video_type, by = "form_id") |>
   count(agency_county, video_type)
 ```
 
@@ -64,9 +64,9 @@ incident %>%
 library(njoaguof)
 library(dplyr)
 # Summarize subject gender by officer gender
-incident %>% 
-  select(form_id, officer_gender) %>% 
-  right_join(subject, by="form_id") %>%
+incident |> 
+  select(form_id, officer_gender) |> 
+  right_join(subject, by="form_id") |>
   count(officer_gender, subject_gender=gender)
 ```
 
@@ -74,14 +74,14 @@ incident %>%
 
 The raw data from the NJ OAG is available in table ```use_of_force_raw```, which has one row for each use of force incident.  Fields with multiple values are recorded as comma separated lists. For example:
 ```{r}
-use_of_force_raw %>% count(SubjectGender) %>% head(5)
+use_of_force_raw |> count(SubjectGender) |> head(5)
 ```
 These fields are broken out into new data tables in the following categories.
 
 #### Subject Fields
 Several fields contain one value for each subject. We presume that the order is preserved, so that we may create one row for each subject in the ```subject``` table.
 ```{r}
-use_of_force_raw %>% filter(FormID == 16301) %>%
+use_of_force_raw |> filter(FormID == 16301) |>
   select(
     FormID,
     SubjectArrested,
@@ -91,26 +91,26 @@ use_of_force_raw %>% filter(FormID == 16301) %>%
     SubjectGender
   )
 
-subject %>% filter(form_id == 16301)
+subject |> filter(form_id == 16301)
 ```
 
 #### Multi-value incident fields
 Some fields contain multiple values which apply to the entire incident. For each such column, we create a separate table expressing this many-to-one relationship. For example, this row in the source data has three values for ```incident_type```, and this results in three rows in the ```incident_type``` table.
 ```{r}
 library(dplyr)
-use_of_force_raw %>% filter(FormID == 16301) %>%
+use_of_force_raw |> filter(FormID == 16301) |>
   select(IncidentType)
-incident_type %>% filter(form_id == 16301)
+incident_type |> filter(form_id == 16301)
 ```
 
 
 #### Multi-value Incident-Subject Fields
 Some fields contain multiple values which apply to individual subjects, but there is no reliable way to assign the values to subjects. For example, in this row of the raw data, there are two subjects and three values in the ```SubResist``` field. In this case, we create three rows in the ```incident_subject_resistance``` table, indicating the position of each item in the list with the ```index``` value.  
 ```{r}
-use_of_force_raw %>% 
-  filter(FormID == 19542) %>% 
+use_of_force_raw |> 
+  filter(FormID == 19542) |> 
   select(SubjectType,SubjectResistance)
-incident_subject_resistance %>% filter(form_id == 19542)
+incident_subject_resistance |> filter(form_id == 19542)
 ```
 Note that it is not clear in the source data if "Aggressive resistance" should be associated to the first subject or to the second subject.
 
