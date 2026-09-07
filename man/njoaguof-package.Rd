@@ -19,5 +19,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Tor Gunston \email{tor.gunston@protonmail.com}
 
+Authors:
+\itemize{
+  \item Tor Gunston \email{tor.gunston@protonmail.com}
+}
+
 }
 \keyword{internal}
