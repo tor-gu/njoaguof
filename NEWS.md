@@ -7,7 +7,10 @@
   "NJOAG Use of Force Data Dashboard 10-01-20 to 08-31-26.sav"
 
 * Fix for `incident`:
-  - `officer_injured` was `FALSE` for every row in all previous release.
+  - `officer_injured` was `FALSE` for every row 1.17.0.
+
+* Fix for `subject`:
+  - `juvenile` was never `TRUE` for every row in 1.17.0.
 
 * Fix for `incident_subject_force_type`:
   - Two force types containing an internal comma, `"Kneeling on Chest, Back"`
@@ -18,6 +21,11 @@
     `Kneeling on Chest, Back for prolonged period`. The OAG started using
     using the longer form in 2025. We have combined them, using the current,
     longer form.
+
+* Added a `testthat` suite. It covers referential integrity between the tables
+  and the three miscoding patterns behind the fixes above: a logical column that
+  is never `TRUE`, a declared factor level that never appears, and a source
+  export whose fixed-width columns truncate the multi-value fields.
 
 # njoaguof 1.17.0
 * Update to most recent dataset from NJ OAG:

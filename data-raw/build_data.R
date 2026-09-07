@@ -583,7 +583,7 @@ subject <- subject |>
 as_integer_or_na <- function(x) suppressWarnings(as.integer(x))
 subject <- subject |> 
   mutate(juvenile=case_when(
-    age=="Juvenile" ~ TRUE,
+    age %in% c("Juvenile", "Under 18") ~ TRUE,
     !is.na(as_integer_or_na(age)) ~ FALSE
   )) |>
   mutate(age=as_integer_or_na(age))

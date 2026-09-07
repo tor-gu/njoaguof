@@ -642,13 +642,16 @@ subject <- subject |>
 
 #### `age`
 
-This field is not currently strictly numeric -- it also contains values `"Unknown"` and `"Juvenile"`. We will add a boolean column, `juvenile` and convert `age` to an integer. The value of `"Unknown"` will map to `NA` in both columns.
+This field is not currently strictly numeric -- it also contains values `"Unknown"` and `"Under 18"`. We will add a boolean column, `juvenile` and convert `age` to an integer. The value of `"Unknown"` will map to `NA` in both columns.
+
+The source has used more than one wording for the under-age value: `"Juvenile"` in early
+releases and `"Under 18"` since. Match both.
 
 ```{r}
 as_integer_or_na <- function(x) suppressWarnings(as.integer(x))
 subject <- subject |> 
   mutate(juvenile=case_when(
-    age=="Juvenile" ~ TRUE,
+    age %in% c("Juvenile", "Under 18") ~ TRUE,
     !is.na(as_integer_or_na(age)) ~ FALSE
   )) |>
   mutate(age=as_integer_or_na(age))

@@ -24,10 +24,12 @@ Suggests:
     tidycensus,
     rlang,
     readr,
-    devtools
+    devtools,
+    testthat (>= 3.0.0)
 Depends: 
     R (>= 4.1)
 LazyData: true
 LazyDataCompression: xz
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.0
+Config/testthat/edition: 3
