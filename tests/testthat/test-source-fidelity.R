@@ -31,3 +31,20 @@ test_that("character columns are valid UTF-8", {
 test_that("use_of_force_raw carries one row per incident", {
   expect_identical(nrow(uof("use_of_force_raw")), nrow(uof("incident")))
 })
+
+# read_sav() hangs SPSS metadata off every column it reads. data-raw/use_of_force_raw.R
+# zaps it
+test_that("no column carries SPSS metadata attributes", {
+  baggage <- c("label", "labels", "display_width", "format.spss", "format.stata")
+  offenders <- character(0)
+  for (tbl in all_tables) {
+    d <- uof(tbl)
+    for (col in names(d)) {
+      hit <- intersect(names(attributes(d[[col]])), baggage)
+      if (length(hit)) {
+        offenders <- c(offenders, paste0(tbl, "$", col, ": ", paste(hit, collapse = ", ")))
+      }
+    }
+  }
+  expect_identical(offenders, character(0))
+})

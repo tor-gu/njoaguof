@@ -1,3 +1,7 @@
+# njoaguof 2.0.1
+* Removed the superfluous SPSS metadata attributes (`label` and `display_width`) that the
+  `.sav` reader introduced in 2.0.0. No values are changed.
+
 # njoaguof 2.0.0
 * Breaking changes:
   - `Depends: R (>= 4.1)`, up from `3.5`

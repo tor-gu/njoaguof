@@ -11,6 +11,8 @@ use_of_force_raw <-
   haven::read_sav() |>
   haven::zap_formats() |>
   haven::zap_labels() |>
+  haven::zap_label() |>
+  haven::zap_widths() |>
   dplyr::mutate(dplyr::across(
     where(rlang::is_character), stringr::str_trim))
 
