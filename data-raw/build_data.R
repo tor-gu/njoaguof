@@ -250,7 +250,6 @@ subject_resistance_levels <- c(
   "Active Resistor",
   "Aggressive resistance (attempt to attack or harm)",
   "Attempt to flee",
-  "Dead-weight tactics(going limp)",
   "Dead-weight tactics (going limp)",
   "Non-response (consciously ignoring)",
   "Passive Resistor",
@@ -445,9 +444,13 @@ check_list_levels(
 )
 # For subject_resistance, internal commas are used
 # inconsistently. We'll normalize this field by
-# internal commas before splitting
+# internal commas before splitting. Older exports also
+# spelled "Dead-weight tactics(going limp)" without the
+# space; normalize that to the current wording.
 uof_raw_trimmed <- uof_raw_trimmed |> 
-  mutate(SubjectResistance=str_replace_all(SubjectResistance, "stiffening, tighening", "stiffening tighening")) 
+  mutate(SubjectResistance = SubjectResistance |>
+           str_replace_all("stiffening, tighening", "stiffening tighening") |>
+           str_replace_all(fixed("tactics(going limp)"), "tactics (going limp)"))
 check_list_levels(
   uof_raw_trimmed,
   SubjectResistance,
@@ -1104,7 +1107,7 @@ incident <- incident |>
 ## -----------------------------------------------------------------------------
 video_footage_levels <- c("Yes", "No", "Unknown")
 incident <- incident |>
-  mutate(video_footage=str_replace(video_footage, "Unknow", "Unknown")) |>
+  mutate(video_footage=str_replace(video_footage, "^Unknow$", "Unknown")) |>
   mutate(video_footage=factor(video_footage, levels=video_footage_levels))
 
 

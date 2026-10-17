@@ -1,3 +1,11 @@
+# njoaguof 2.1.1
+* Fix for `incident`:
+  - `video_footage` was `NA` instead of `Unknown` for 1,981 rows.
+
+* Change to `incident_subject_resistance`:
+  - Removed the unused level `Dead-weight tactics(going limp)` from
+    `subject_resistance`.
+
 # njoaguof 2.1.0
 * Update to most recent dataset from NJ OAG:
   "NJOAG Use of Force Data Dashboard 10-01-20 to 09-30-26.sav"

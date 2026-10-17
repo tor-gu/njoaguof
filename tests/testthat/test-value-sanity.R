@@ -22,10 +22,8 @@ test_that("no logical column is constant", {
 known_empty_levels <- list(
   "incident$officer_race" = c("Asian/Pacific Islander", "Pacific Islander"),
   "incident$officer_gender" = "Non-Binary/X",
-  "incident$video_footage" = "Unknown",
   "incident_subject_injury$subject_injury" = "No Injury",
   "incident_subject_medical_treatment$subject_medical_treatment" = "Not Provided",
-  "incident_subject_resistance$subject_resistance" = "Dead-weight tactics(going limp)",
   "subject$race" = c(
     "Asian/Pacific Islander",
     "Native Hawaiian or other Pacific Islander",

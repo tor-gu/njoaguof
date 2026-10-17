@@ -55,8 +55,9 @@ a name variant to a specific incident, refer to the raw data
 incident. \emph{C.f.} tables \code{incident_officer_injury_type} and
 \code{incident_officer_medical_treatment}.}
 
-\item{video_footage}{\code{TRUE} if there is video footage of the
-incident. \emph{C.f} table \code{incident_video_type}.}
+\item{video_footage}{Whether there is video footage of the incident:
+\code{"Yes"}, \code{"No"} or \code{"Unknown"}. \emph{C.f} table
+\code{incident_video_type}.}
 
 \item{indoors}{\code{TRUE} if the incident was indoors. Not exclusive of
 \code{outdoors}.}
