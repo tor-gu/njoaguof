@@ -62,16 +62,16 @@ incident |>
 #> # A tibble: 191 × 3
 #>    agency_county   video_type              n
 #>    <fct>           <fct>               <int>
-#>  1 Atlantic County Body Worn            3834
+#>  1 Atlantic County Body Worn            3910
 #>  2 Atlantic County CED Camera             26
 #>  3 Atlantic County Cell Phone             15
-#>  4 Atlantic County Commercial Building   177
-#>  5 Atlantic County Motor Vehicle         444
+#>  4 Atlantic County Commercial Building   179
+#>  5 Atlantic County Motor Vehicle         450
 #>  6 Atlantic County Residential/Home       19
-#>  7 Atlantic County Station House         173
+#>  7 Atlantic County Station House         174
 #>  8 Atlantic County Other                  31
-#>  9 Atlantic County Unknown                 6
-#> 10 Bergen County   Body Worn            4677
+#>  9 Atlantic County Unknown                 7
+#> 10 Bergen County   Body Worn            4775
 #> # ℹ 181 more rows
 ```
 
@@ -86,19 +86,19 @@ incident |>
 #> # A tibble: 16 × 3
 #>    officer_gender subject_gender     n
 #>    <fct>          <fct>          <int>
-#>  1 Male           Male           26841
-#>  2 Male           Female          7006
+#>  1 Male           Male           27155
+#>  2 Male           Female          7089
 #>  3 Male           Non-Binary/X      41
-#>  4 Male           <NA>             971
-#>  5 Female         Male            1507
-#>  6 Female         Female           930
+#>  4 Male           <NA>             974
+#>  5 Female         Male            1525
+#>  6 Female         Female           937
 #>  7 Female         Non-Binary/X       4
 #>  8 Female         <NA>              85
-#>  9 Other          Male           55495
-#> 10 Other          Female         15677
+#>  9 Other          Male           56587
+#> 10 Other          Female         15950
 #> 11 Other          Non-Binary/X      60
-#> 12 Other          <NA>            1666
-#> 13 <NA>           Male              34
+#> 12 Other          <NA>            1684
+#> 13 <NA>           Male              35
 #> 14 <NA>           Female            11
 #> 15 <NA>           Non-Binary/X       4
 #> 16 <NA>           <NA>               8
@@ -115,8 +115,8 @@ use_of_force_raw |> count(SubjectGender) |> head(5)
 #> # A tibble: 5 × 2
 #>   SubjectGender                              n
 #>   <chr>                                  <int>
-#> 1 Female                                 23099
-#> 2 Female, Female                           149
+#> 1 Female                                 23456
+#> 2 Female, Female                           151
 #> 3 Female, Female, Female                    16
 #> 4 Female, Female, Female, Female             5
 #> 5 Female, Female, Female, Female, Female     1

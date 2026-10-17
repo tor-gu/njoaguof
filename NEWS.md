@@ -1,3 +1,17 @@
+# njoaguof 2.1.0
+* Update to most recent dataset from NJ OAG:
+  "NJOAG Use of Force Data Dashboard 10-01-20 to 09-30-26.sav"
+
+* Six incident reports (`form_id`s) present in the 2026-08-31 release are
+  absent from this release. All are Union City PD forms; the incidents
+  themselves remain, via other officers' forms.
+  - `2400274` (`HUDSON-UNION CITY PD-26-045085`)
+  - `2446802` (`HUDSON-UNION CITY PD-26-060557`)
+  - `2467408` (`HUDSON-UNION CITY PD-26-066523`)
+  - `2545044` (`HUDSON-UNION CITY PD-26-087867`)
+  - `2578443` (`HUDSON-UNION CITY PD-26-097016`)
+  - `2578618` (`HUDSON-UNION CITY PD-26-097016`)
+
 # njoaguof 2.0.1
 * Removed the superfluous SPSS metadata attributes (`label` and `display_width`) that the
   `.sav` reader introduced in 2.0.0. No values are changed.
