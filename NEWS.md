@@ -1,3 +1,8 @@
+# njoaguof 2.1.2
+* Fix for `incident` and `officer_name_variants`:
+  - The source placeholder "Not Provided Not Provided", which has appeared
+    since 1.16.0, is now treated as an `NA` `officer_name`.
+
 # njoaguof 2.1.1
 * Fix for `incident`:
   - `video_footage` was `NA` instead of `Unknown` for 1,981 rows.

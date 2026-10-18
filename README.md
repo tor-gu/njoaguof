@@ -215,11 +215,11 @@ All of the `incident_subject_xxx` data tables are of this form, with an
 #### Officer name variants
 
 In the raw data, there are two fields which identify the officer:
-`officer_name` (an ID field) and `Officer_Name2` (a name field). A
-single `officer_name` ID can be associated different spellings in the
-`Officer_Name2` field. When building the `incident` table, we ensure
-that every `officer_name_id` is associated with a single spelling of the
-officer name by choosing the most common form.
+`UserID` (an ID field) and `OfficerName` (a name field). A single
+`UserID` can be associated different spellings in the `OfficerName`
+field. When building the `incident` table, we ensure that every
+`officer_name_id` is associated with a single spelling of the officer
+name by choosing the most common form.
 
 But all variants of the officer names appearing in the source data are
 preserved in the `officer_name_variants` table.

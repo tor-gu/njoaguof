@@ -1191,11 +1191,17 @@ incident |>
 
 Therefore, we will choose the most common variant for each name id and apply that to all rows. We will save variant names in a new table, `officer_name_variants`.
 
-```{r}
-incident <- incident |> 
-  mutate(officer_name = na_if(officer_name, ""))
+Some rows have no `officer_name_id`. Since the 2024 releases, NJ OAG gives these rows the placeholder name `"Not Provided Not Provided"`, which we treat as missing. Earlier releases had either an empty name or a real one. Either way, a missing id does not identify an officer, so we leave these rows out when choosing standard names and out of `officer_name_variants`, and they get an `NA` name. (Releases 1.1.0 through 1.15.0 grouped all of these rows together as a single officer. The most common name in that group was empty, so about 200 real names became `NA`. That is the reason for both the `filter()` and `na_matches = "never"` below.)
 
-standard_names <- incident |> 
+```{r}
+officer_name_placeholders <- c("", "Not Provided Not Provided")
+
+incident <- incident |>
+  mutate(officer_name = if_else(officer_name %in% officer_name_placeholders,
+                                NA_character_, officer_name))
+
+standard_names <- incident |>
+  filter(!is.na(officer_name_id)) |>
   count(officer_name, officer_name_id) |>
   group_by(officer_name_id) |>
   slice(which.max(n)) |>
@@ -1203,12 +1209,13 @@ standard_names <- incident |>
   select(officer_name_id, officer_name)
 
 officer_name_variants <- incident |>
+  filter(!is.na(officer_name_id)) |>
   select(officer_name_id, officer_name) |>
   unique()
 
-incident <- incident |> 
+incident <- incident |>
   select(-officer_name) |>
-  left_join(standard_names, by="officer_name_id") 
+  left_join(standard_names, by="officer_name_id", na_matches="never")
 
 rm(standard_names)
 ```

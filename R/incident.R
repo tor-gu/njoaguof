@@ -29,16 +29,22 @@
 #'  occurred.}
 #'
 #'  \item{officer_name_id}{An ID identifying the officer. In the source data,
-#'  this is column \code{officer_name}. }
+#'  this is column \code{UserID}. }
 #'
 #'  \item{officer_name}{The most common name associated to the
 #'  \code{officer_name_id}. In this table, each
 #'  \code{officer_name_id} is associated to a single name, while in the
-#'  source data, names will sometimes vary in spelling and capitalization.
+#'  source data (column \code{OfficerName}), names will sometimes vary in
+#'  spelling and capitalization.
+#'
+#'  \code{officer_name} is \code{NA} whenever \code{officer_name_id} is
+#'  \code{NA} (327 incidents, all from 2020 and 2021). For these rows the
+#'  source gives the placeholder \code{"Not Provided Not Provided"} instead
+#'  of a name.
 #'
 #'  For name variants, refer to table \code{officer_name_variants}. To associate
 #'  a name variant to a specific incident, refer to the raw data
-#'  \code{use_of_force_raw}, column \code{Officer_Name2}.}
+#'  \code{use_of_force_raw}, column \code{OfficerName}.}
 #'
 #'  \item{officer_age}{The officer's age.}
 #'

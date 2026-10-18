@@ -958,10 +958,14 @@ incident <- incident |>
 
 
 ## -----------------------------------------------------------------------------
-incident <- incident |> 
-  mutate(officer_name = na_if(officer_name, ""))
+officer_name_placeholders <- c("", "Not Provided Not Provided")
 
-standard_names <- incident |> 
+incident <- incident |>
+  mutate(officer_name = if_else(officer_name %in% officer_name_placeholders,
+                                NA_character_, officer_name))
+
+standard_names <- incident |>
+  filter(!is.na(officer_name_id)) |>
   count(officer_name, officer_name_id) |>
   group_by(officer_name_id) |>
   slice(which.max(n)) |>
@@ -969,12 +973,13 @@ standard_names <- incident |>
   select(officer_name_id, officer_name)
 
 officer_name_variants <- incident |>
+  filter(!is.na(officer_name_id)) |>
   select(officer_name_id, officer_name) |>
   unique()
 
-incident <- incident |> 
+incident <- incident |>
   select(-officer_name) |>
-  left_join(standard_names, by="officer_name_id") 
+  left_join(standard_names, by="officer_name_id", na_matches="never")
 
 rm(standard_names)
 

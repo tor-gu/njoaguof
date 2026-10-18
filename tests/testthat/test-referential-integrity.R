@@ -44,3 +44,29 @@ test_that("subject index is contiguous from 1 within each incident", {
   })
   expect_true(all(runs))
 })
+
+# A missing officer_name_id does not identify an officer. Releases 1.1.0-1.15.0
+# grouped all such rows as a single officer, which replaced about 200 real
+# names with NA.
+test_that("officer_name_variants has no missing officer_name_id", {
+  expect_false(anyNA(uof("officer_name_variants")$officer_name_id))
+})
+
+# Guards against an NA officer_name_id picking up a name through the join.
+# Only this direction is checked: the source itself has had rows with an id
+# but no name (two in 2022).
+test_that("incident$officer_name is NA wherever officer_name_id is NA", {
+  incident <- uof("incident")
+  expect_true(all(is.na(incident$officer_name[is.na(incident$officer_name_id)])))
+})
+
+# The source's marker for a missing name changed from "" to
+# "Not Provided Not Provided" in 2024. If a new variant appears, add it to
+# officer_name_placeholders in the vignette.
+test_that("no officer_name is a 'Not Provided' placeholder", {
+  names <- c(
+    uof("incident")$officer_name,
+    uof("officer_name_variants")$officer_name
+  )
+  expect_identical(grep("^Not Provided", names, value = TRUE), character(0))
+})
