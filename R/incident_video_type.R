@@ -2,7 +2,7 @@
 #'
 #' The type of video footage of the incident
 #'
-#' This data is extracted from the \code{video_type} field in
+#' This data is extracted from the \code{VideoType} field in
 #' \code{use_of_force_raw}.
 #'
 #' There may be multiple rows in this table linking to a single incident.

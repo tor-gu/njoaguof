@@ -22,7 +22,7 @@ incident_subject_reason_not_arrested
 Reason subject was not arrested
 }
 \details{
-This data is extracted from the \code{ReasonNotArrest} field in
+This data is extracted from the \code{ReasonSubjectNotArrested} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident or

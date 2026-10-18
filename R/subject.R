@@ -26,7 +26,7 @@
 #'  \item{injured}{\code{TRUE} if the subject was injured in the incident.
 #'  \code{NA} where the source recorded \code{"Unknown"} or left the field
 #'  blank. \emph{C.f.} table \code{incident_subject_injury} for injury types,
-#'  and note the warning on \code{incident$subject_injured_count}.}
+#'  and \code{incident$subject_injured_count}, which counts these.}
 #'  \item{injured_prior}{\code{TRUE} if the subject was injured \emph{before}
 #'  the incident. \code{NA} where the source recorded \code{"Unknown"} or left
 #'  the field blank.}

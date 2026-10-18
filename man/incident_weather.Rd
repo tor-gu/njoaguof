@@ -21,7 +21,7 @@ incident_weather
 Weather conditions during the use of force incident.
 }
 \details{
-This data is extracted from the \code{incident_weather} field in
+This data is extracted from the \code{IncidentWeather} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident.

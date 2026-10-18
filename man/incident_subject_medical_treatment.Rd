@@ -22,7 +22,7 @@ incident_subject_medical_treatment
 Subject medial treatment received.
 }
 \details{
-This data is extracted from the \code{SubMedicalTreat} field in
+This data is extracted from the \code{SubjectMedicalTreatment} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident or

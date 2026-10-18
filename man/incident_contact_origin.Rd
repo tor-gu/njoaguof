@@ -21,7 +21,7 @@ incident_contact_origin
 Origin of initial police-citizen contact
 }
 \details{
-This data is extracted from the \code{contact_origin} field in
+This data is extracted from the \code{ContactOrigin} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident.

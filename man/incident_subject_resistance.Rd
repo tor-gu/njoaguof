@@ -22,7 +22,7 @@ incident_subject_resistance
 Subject type of resistance.
 }
 \details{
-This data is extracted from the \code{SubResist} field in
+This data is extracted from the \code{SubjectResistance} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident or

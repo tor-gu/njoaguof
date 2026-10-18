@@ -2,7 +2,7 @@
 #'
 #' Officer perception of subject's condition.
 #'
-#' This data is extracted from the \code{PerceivedCondition} field in
+#' This data is extracted from the \code{PerceivedConditionOfSubject} field in
 #' \code{use_of_force_raw}.
 #'
 #' There may be multiple rows in this table linking to a single incident or

@@ -21,7 +21,7 @@ incident_type
 The type of incident during which the use of force occurred.
 }
 \details{
-This data is extracted from the \code{incident_type} field in
+This data is extracted from the \code{IncidentType} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident.

@@ -2,7 +2,7 @@
 #'
 #' All lighting circumstances during the use of force incident.
 #'
-#' This data is extracted from the \code{incident_lighting} field in
+#' This data is extracted from the \code{IncidentLighting} field in
 #' \code{use_of_force_raw}.
 #'
 #' There may be multiple rows in this table linking to a single incident.

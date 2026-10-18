@@ -2,7 +2,7 @@
 #'
 #' The type of pre-planned contact that initiated the police-citizen contact.
 #'
-#' This data is extracted from the \code{planned_contact} field in
+#' This data is extracted from the \code{PlannedContact} field in
 #' \code{use_of_force_raw}.
 #'
 #' There may be multiple rows in this table linking to a single incident.

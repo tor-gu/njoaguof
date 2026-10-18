@@ -22,7 +22,7 @@ incident_subject_action
 Subject’s action that elicited a use of force response.
 }
 \details{
-This data is extracted from the \code{SubActions} field in
+This data is extracted from the \code{SubjectActions} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident or

@@ -3,6 +3,11 @@
   - The source placeholder "Not Provided Not Provided", which has appeared
     since 1.16.0, is now treated as an `NA` `officer_name`.
 
+* Documentation fixes:
+  - Source column names updated to match the current source file throughout.
+  - The `subject_injured_count` warning now says the field has been reliable
+    since 1.16.0.
+
 # njoaguof 2.1.1
 * Fix for `incident`:
   - `video_footage` was `NA` instead of `Unknown` for 1,981 rows.

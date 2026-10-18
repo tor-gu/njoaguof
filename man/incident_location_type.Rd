@@ -21,7 +21,7 @@ incident_location_type
 Location type
 }
 \details{
-This data is extracted from the \code{location_type} field in
+This data is extracted from the \code{LocationType} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident.

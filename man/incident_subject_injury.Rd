@@ -22,7 +22,7 @@ incident_subject_injury
 Subject’s type of injury.
 }
 \details{
-This data is extracted from the \code{SubjectInjuries} field in
+This data is extracted from the \code{SubjectInjuryType} field in
 \code{use_of_force_raw}.
 
 There may be multiple rows in this table linking to a single incident or
