@@ -16,12 +16,12 @@ containing multiple incidents)}
 to the incident.}
 
 \item{incident_date_1}{The date of the incident. In the source data, this
-is column \code{IncidentDate1}, and is the date the OAG dashboard uses as the
+is column \code{IncidentDate}, and is the date the OAG dashboard uses as the
 incident date.}
 
 \item{agency_county}{The county of the \emph{agency}.
 Note that this is not the incident location. This is column
-\code{County2}.}
+\code{County}.}
 
 \item{agency_name}{The name of the agency, e.g. "Essex Co Sheriffs
 Office".}
@@ -68,25 +68,26 @@ incident. \emph{C.f.} tables \code{incident_officer_injury_type} and
 \item{indoors}{\code{TRUE} if the incident was indoors. Not exclusive of
 \code{outdoors}.}
 
-\item{outdoors}{\code{TRUE} if the incident was indoors. Not exclusive of
+\item{outdoors}{\code{TRUE} if the incident was outdoors. Not exclusive of
 \code{indoors}.}
 
 \item{subject_count}{Number of subjects involved. This will reliably match
 the number of subject in the \code{subject} table with same \code{form_id}.}
 
 \item{subject_injured_count}{Number of injured subjects. This field
-corresponds to column \code{TotalSubInjuredIncident} in the raw data.
+corresponds to column \code{TotalSubInjuredInIncident} in the raw data.
+Wherever both are known, it equals the number of subjects in the
+\code{subject} table with \code{injured == TRUE}.
 
-\emph{\strong{Warning} This field is not reliable. There over 700
-incidents with \code{subject_injured_count > subject_count} and over
-3500 rows with \code{subject_injured_count == 0} that have matching rows
-in \code{incident_subject_injury} indicating specific injury types.}}
+\emph{\strong{Warning} Before release 1.16.0 this field was not reliable:
+the source often gave more injured subjects than subjects (over 1,500
+incidents in 1.15.0). Take care when comparing with older releases.}}
 
 \item{other_officer_involved}{\code{TRUE} if another officer was involved
 in the incident.
 
 \emph{\strong{Warning} This field is largely unpopulated. The source data
-records \code{"Not Provided"} for 88,608 of the 108,210 incidents, which
+records \code{"Not Provided"} for more than 80\\% of incidents, which
 becomes \code{NA} here. In practice the field was only collected during
 2020 and 2021 -- from 2022 onward it is \code{NA} for every incident but
 one.}}

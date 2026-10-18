@@ -70,3 +70,18 @@ test_that("no officer_name is a 'Not Provided' placeholder", {
   )
   expect_identical(grep("^Not Provided", names, value = TRUE), character(0))
 })
+
+# R/incident.R documents this equality. Before 1.16.0 the source count was
+# unreliable (often more injured subjects than subjects).
+test_that("incident$subject_injured_count matches subject$injured", {
+  incident <- uof("incident")
+  subject <- uof("subject")
+  injured <- tapply(subject$injured, subject$form_id, sum)
+  key <- as.character(incident$form_id)
+  # Incidents with an NA count, or any subject with NA injured, can't be compared.
+  known <- !is.na(incident$subject_injured_count) & !is.na(injured[key])
+  expect_identical(
+    as.integer(incident$subject_injured_count[known]),
+    as.integer(injured[key][known])
+  )
+})
