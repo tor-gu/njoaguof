@@ -1,4 +1,4 @@
-# The package exports nothing, so datasets are reached through data() rather
+# The package does not export its datasets, so they are reached through data() rather
 # than by name.
 uof <- function(name) {
   e <- new.env(parent = emptyenv())

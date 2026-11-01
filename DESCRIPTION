@@ -1,6 +1,6 @@
 Package: njoaguof
 Title: NJ OAG Use of Force data package
-Version: 2.1.2
+Version: 2.2.0
 Authors@R: 
     person("Tor", "Gunston", , "tor.gunston@protonmail.com", role = c("aut", "cre"))
 Description: This is cleaned-up version of the NJ OAG Use of Force database
@@ -10,6 +10,10 @@ URL: https://github.com/tor-gu/njoaguof
 BugReports: https://github.com/tor-gu/njoaguof/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
+Imports: 
+    njlea (>= 0.1.0)
+Remotes: 
+    tor-gu/njlea
 Suggests: 
     dplyr,
     knitr,

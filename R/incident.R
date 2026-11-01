@@ -2,7 +2,7 @@
 #'
 #' Use of force incidents from the NJ OAG Use of Force database.
 #'
-#' @format A dataframe with 22 columns
+#' @format A dataframe with 23 columns
 #' \describe{
 #'  \item{form_id}{A unique identifier for the row, present in the source data}
 #'
@@ -15,6 +15,13 @@
 #'  \item{incident_date_1}{The date of the incident. In the source data, this
 #'  is column \code{IncidentDate}, and is the date the OAG dashboard uses as the
 #'  incident date.}
+#'
+#'  \item{agency_id}{The agency's \href{https://github.com/tor-gu/njlea}{njlea}
+#'  ID, e.g. \code{"NJLEA0001"}. Use it to join with other NJ law enforcement
+#'  datasets, and with \code{\link[njlea:get_agencies]{get_agencies()}} and
+#'  \code{\link[njlea:get_agency_municipalities]{get_agency_municipalities()}}
+#'  for canonical names, agency level and function, and the municipalities an
+#'  agency serves. Derived from \code{agency_county} and \code{agency_name}.}
 #'
 #'  \item{agency_county}{The county of the \emph{agency}.
 #'  Note that this is not the incident location. This is column

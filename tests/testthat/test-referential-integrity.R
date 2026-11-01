@@ -85,3 +85,29 @@ test_that("incident$subject_injured_count matches subject$injured", {
     as.integer(injured[key][known])
   )
 })
+
+test_that("incident$agency_id is complete and exists in njlea", {
+  agency_id <- uof("incident")$agency_id
+  expect_false(anyNA(agency_id))
+  expect_identical(setdiff(agency_id, njlea::agency$agency_id), character(0))
+})
+
+test_that("incident$agency_id agrees with njlea's aliases and agency years", {
+  incident <- uof("incident")
+  year <- as.integer(format(incident$incident_date_1, "%Y"))
+  # Re-resolving against the installed njlea catches a stale build: an alias
+  # that njlea has since repointed, or a registry newer than the shipped data.
+  expect_identical(
+    njlea::resolve_agency(
+      "njoaguof", as.character(incident$agency_county), incident$agency_name,
+      year = year
+    ),
+    incident$agency_id
+  )
+  expect_true(njlea::check_agency_years(incident$agency_id, year))
+})
+
+test_that("each (agency_county, agency_name) maps to one agency_id", {
+  pairs <- unique(uof("incident")[c("agency_county", "agency_name", "agency_id")])
+  expect_identical(anyDuplicated(pairs[c("agency_county", "agency_name")]), 0L)
+})
