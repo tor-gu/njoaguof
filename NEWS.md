@@ -1,3 +1,14 @@
+# njoaguof 2.2.0
+* New column `incident$agency_id`: the agency's
+  [njlea](https://github.com/tor-gu/njlea) 0.1.0 ID, for joining with other NJ law
+  enforcement datasets. Every incident has one (538 agencies).
+
+* njoaguof now imports njlea and re-exports `get_agencies()`,
+  `get_agency_municipalities()` and `find_agency()`, for canonical agency
+  names, level and function, and the municipalities each agency serves.
+  These are the package's first exports; the datasets are still reached with
+  `data()`.
+
 # njoaguof 2.1.2
 * Fix for `incident` and `officer_name_variants`:
   - The source placeholder "Not Provided Not Provided", which has appeared

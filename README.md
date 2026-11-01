@@ -45,6 +45,12 @@ available from <https://www.njoag.gov/force/>.
   capitalization of the officer names found in the source data.
 - `use_of_force_raw` The source data.
 
+Each incident’s agency also carries an `agency_id` from
+[njlea](https://github.com/tor-gu/njlea), a registry of NJ law
+enforcement agencies shared with other NJ OAG data packages. njoaguof
+re-exports njlea’s `get_agencies()`, `get_agency_municipalities()` and
+`find_agency()`.
+
 ## Examples
 
 Every incident has a unique `form_id`, and this field is used to link
@@ -102,6 +108,43 @@ incident |>
 #> 14 <NA>           Female            11
 #> 15 <NA>           Non-Binary/X       4
 #> 16 <NA>           <NA>               8
+```
+
+`agency_id` joins incidents to the njlea registry and to other datasets
+that use it. Agencies can be renamed or disbanded, so look them up for
+the year of each incident. `get_agencies()` with no year gives only
+current agencies, which would miss incidents from agencies that no
+longer exist.
+
+``` r
+library(njoaguof)
+library(dplyr)
+# Incidents by agency level and function
+years <- 2020:2026
+agencies <- lapply(years, \(y) mutate(get_agencies(y), year = y)) |>
+  bind_rows()
+incident |>
+  mutate(year = as.integer(format(incident_date_1, "%Y"))) |>
+  left_join(agencies, by = c("agency_id", "year")) |>
+  count(agency_level, agency_function, sort = TRUE)
+#> # A tibble: 15 × 3
+#>    agency_level agency_function           n
+#>    <fct>        <fct>                 <int>
+#>  1 Municipal    Police                91281
+#>  2 State        Police                 4760
+#>  3 State        Authority or transit   3972
+#>  4 County       Police                 3428
+#>  5 County       Sheriff                3422
+#>  6 State        College or university   984
+#>  7 Bi-state     Authority or transit    747
+#>  8 County       Prosecutor              718
+#>  9 State        Corrections             402
+#> 10 County       Corrections             120
+#> 11 Private      College or university    90
+#> 12 State        Park and conservation    60
+#> 13 County       Authority or transit     13
+#> 14 State        Investigative             6
+#> 15 County       College or university     5
 ```
 
 ## Notes
