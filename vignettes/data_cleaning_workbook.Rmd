@@ -1172,6 +1172,35 @@ incident <- incident |>
   )
 ```
 
+#### `agency_id`
+
+To make joins with other NJ law enforcement datasets easier, we add the
+[njlea](https://github.com/tor-gu/njlea) agency ID. njlea records every
+(`agency_county`, `agency_name`) spelling used here, as cleaned above, under its
+alias source `"njoaguof"`. State agencies have an `NA` county.
+
+`resolve_agency()` with `strict = TRUE` stops the build and lists any spelling
+njlea does not know. That happens when a new release adds an agency or a new
+spelling: add the alias to njlea and release it, then rebuild here. Do not fall
+back to `strict = FALSE`.
+
+`check_agency_years()` then confirms that every agency existed in the year of
+each of its incidents. For example, Woodlynne PD was disbanded in 2024.
+
+```{r}
+incident <- incident |>
+  mutate(
+    agency_id = njlea::resolve_agency(
+      "njoaguof",
+      as.character(agency_county),
+      agency_name,
+      year = lubridate::year(incident_date_1),
+      strict = TRUE
+    )
+  )
+njlea::check_agency_years(incident$agency_id, lubridate::year(incident$incident_date_1))
+```
+
 
 
 #### `officer_name` and `officer_name_id`
@@ -1492,6 +1521,7 @@ incident <- incident |>
     report_number,
     incident_case_number,
     incident_date_1,
+    agency_id,
     agency_county,
     agency_name,
     incident_municipality,

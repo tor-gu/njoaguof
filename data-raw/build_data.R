@@ -955,6 +955,20 @@ incident <- incident |>
   )
 
 
+## -----------------------------------------------------------------------------
+incident <- incident |>
+  mutate(
+    agency_id = njlea::resolve_agency(
+      "njoaguof",
+      as.character(agency_county),
+      agency_name,
+      year = lubridate::year(incident_date_1),
+      strict = TRUE
+    )
+  )
+njlea::check_agency_years(incident$agency_id, lubridate::year(incident$incident_date_1))
+
+
 
 
 ## -----------------------------------------------------------------------------
@@ -1175,6 +1189,7 @@ incident <- incident |>
     report_number,
     incident_case_number,
     incident_date_1,
+    agency_id,
     agency_county,
     agency_name,
     incident_municipality,

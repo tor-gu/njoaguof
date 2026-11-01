@@ -2447,6 +2447,84 @@
       "Maintainer": "Joe Cheng <joe@posit.co>",
       "Repository": "CRAN"
     },
+    "njlea": {
+      "Package": "njlea",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "Type": "Package",
+      "Title": "Registry of New Jersey Law Enforcement Agencies",
+      "Authors@R": "person(\"Tor\", \"Gunston\", , \"tor.gunston@protonmail.com\", role = c(\"aut\", \"cre\"))",
+      "Description": "A shared registry of New Jersey law enforcement agencies from 2020, for the NJ Office of the Attorney General dataset packages. Stable agency identifiers, name epochs, level and function, FBI ORIs, municipalities served, and every source spelling of each agency.",
+      "License": "CC0",
+      "Encoding": "UTF-8",
+      "LazyData": "true",
+      "Depends": [
+        "R (>= 4.1.0)"
+      ],
+      "Imports": [
+        "dplyr",
+        "njmunicipalities",
+        "tibble",
+        "utils"
+      ],
+      "Suggests": [
+        "jsonlite",
+        "readxl",
+        "testthat (>= 3.0.0)",
+        "usethis"
+      ],
+      "Config/testthat/edition": "3",
+      "Config/roxygen2/version": "8.1.0",
+      "Author": "Tor Gunston [aut, cre]",
+      "Maintainer": "Tor Gunston <tor.gunston@protonmail.com>",
+      "RemoteType": "github",
+      "Remotes": "tor-gu/njmunicipalities",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "tor-gu",
+      "RemoteRepo": "njlea",
+      "RemoteRef": "v0.1.0",
+      "RemoteSha": "576287b825f2efa5d766f782b44538045468b9b1"
+    },
+    "njmunicipalities": {
+      "Package": "njmunicipalities",
+      "Version": "1.4.0",
+      "Source": "GitHub",
+      "Type": "Package",
+      "Title": "NJ Municipalities data package",
+      "Authors@R": "person(\"Tor\", \"Gunston\", , \"tor.gunston@protonmail.com\", role = c(\"aut\", \"cre\"))",
+      "Description": "NJ Municipalities, 2000-2026. Name and GEOID for every NJ municipality and county, for the years 2000-2026.",
+      "License": "CC0",
+      "Encoding": "UTF-8",
+      "LazyData": "true",
+      "Depends": [
+        "R (>= 4.1.0)"
+      ],
+      "Imports": [
+        "dplyr",
+        "magrittr",
+        "purrr",
+        "stringr",
+        "utils"
+      ],
+      "Suggests": [
+        "fs",
+        "knitr",
+        "readr",
+        "testthat (>= 3.0.0)",
+        "tibble",
+        "usethis"
+      ],
+      "Config/testthat/edition": "3",
+      "Config/roxygen2/version": "8.1.0",
+      "Author": "Tor Gunston [aut, cre]",
+      "Maintainer": "Tor Gunston <tor.gunston@protonmail.com>",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "tor-gu",
+      "RemoteRepo": "njmunicipalities",
+      "RemoteRef": "main",
+      "RemoteSha": "c1bd679e6b6426493d23eca88a420218a6ebf220"
+    },
     "nlme": {
       "Package": "nlme",
       "Version": "3.1-165",
