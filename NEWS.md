@@ -1,3 +1,7 @@
+# njoaguof 2.3.0
+* Update to most recent dataset from NJ OAG:
+  "NJOAG Use of Force Data Dashboard 10-01-20 to 10-31-26.sav"
+
 # njoaguof 2.2.0
 * New column `incident$agency_id`: the agency's
   [njlea](https://github.com/tor-gu/njlea) 0.1.0 ID, for joining with other NJ law

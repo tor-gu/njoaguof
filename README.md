@@ -68,16 +68,16 @@ incident |>
 #> # A tibble: 191 × 3
 #>    agency_county   video_type              n
 #>    <fct>           <fct>               <int>
-#>  1 Atlantic County Body Worn            3910
+#>  1 Atlantic County Body Worn            3978
 #>  2 Atlantic County CED Camera             26
 #>  3 Atlantic County Cell Phone             15
-#>  4 Atlantic County Commercial Building   179
-#>  5 Atlantic County Motor Vehicle         450
+#>  4 Atlantic County Commercial Building   189
+#>  5 Atlantic County Motor Vehicle         454
 #>  6 Atlantic County Residential/Home       19
-#>  7 Atlantic County Station House         174
+#>  7 Atlantic County Station House         175
 #>  8 Atlantic County Other                  31
 #>  9 Atlantic County Unknown                 7
-#> 10 Bergen County   Body Worn            4775
+#> 10 Bergen County   Body Worn            4848
 #> # ℹ 181 more rows
 ```
 
@@ -92,18 +92,18 @@ incident |>
 #> # A tibble: 16 × 3
 #>    officer_gender subject_gender     n
 #>    <fct>          <fct>          <int>
-#>  1 Male           Male           27155
-#>  2 Male           Female          7089
+#>  1 Male           Male           27498
+#>  2 Male           Female          7164
 #>  3 Male           Non-Binary/X      41
-#>  4 Male           <NA>             974
-#>  5 Female         Male            1525
-#>  6 Female         Female           937
+#>  4 Male           <NA>             978
+#>  5 Female         Male            1543
+#>  6 Female         Female           961
 #>  7 Female         Non-Binary/X       4
-#>  8 Female         <NA>              85
-#>  9 Other          Male           56587
-#> 10 Other          Female         15950
+#>  8 Female         <NA>              86
+#>  9 Other          Male           57611
+#> 10 Other          Female         16216
 #> 11 Other          Non-Binary/X      60
-#> 12 Other          <NA>            1684
+#> 12 Other          <NA>            1698
 #> 13 <NA>           Male              35
 #> 14 <NA>           Female            11
 #> 15 <NA>           Non-Binary/X       4
@@ -130,17 +130,17 @@ incident |>
 #> # A tibble: 15 × 3
 #>    agency_level agency_function           n
 #>    <fct>        <fct>                 <int>
-#>  1 Municipal    Police                91281
-#>  2 State        Police                 4760
-#>  3 State        Authority or transit   3972
-#>  4 County       Police                 3428
-#>  5 County       Sheriff                3422
-#>  6 State        College or university   984
-#>  7 Bi-state     Authority or transit    747
-#>  8 County       Prosecutor              718
-#>  9 State        Corrections             402
+#>  1 Municipal    Police                92686
+#>  2 State        Police                 4844
+#>  3 State        Authority or transit   4040
+#>  4 County       Sheriff                3492
+#>  5 County       Police                 3485
+#>  6 State        College or university  1026
+#>  7 Bi-state     Authority or transit    762
+#>  8 County       Prosecutor              727
+#>  9 State        Corrections             408
 #> 10 County       Corrections             120
-#> 11 Private      College or university    90
+#> 11 Private      College or university    92
 #> 12 State        Park and conservation    60
 #> 13 County       Authority or transit     13
 #> 14 State        Investigative             6
@@ -158,7 +158,7 @@ use_of_force_raw |> count(SubjectGender) |> head(5)
 #> # A tibble: 5 × 2
 #>   SubjectGender                              n
 #>   <chr>                                  <int>
-#> 1 Female                                 23456
+#> 1 Female                                 23821
 #> 2 Female, Female                           151
 #> 3 Female, Female, Female                    16
 #> 4 Female, Female, Female, Female             5
