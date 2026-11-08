@@ -16,4 +16,7 @@ use_of_force_raw
 \description{
 Use of force data downloaded from the NJ OAG Use of Force dashboard.
 }
+\seealso{
+\url{https://nj.gov/oag/excellence/docs/Use-of-Force-Reporting-Portal-Guide.pdf}
+}
 \keyword{datasets}

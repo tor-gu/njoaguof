@@ -90,8 +90,10 @@ subject_type_levels <-
 gender_levels <-
   c("Male",
     "Female",
-    "Gender Non-Conforming/X",
-    "Other")
+    "Gender Non-Conforming/X")
+
+# The source also uses "Other" for officers, but never for subjects.
+officer_gender_levels <- c(gender_levels, "Other")
 
 incident_type_levels <- c(
   "Aggressive/Injured Animal",
@@ -361,7 +363,7 @@ check_list_levels(
   uof_raw_trimmed,
   OfficerGender,
   sep_comma_space_no_paren,
-  gender_levels,
+  officer_gender_levels,
   "N/A"
 )
 check_list_levels(
@@ -1224,7 +1226,10 @@ incident <- incident |>
   )
 
 incident <- incident |> 
-  mutate(officer_gender=factor(officer_gender, levels=gender_levels))
+  mutate(
+    officer_gender = if_else(officer_gender == "N/A", NA_character_, officer_gender),
+    officer_gender = factor(officer_gender, levels = officer_gender_levels)
+  )
 
 
 ## -----------------------------------------------------------------------------

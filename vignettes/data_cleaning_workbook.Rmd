@@ -127,8 +127,10 @@ subject_type_levels <-
 gender_levels <-
   c("Male",
     "Female",
-    "Gender Non-Conforming/X",
-    "Other")
+    "Gender Non-Conforming/X")
+
+# The source also uses "Other" for officers, but never for subjects.
+officer_gender_levels <- c(gender_levels, "Other")
 
 incident_type_levels <- c(
   "Aggressive/Injured Animal",
@@ -402,7 +404,7 @@ check_list_levels(
   uof_raw_trimmed,
   OfficerGender,
   sep_comma_space_no_paren,
-  gender_levels,
+  officer_gender_levels,
   "N/A"
 )
 check_list_levels(
@@ -1559,6 +1561,13 @@ incident <- incident |>
 
 We perform the same transformations as we did on the `subject` `race` and `gender` columns, except that `OfficerGender` needs no relabelling: it already uses `"Gender Non-Conforming/X"`. Its value `"N/A"` becomes `NA`.
 
+`OfficerGender` is `"Other"` for about two thirds of incidents. We keep it as published,
+since NJ OAG's own dashboard reports it as a category, but its meaning is unclear: the
+[Use of Force Reporting Portal Guide](https://nj.gov/oag/excellence/docs/Use-of-Force-Reporting-Portal-Guide.pdf) has no `"Other"` option for officer gender, and
+between the 2023-05-31 and 2024-09-30 source releases 20,543 officers with a recorded
+`"Male"` or `"Female"` became `"Other"` on the same forms. `subject$gender` never uses
+`"Other"`, so only `officer_gender` has that level.
+
 ```{r}
 incident <- incident |>
   mutate(
@@ -1571,7 +1580,10 @@ incident <- incident |>
   )
 
 incident <- incident |> 
-  mutate(officer_gender=factor(officer_gender, levels=gender_levels))
+  mutate(
+    officer_gender = if_else(officer_gender == "N/A", NA_character_, officer_gender),
+    officer_gender = factor(officer_gender, levels = officer_gender_levels)
+  )
 ```
 
 

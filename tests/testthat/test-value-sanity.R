@@ -27,8 +27,7 @@ known_empty_levels <- list(
     "Asian/Pacific Islander",
     "Native Hawaiian or other Pacific Islander",
     "Pacific Islander"
-  ),
-  "subject$gender" = "Other"
+  )
 )
 
 test_that("every declared factor level is used, or is a known exception", {

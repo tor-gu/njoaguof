@@ -23,6 +23,10 @@ knitr::opts_chunk$set(
 This is a cleaned-up version of the NJ OAG Use of Force database
     available from https://www.njoag.gov/force/.
 
+The fields follow the NJ OAG's
+[Use of Force Reporting Portal Guide](https://nj.gov/oag/excellence/docs/Use-of-Force-Reporting-Portal-Guide.pdf),
+which describes the reporting form and its options.
+
 ## Dataset Overview
 
 * ```incident``` This is the main data table. Each use of force incident is recorded here. A single incident may involve multiple subjects.

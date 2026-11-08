@@ -46,4 +46,5 @@
 #'  details).}
 #' }
 #' @source \url{https://www.njoag.gov/force/}
+#' @seealso \url{https://nj.gov/oag/excellence/docs/Use-of-Force-Reporting-Portal-Guide.pdf}
 "subject"

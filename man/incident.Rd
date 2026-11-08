@@ -62,7 +62,15 @@ a name variant to a specific incident, refer to the raw data
 
 \item{officer_rank}{The officer's rank.}
 
-\item{officer_gender}{The officer's gender.}
+\item{officer_gender}{The officer's gender. \code{NA} where the source
+records \code{"N/A"}.
+
+\emph{\strong{Warning} The source records \code{"Other"} for about two
+thirds of incidents, and NJ OAG has not said what it means. It is not an
+option on the reporting form (see the
+\href{https://nj.gov/oag/excellence/docs/Use-of-Force-Reporting-Portal-Guide.pdf}{Use of Force Reporting Portal Guide}), and the source has
+replaced recorded genders with it: about 20,500 incidents from 2020 to 2023
+had \code{"Male"} or \code{"Female"} in earlier source releases.}}
 
 \item{officer_injured}{\code{TRUE} if the officer was injured in the
 incident. \emph{C.f.} tables \code{incident_officer_injury_type} and
@@ -115,5 +123,8 @@ incident
 }
 \description{
 Use of force incidents from the NJ OAG Use of Force database.
+}
+\seealso{
+\url{https://nj.gov/oag/excellence/docs/Use-of-Force-Reporting-Portal-Guide.pdf}
 }
 \keyword{datasets}

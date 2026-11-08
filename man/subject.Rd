@@ -59,4 +59,7 @@ Subject types:
 \item "Other"
 }
 }
+\seealso{
+\url{https://nj.gov/oag/excellence/docs/Use-of-Force-Reporting-Portal-Guide.pdf}
+}
 \keyword{datasets}
