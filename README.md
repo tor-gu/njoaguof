@@ -11,6 +11,10 @@
 This is a cleaned-up version of the NJ OAG Use of Force database
 available from <https://www.njoag.gov/force/>.
 
+The fields follow the NJ OAG’s [Use of Force Reporting Portal
+Guide](https://nj.gov/oag/excellence/docs/Use-of-Force-Reporting-Portal-Guide.pdf),
+which describes the reporting form and its options.
+
 ## Dataset Overview
 
 - `incident` This is the main data table. Each use of force incident is
@@ -90,24 +94,24 @@ incident |>
   right_join(subject, by="form_id") |>
   count(officer_gender, subject_gender=gender)
 #> # A tibble: 16 × 3
-#>    officer_gender subject_gender     n
-#>    <fct>          <fct>          <int>
-#>  1 Male           Male           27498
-#>  2 Male           Female          7164
-#>  3 Male           Non-Binary/X      41
-#>  4 Male           <NA>             978
-#>  5 Female         Male            1543
-#>  6 Female         Female           961
-#>  7 Female         Non-Binary/X       4
-#>  8 Female         <NA>              86
-#>  9 Other          Male           57611
-#> 10 Other          Female         16216
-#> 11 Other          Non-Binary/X      60
-#> 12 Other          <NA>            1698
-#> 13 <NA>           Male              35
-#> 14 <NA>           Female            11
-#> 15 <NA>           Non-Binary/X       4
-#> 16 <NA>           <NA>               8
+#>    officer_gender          subject_gender              n
+#>    <fct>                   <fct>                   <int>
+#>  1 Male                    Male                    27810
+#>  2 Male                    Female                   7252
+#>  3 Male                    Gender Non-Conforming/X    41
+#>  4 Male                    <NA>                      208
+#>  5 Female                  Male                     1571
+#>  6 Female                  Female                    971
+#>  7 Female                  Gender Non-Conforming/X     4
+#>  8 Female                  <NA>                       11
+#>  9 Gender Non-Conforming/X Male                       36
+#> 10 Gender Non-Conforming/X Female                     14
+#> 11 Gender Non-Conforming/X Gender Non-Conforming/X     5
+#> 12 Other                   Male                    58208
+#> 13 Other                   Female                  16356
+#> 14 Other                   Gender Non-Conforming/X    60
+#> 15 Other                   <NA>                      518
+#> 16 <NA>                    Male                        2
 ```
 
 `agency_id` joins incidents to the njlea registry and to other datasets
@@ -195,7 +199,7 @@ subject |> filter(form_id == 16301)
 #>   form_id index arrested type    age juvenile race  gender injured injured_prior
 #>     <dbl> <int> <lgl>    <fct> <int> <lgl>    <fct> <fct>  <lgl>   <lgl>        
 #> 1   16301     1 FALSE    Pers…    23 FALSE    Black Female FALSE   FALSE        
-#> 2   16301     2 NA       <NA>     26 FALSE    <NA>  <NA>   TRUE    FALSE
+#> 2   16301     2 TRUE     Pers…    26 FALSE    Hisp… Male   TRUE    FALSE
 ```
 
 #### Multi-value incident fields

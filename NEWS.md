@@ -1,3 +1,43 @@
+# njoaguof 2.4.0
+* Fixes for `subject`:
+  - Since 1.16.0, every subject after the first in an incident lost `arrested`,
+    `type`, `race` and `gender`, and some lost `juvenile`. The source's lists
+    switched to `", "` as a separator and the split did not allow for the space.
+    Counts of subjects by race or gender from 1.16.0 to 2.3.0 are too low: for
+    example, 1,177 more subjects now have a known race.
+  - Removed 851 rows that were not subjects (113,918 rows are now 113,067). On 838
+    incidents from 2020-10 to 2022-10, the source's injury lists have more entries
+    than there are subjects, and each extra entry made a row. Rows now follow the
+    source's `SubjectType` list.
+  - `injured` and `injured_prior` are now `NA` where the source's list cannot be
+    matched to subjects: a list that is too short, or too long with differing
+    entries. A too-long list whose entries are all the same gives that value to
+    every subject.
+  - `gender`: `Non-Binary/X` is now `Gender Non-Conforming/X` (110 rows), the
+    label used for officers and on the reporting form.
+
+* Fixes for `incident`:
+  - `officer_gender`: 48 `Gender Non-Conforming/X` values, `NA` since 1.16.0,
+    are restored.
+  - `subject_count` was too high on 838 incidents (see above).
+
+* `subject$gender` no longer has the level `Other`, which the source never uses
+  for subjects. `incident$officer_gender` keeps it.
+
+* Warning for `incident$officer_gender`: the source value `Other` (74,331
+  incidents, two thirds of the data) is not an option on the reporting form,
+  NJ OAG has not said what it means, and later source releases replaced about
+  20,500 recorded officer genders with it. It is kept as published.
+
+* Links to the NJ OAG Use of Force Reporting Portal Guide in the README and in
+  the `incident`, `subject` and `use_of_force_raw` documentation.
+
+* Warning for `incident$subject_injured_count`, which is unchanged: on 77
+  single-subject incidents from 2021-12 to 2022-10, the source repeats the
+  subject's injury entry (`"Yes, Yes"`) and counts each repeat, giving 2 or 3
+  injured subjects for one subject. For a count per subject, use
+  `subject$injured`.
+
 # njoaguof 2.3.0
 * Update to most recent dataset from NJ OAG:
   "NJOAG Use of Force Data Dashboard 10-01-20 to 10-31-26.sav"
