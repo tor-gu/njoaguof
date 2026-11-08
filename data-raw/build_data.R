@@ -90,8 +90,7 @@ subject_type_levels <-
 gender_levels <-
   c("Male",
     "Female",
-    #"Gender Non-Conforming/X",
-    "Non-Binary/X",
+    "Gender Non-Conforming/X",
     "Other")
 
 incident_type_levels <- c(
@@ -346,12 +345,28 @@ check_list_levels(
   #sep_comma_no_space,
   sep_comma_space_no_paren,
   gender_levels,
-  c("", "Not Provided")
+  c("", "Not Provided", "Non-Binary/X")
 )
 check_list_levels(
   uof_raw_trimmed,
   SubjectRaceEthnicity,
   #sep_comma_no_space,
+  sep_comma_space_no_paren,
+  race_levels,
+  c("Am. Indian", "Black or African American", "", "Not Provided")
+)
+# The officer fields hold a single value, but an unknown value would still
+# silently become NA in factor().
+check_list_levels(
+  uof_raw_trimmed,
+  OfficerGender,
+  sep_comma_space_no_paren,
+  gender_levels,
+  "N/A"
+)
+check_list_levels(
+  uof_raw_trimmed,
+  OfficerRaceEthnicity,
   sep_comma_space_no_paren,
   race_levels,
   c("Am. Indian", "Black or African American", "", "Not Provided")
@@ -510,63 +525,100 @@ stopifnot(all(
 
 
 ## -----------------------------------------------------------------------------
-subject <- uof_raw |>
-  select(FormID,
-         SubjectArrested,
-         SubjectType,
-         SubjectAge,
-         SubjectRaceEthnicity,
-         SubjectGender,
-         SubjectInjuredInIncident,
-         SubjectInjuredPriorToIncident) |>
+subject_list_columns <- c(
+  arrested      = "SubjectArrested",
+  type          = "SubjectType",
+  age           = "SubjectAge",
+  race          = "SubjectRaceEthnicity",
+  gender        = "SubjectGender",
+  injured       = "SubjectInjuredInIncident",
+  injured_prior = "SubjectInjuredPriorToIncident"
+)
+subject_core_columns <- c("arrested", "type", "age", "race", "gender")
+subject_injury_columns <- c("injured", "injured_prior")
+
+split_subject_list <- function(x) {
+  out <- str_split(x, sep_comma_optional_space)
+  out[x == ""] <- list(character(0))
+  out
+}
+
+subject_lists <- uof_raw |>
+  select(form_id = FormID, incident_date = IncidentDate,
+         all_of(subject_list_columns)) |>
   mutate(across(
-    where(is.character),
-    ~ str_replace(., trailing_comma_regex, "")
+    all_of(names(subject_list_columns)),
+    ~ str_replace(coalesce(., ""), trailing_comma_regex, "")
   )) |>
-  filter(if_any(-FormID, ~ . != ""))
-  
-max_subjects <- 
-  subject$SubjectArrested |> 
-  map_int(str_count, ",") |> 
-  max() + 1
+  filter(if_any(all_of(names(subject_list_columns)), ~ . != "")) |>
+  mutate(
+    across(all_of(names(subject_list_columns)), split_subject_list),
+    subject_count = lengths(type)
+  )
 
 
-subject <- subject |> 
-  separate(SubjectArrested, 
-           paste0("arrested__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectType, 
-           paste0("type__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectAge, 
-           paste0("age__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectRaceEthnicity, 
-           paste0("race__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectGender, 
-           paste0("gender__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectInjuredInIncident, 
-           paste0("injured__", 1:max_subjects),
-           ",",
-           fill="right") |>
-  separate(SubjectInjuredPriorToIncident, 
-           paste0("injured_prior__", 1:max_subjects),
-           ",",
-           fill="right") |>
-  pivot_longer(cols = -FormID,
-               names_to="column",
-               values_to="value",
-               values_drop_na=TRUE) |>
-  separate(column, c("column", "index"), "__") |>
-  pivot_wider(names_from="column", values_from="value") |>
-  rename(form_id=FormID)
+## -----------------------------------------------------------------------------
+subject_core_mismatch <- subject_lists |>
+  filter(if_any(all_of(subject_core_columns), ~ lengths(.) != subject_count))
+if (nrow(subject_core_mismatch) > 0) {
+  print(subject_core_mismatch |> select(form_id, all_of(subject_core_columns)))
+  stop("Subject core lists disagree in length with SubjectType")
+}
+
+
+## -----------------------------------------------------------------------------
+subject_long_injury_window_end <- as.Date("2022-10-31")
+
+injury_list_status <- function(x, n) {
+  distinct_values <- map_int(x, \(v) length(unique(str_trim(v))))
+  case_when(
+    lengths(x) == n      ~ "equal",
+    lengths(x) < n       ~ "short",
+    distinct_values == 1 ~ "long, constant",
+    TRUE                 ~ "long, mixed"
+  )
+}
+
+subject_injury_status <- subject_lists |>
+  transmute(
+    form_id, incident_date,
+    across(all_of(subject_injury_columns), ~ injury_list_status(., subject_count))
+  )
+
+subject_injury_status |>
+  pivot_longer(all_of(subject_injury_columns),
+               names_to = "column", values_to = "status") |>
+  count(column, status) |>
+  pivot_wider(names_from = column, values_from = n, values_fill = 0L) |>
+  print()
+
+subject_late_long <- subject_injury_status |>
+  filter(if_any(all_of(subject_injury_columns), ~ str_starts(., "long")),
+         incident_date > subject_long_injury_window_end)
+if (nrow(subject_late_long) > 0) {
+  print(subject_late_long)
+  stop("Subject injury lists longer than the subject list after ",
+       subject_long_injury_window_end)
+}
+
+
+## -----------------------------------------------------------------------------
+fit_injury_list <- function(x, n) {
+  if (length(x) == n) {
+    x
+  } else if (length(x) > n && length(unique(str_trim(x))) == 1) {
+    rep(x[[1]], n)
+  } else {
+    rep(NA_character_, n)
+  }
+}
+
+subject <- subject_lists |>
+  mutate(across(all_of(subject_injury_columns),
+                ~ map2(., subject_count, fit_injury_list))) |>
+  select(form_id, all_of(names(subject_list_columns))) |>
+  unnest(all_of(names(subject_list_columns))) |>
+  mutate(index = row_number(), .by = form_id, .after = form_id)
 
 
 ## -----------------------------------------------------------------------------
@@ -577,8 +629,12 @@ subject <- subject |>
 
 
 ## -----------------------------------------------------------------------------
-subject <- subject |> 
+subject <- subject |>
   mutate(type=factor(type, levels=subject_type_levels),
+         gender=case_when(
+           gender == "Non-Binary/X" ~ "Gender Non-Conforming/X",
+           TRUE                     ~ gender
+         ),
          gender=factor(gender, levels=gender_levels))
 
 

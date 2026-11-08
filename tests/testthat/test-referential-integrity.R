@@ -23,6 +23,20 @@ test_that("incident$subject_count matches the rows in subject", {
   expect_identical(as.integer(incident$subject_count), expected)
 })
 
+# The test above counts from the same rows it checks, so it cannot catch extra
+# subject rows. Releases 1.16.0-2.3.0 made one for every surplus entry in the
+# source's injury lists, overcounting 838 incidents.
+test_that("incident$subject_count matches the SubjectType list in the source", {
+  raw <- uof("use_of_force_raw")
+  incident <- uof("incident")
+  listed <- lengths(strsplit(sub(",\\s*$", "", raw$SubjectType), " ?, ?"))
+  names(listed) <- raw$FormID
+  expect_identical(
+    as.integer(incident$subject_count),
+    unname(listed[as.character(incident$form_id)])
+  )
+})
+
 test_that("index columns are positive integers", {
   bad <- vapply(
     indexed_tables,
@@ -73,6 +87,23 @@ test_that("no officer_name is a 'Not Provided' placeholder", {
 
 # R/incident.R documents this equality. Before 1.16.0 the source count was
 # unreliable (often more injured subjects than subjects).
+#
+# The exceptions are the 77 single-subject incidents (Dec 2021 - Oct 2022) where
+# the source repeats the subject's injury entry ("Yes, Yes") and counts each
+# repeat. subject_injured_count keeps the published value, so they disagree.
+# The list must match exactly: a new mismatch, or one that disappears, fails.
+subject_injured_count_exceptions <- c(
+  195068, 195476, 195687, 200925, 204422, 213125, 213136, 217488, 227742,
+  232312, 239233, 241663, 243227, 247496, 251717, 256866, 257229, 257237,
+  259059, 260200, 260951, 263208, 263778, 266592, 267693, 271366, 272767,
+  273435, 286603, 290543, 292919, 296775, 302748, 304157, 309091, 313239,
+  314701, 315247, 317497, 318321, 318891, 329076, 330794, 344433, 346748,
+  346943, 347682, 349330, 351376, 358480, 362384, 362773, 365010, 365230,
+  366996, 368389, 371583, 377732, 386004, 388497, 388580, 389718, 392704,
+  399689, 400078, 400167, 406241, 406721, 408240, 410355, 420906, 424637,
+  425339, 426610, 428895, 446882, 447655
+)
+
 test_that("incident$subject_injured_count matches subject$injured", {
   incident <- uof("incident")
   subject <- uof("subject")
@@ -80,10 +111,17 @@ test_that("incident$subject_injured_count matches subject$injured", {
   key <- as.character(incident$form_id)
   # Incidents with an NA count, or any subject with NA injured, can't be compared.
   known <- !is.na(incident$subject_injured_count) & !is.na(injured[key])
+  differs <- known &
+    as.integer(incident$subject_injured_count) != as.integer(injured[key])
   expect_identical(
-    as.integer(incident$subject_injured_count[known]),
-    as.integer(injured[key][known])
+    sort(as.numeric(incident$form_id[differs])),
+    sort(subject_injured_count_exceptions)
   )
+  # On every exception the source counts more injured subjects than subjects.
+  exceptions <- incident$form_id %in% subject_injured_count_exceptions
+  expect_true(all(
+    incident$subject_injured_count[exceptions] > incident$subject_count[exceptions]
+  ))
 })
 
 test_that("incident$agency_id is complete and exists in njlea", {

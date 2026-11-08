@@ -75,17 +75,20 @@
 #'  \item{outdoors}{\code{TRUE} if the incident was outdoors. Not exclusive of
 #'  \code{indoors}.}
 #'
-#'  \item{subject_count}{Number of subjects involved. This will reliably match
-#'  the number of subject in the \code{subject} table with same \code{form_id}.}
+#'  \item{subject_count}{Number of subjects involved: the number of entries in
+#'  the source's \code{SubjectType} list, and the number of rows in the
+#'  \code{subject} table with the same \code{form_id}.}
 #'
-#'  \item{subject_injured_count}{Number of injured subjects. This field
-#'  corresponds to column \code{TotalSubInjuredInIncident} in the raw data.
-#'  Wherever both are known, it equals the number of subjects in the
-#'  \code{subject} table with \code{injured == TRUE}.
+#'  \item{subject_injured_count}{Number of injured subjects, as published. This
+#'  field corresponds to column \code{TotalSubInjuredInIncident} in the raw
+#'  data. Wherever both are known, it equals the number of subjects in the
+#'  \code{subject} table with \code{injured == TRUE}, except as below.
 #'
-#'  \emph{\strong{Warning} Before release 1.16.0 this field was not reliable:
-#'  the source often gave more injured subjects than subjects (over 1,500
-#'  incidents in 1.15.0). Take care when comparing with older releases.}}
+#'  \emph{\strong{Warning} On 77 incidents from December 2021 to October 2022,
+#'  each with one subject, the source repeats that subject's injury entry
+#'  (\code{"Yes, Yes"}) and counts each repeat, giving 2 or 3 injured subjects.
+#'  The cause is not known. For a count per subject, use
+#'  \code{subject$injured} instead.}}
 #'
 #'  \item{other_officer_involved}{\code{TRUE} if another officer was involved
 #'  in the incident.

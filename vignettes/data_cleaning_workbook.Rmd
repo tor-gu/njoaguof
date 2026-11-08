@@ -127,8 +127,7 @@ subject_type_levels <-
 gender_levels <-
   c("Male",
     "Female",
-    #"Gender Non-Conforming/X",
-    "Non-Binary/X",
+    "Gender Non-Conforming/X",
     "Other")
 
 incident_type_levels <- c(
@@ -387,12 +386,28 @@ check_list_levels(
   #sep_comma_no_space,
   sep_comma_space_no_paren,
   gender_levels,
-  c("", "Not Provided")
+  c("", "Not Provided", "Non-Binary/X")
 )
 check_list_levels(
   uof_raw_trimmed,
   SubjectRaceEthnicity,
   #sep_comma_no_space,
+  sep_comma_space_no_paren,
+  race_levels,
+  c("Am. Indian", "Black or African American", "", "Not Provided")
+)
+# The officer fields hold a single value, but an unknown value would still
+# silently become NA in factor().
+check_list_levels(
+  uof_raw_trimmed,
+  OfficerGender,
+  sep_comma_space_no_paren,
+  gender_levels,
+  "N/A"
+)
+check_list_levels(
+  uof_raw_trimmed,
+  OfficerRaceEthnicity,
   sep_comma_space_no_paren,
   race_levels,
   c("Am. Indian", "Black or African American", "", "Not Provided")
@@ -557,64 +572,131 @@ stopifnot(all(
 
 ## `subject` table
 
+Each form lists its subjects in seven parallel, comma-separated fields. The five core fields
+(`SubjectArrested`, `SubjectType`, `SubjectAge`, `SubjectRaceEthnicity`, `SubjectGender`)
+describe one subject per position. We split every field into a list and take the number of
+subjects from `SubjectType`.
+
+These lists have used both `","` and `", "` as separators. The split has to allow for the
+space: if it stays on a value, that value later becomes `NA` in `factor()` and
+`as.logical()`. Releases 1.16.0 through 2.3.0 split on a bare `","`, which removed `arrested`,
+`type`, `race` and `gender` from every subject after the first.
+
 ```{r}
-subject <- uof_raw |>
-  select(FormID,
-         SubjectArrested,
-         SubjectType,
-         SubjectAge,
-         SubjectRaceEthnicity,
-         SubjectGender,
-         SubjectInjuredInIncident,
-         SubjectInjuredPriorToIncident) |>
+subject_list_columns <- c(
+  arrested      = "SubjectArrested",
+  type          = "SubjectType",
+  age           = "SubjectAge",
+  race          = "SubjectRaceEthnicity",
+  gender        = "SubjectGender",
+  injured       = "SubjectInjuredInIncident",
+  injured_prior = "SubjectInjuredPriorToIncident"
+)
+subject_core_columns <- c("arrested", "type", "age", "race", "gender")
+subject_injury_columns <- c("injured", "injured_prior")
+
+split_subject_list <- function(x) {
+  out <- str_split(x, sep_comma_optional_space)
+  out[x == ""] <- list(character(0))
+  out
+}
+
+subject_lists <- uof_raw |>
+  select(form_id = FormID, incident_date = IncidentDate,
+         all_of(subject_list_columns)) |>
   mutate(across(
-    where(is.character),
-    ~ str_replace(., trailing_comma_regex, "")
+    all_of(names(subject_list_columns)),
+    ~ str_replace(coalesce(., ""), trailing_comma_regex, "")
   )) |>
-  filter(if_any(-FormID, ~ . != ""))
-  
-max_subjects <- 
-  subject$SubjectArrested |> 
-  map_int(str_count, ",") |> 
-  max() + 1
+  filter(if_any(all_of(names(subject_list_columns)), ~ . != "")) |>
+  mutate(
+    across(all_of(names(subject_list_columns)), split_subject_list),
+    subject_count = lengths(type)
+  )
+```
 
+The core fields have always agreed in length. A mismatch would most likely mean a separator
+problem, such as a new level containing a comma, so we stop.
 
-subject <- subject |> 
-  separate(SubjectArrested, 
-           paste0("arrested__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectType, 
-           paste0("type__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectAge, 
-           paste0("age__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectRaceEthnicity, 
-           paste0("race__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectGender, 
-           paste0("gender__", 1:max_subjects), 
-           ",",
-           fill="right") |>
-  separate(SubjectInjuredInIncident, 
-           paste0("injured__", 1:max_subjects),
-           ",",
-           fill="right") |>
-  separate(SubjectInjuredPriorToIncident, 
-           paste0("injured_prior__", 1:max_subjects),
-           ",",
-           fill="right") |>
-  pivot_longer(cols = -FormID,
-               names_to="column",
-               values_to="value",
-               values_drop_na=TRUE) |>
-  separate(column, c("column", "index"), "__") |>
-  pivot_wider(names_from="column", values_from="value") |>
-  rename(form_id=FormID)
+```{r}
+subject_core_mismatch <- subject_lists |>
+  filter(if_any(all_of(subject_core_columns), ~ lengths(.) != subject_count))
+if (nrow(subject_core_mismatch) > 0) {
+  print(subject_core_mismatch |> select(form_id, all_of(subject_core_columns)))
+  stop("Subject core lists disagree in length with SubjectType")
+}
+```
+
+The two injury fields, `SubjectInjuredInIncident` and `SubjectInjuredPriorToIncident`, do
+not always have one entry per subject.
+
+- **Too long.** On 838 forms with incident dates from 2020-10-05 to 2022-10-25, the injury
+  lists are longer than the subject list. Almost all of them have one subject, and most of the
+  entries are repeats (`"No, No"`, `"Yes, Yes"`). Why the entries repeat is not known; it is not
+  simply one entry per officer. Where every entry is the same, we give that value to every
+  subject, since that does not depend on position. Where the entries differ (`"No, Yes"` for one
+  subject), the source contradicts itself and we use `NA`. This happened only in that period,
+  so a too-long list on a later incident stops the build.
+- **Too short.** A small number of forms, scattered across every year, have fewer entries than
+  subjects (usually one entry for two subjects), or none at all. We cannot tell which subject
+  an entry belongs to, so every subject on the form gets `NA`. This keeps happening, so we only
+  report the count.
+
+```{r}
+subject_long_injury_window_end <- as.Date("2022-10-31")
+
+injury_list_status <- function(x, n) {
+  distinct_values <- map_int(x, \(v) length(unique(str_trim(v))))
+  case_when(
+    lengths(x) == n      ~ "equal",
+    lengths(x) < n       ~ "short",
+    distinct_values == 1 ~ "long, constant",
+    TRUE                 ~ "long, mixed"
+  )
+}
+
+subject_injury_status <- subject_lists |>
+  transmute(
+    form_id, incident_date,
+    across(all_of(subject_injury_columns), ~ injury_list_status(., subject_count))
+  )
+
+subject_injury_status |>
+  pivot_longer(all_of(subject_injury_columns),
+               names_to = "column", values_to = "status") |>
+  count(column, status) |>
+  pivot_wider(names_from = column, values_from = n, values_fill = 0L) |>
+  print()
+
+subject_late_long <- subject_injury_status |>
+  filter(if_any(all_of(subject_injury_columns), ~ str_starts(., "long")),
+         incident_date > subject_long_injury_window_end)
+if (nrow(subject_late_long) > 0) {
+  print(subject_late_long)
+  stop("Subject injury lists longer than the subject list after ",
+       subject_long_injury_window_end)
+}
+```
+
+Now fit each injury list to the subject count and make one row per subject.
+
+```{r}
+fit_injury_list <- function(x, n) {
+  if (length(x) == n) {
+    x
+  } else if (length(x) > n && length(unique(str_trim(x))) == 1) {
+    rep(x[[1]], n)
+  } else {
+    rep(NA_character_, n)
+  }
+}
+
+subject <- subject_lists |>
+  mutate(across(all_of(subject_injury_columns),
+                ~ map2(., subject_count, fit_injury_list))) |>
+  select(form_id, all_of(names(subject_list_columns))) |>
+  unnest(all_of(names(subject_list_columns))) |>
+  mutate(index = row_number(), .by = form_id, .after = form_id)
 ```
 
 
@@ -636,9 +718,19 @@ subject <- subject |>
 
 We will convert these to factors.
 
+The source has two labels for one gender category. Through the 2023-05-31 release,
+`SubjectGender` and the officer gender column both used `"Gender Non-Conforming/X"`,
+which is also the wording on the reporting form. Since the 2024-09-30 release,
+`SubjectGender` uses `"Non-Binary/X"` while `OfficerGender` keeps the old label. We use
+`"Gender Non-Conforming/X"` for both.
+
 ```{r}
-subject <- subject |> 
+subject <- subject |>
   mutate(type=factor(type, levels=subject_type_levels),
+         gender=case_when(
+           gender == "Non-Binary/X" ~ "Gender Non-Conforming/X",
+           TRUE                     ~ gender
+         ),
          gender=factor(gender, levels=gender_levels))
 ```
 
@@ -1465,7 +1557,7 @@ incident <- incident |>
 
 #### `officer_race` and `officer_gender`
 
-We perform the same transformations as we did on the `subject` `race` and `gender` columns.
+We perform the same transformations as we did on the `subject` `race` and `gender` columns, except that `OfficerGender` needs no relabelling: it already uses `"Gender Non-Conforming/X"`. Its value `"N/A"` becomes `NA`.
 
 ```{r}
 incident <- incident |>

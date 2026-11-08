@@ -3,7 +3,20 @@
 #' Every subject in a use of force incident.
 #'
 #' This table contains every field that can reliably be attributed to a
-#' specific subject.
+#' specific subject. There is one row for each entry in the source's
+#' \code{SubjectType} list.
+#'
+#' The injury fields (\code{injured}, \code{injured_prior}) do not always have
+#' one entry per subject in the source:
+#' \itemize{
+#'  \item Too long: on 838 incidents from October 2020 to October 2022, almost
+#'  all with one subject, the source repeats entries (\code{"Yes, Yes"} for
+#'  one subject). Where all the entries are the same, every subject gets that
+#'  value. Where they differ (\code{"No, Yes"}), every subject gets \code{NA}.
+#'  \item Too short or empty: on a small number of incidents in every year, the
+#'  source has fewer entries than subjects. The entries cannot be matched to
+#'  subjects, so every subject gets \code{NA}.
+#' }
 #'
 #' Subject types:
 #' \itemize{
@@ -24,12 +37,13 @@
 #'  \item{race}{Subject race}
 #'  \item{gender}{Subject gender.}
 #'  \item{injured}{\code{TRUE} if the subject was injured in the incident.
-#'  \code{NA} where the source recorded \code{"Unknown"} or left the field
-#'  blank. \emph{C.f.} table \code{incident_subject_injury} for injury types,
+#'  \code{NA} where the source recorded \code{"Unknown"}, left the field
+#'  blank, or gave a list that cannot be matched to subjects (see details). \emph{C.f.} table \code{incident_subject_injury} for injury types,
 #'  and \code{incident$subject_injured_count}, which counts these.}
 #'  \item{injured_prior}{\code{TRUE} if the subject was injured \emph{before}
-#'  the incident. \code{NA} where the source recorded \code{"Unknown"} or left
-#'  the field blank.}
+#'  the incident. \code{NA} where the source recorded \code{"Unknown"}, left
+#'  the field blank, or gave a list that cannot be matched to subjects (see
+#'  details).}
 #' }
 #' @source \url{https://www.njoag.gov/force/}
 "subject"

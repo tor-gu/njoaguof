@@ -21,7 +21,6 @@ test_that("no logical column is constant", {
 # a change in the source data coding.
 known_empty_levels <- list(
   "incident$officer_race" = c("Asian/Pacific Islander", "Pacific Islander"),
-  "incident$officer_gender" = "Non-Binary/X",
   "incident_subject_injury$subject_injury" = "No Injury",
   "incident_subject_medical_treatment$subject_medical_treatment" = "Not Provided",
   "subject$race" = c(
